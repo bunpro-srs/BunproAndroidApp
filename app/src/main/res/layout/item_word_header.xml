@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:gravity="center"
+    android:background="@color/colorPrimaryDark">
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/segmented"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        segmentedgroup:sc_border_width="2dp"
+        segmentedgroup:sc_corner_radius="3dp"
+        segmentedgroup:sc_checked_text_color="@android:color/black"
+        segmentedgroup:sc_tint_color="@color/colorYellow">
+        <RadioButton
+            android:id="@+id/rbExamples"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/examples"
+            style="@style/RadioButton" />
+        <RadioButton
+            android:id="@+id/rbReadings"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/readings"
+            style="@style/RadioButton"/>
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+</LinearLayout>

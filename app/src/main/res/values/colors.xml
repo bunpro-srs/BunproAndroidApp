@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#577478</color>
+    <color name="colorPrimaryDark">#1c3538</color>
+    <color name="colorAccent">#610c10</color>
+    <color name="colorYellow">#ffff00</color>
+    <color name="colorGrey">#c7d1d3</color>
+    <color name="colorPgBack">#545454</color>
+    <color name="colorPgTint">#a3aaab</color>
+    <color name="default_header_color">#445566</color>
+</resources>
