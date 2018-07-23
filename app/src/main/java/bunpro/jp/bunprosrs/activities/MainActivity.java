@@ -43,19 +43,16 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
 
-        List<Fragment> fragments = new ArrayList<>();
+        final List<Fragment> fragments = new ArrayList<>();
         fragments.add(StatusFragment.newInstance());
         fragments.add(SearchFragment.newInstance());
         fragments.add(SettingFragment.newInstance());
-        fragments.add(StatusDetailFragment.newInstance());
-        fragments.add(LevelDetailFragment.newInstance());
-        fragments.add(WordDetailFragment.newInstance());
-        fragments.add(ExampleFragment.newInstance());
         builder.rootFragments(fragments);
 
         fragNavController = builder.build();
@@ -73,26 +70,28 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_status:
-                                Fragment statusFragment = new StatusFragment();
-                                replaceFragment(statusFragment);
+                                fragNavController.switchTab(FragNavController.TAB1);
                                 break;
                             case R.id.action_search:
-                                Fragment searchFragment = new SearchFragment();
-                                replaceFragment(searchFragment);
+                                fragNavController.switchTab(FragNavController.TAB2);
                                 break;
                             case R.id.action_settings:
-                                Fragment settingFragment = new SettingFragment();
-                                replaceFragment(settingFragment);
+                                fragNavController.switchTab(FragNavController.TAB3);
                                 break;
-
                         }
                         return true;
                     }
                 });
 
-        replaceFragment(new StatusFragment());
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (fragNavController != null) {
+            fragNavController.onSaveInstanceState(outState);
+        }
+    }
 
     @Override
     public void replaceFragment(Fragment fragment) {

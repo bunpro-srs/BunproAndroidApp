@@ -211,18 +211,34 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onBindViewHolder(@NonNull StatusViewHolder viewHolder, int position) {
-            Status status = mStatus.get(position);
-            viewHolder.tvName.setText(status.getName());
 
-            viewHolder.progressBar.setMax(status.getTotal());
-            viewHolder.progressBar.setProgress(status.getStatus());
+            if (position == mStatus.size()) {
 
-            viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(status.getStatus()), String.valueOf(status.getTotal())));
+                viewHolder.tvName.setText("N1");
+                viewHolder.progressBar.setMax(0);
+                viewHolder.progressBar.setProgress(0);
+                viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(0), String.valueOf(0)));
+
+            } else {
+
+                Status status = mStatus.get(position);
+                viewHolder.tvName.setText(status.getName());
+                viewHolder.progressBar.setMax(status.getTotal());
+                viewHolder.progressBar.setProgress(status.getStatus());
+                viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(status.getStatus()), String.valueOf(status.getTotal())));
+
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            return mStatus.size();
+            if (mStatus.size() != 0) {
+                return mStatus.size() + 1;
+            } else {
+                return 0;
+            }
+
         }
 
         public void setStatus(List<Status> status) {
