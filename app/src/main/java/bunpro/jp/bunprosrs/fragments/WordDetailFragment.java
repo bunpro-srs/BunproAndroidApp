@@ -51,6 +51,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     }
 
+    public static WordDetailFragment newInstance() {
+        return new WordDetailFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

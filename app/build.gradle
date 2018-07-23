@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.github.hzw1199:AwesomeWebView-Android:1.2'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
     implementation 'com.github.edubarr:header-decor:master-SNAPSHOT'
+    implementation 'com.ncapdevi:frag-nav:2.4.0'
 }

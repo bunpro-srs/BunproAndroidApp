@@ -35,6 +35,10 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
 
     }
 
+    public static LevelDetailFragment newInstance() {
+        return new LevelDetailFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -32,6 +32,10 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
 
     }
 
+    public static StatusDetailFragment newInstance() {
+        return new StatusDetailFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

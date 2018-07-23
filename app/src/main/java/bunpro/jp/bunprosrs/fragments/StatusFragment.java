@@ -57,6 +57,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     }
 
+
+    public static StatusFragment newInstance() {
+        return new StatusFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

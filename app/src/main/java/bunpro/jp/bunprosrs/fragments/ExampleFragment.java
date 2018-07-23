@@ -42,6 +42,9 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
     }
 
+    public static ExampleFragment newInstance() {
+        return new ExampleFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

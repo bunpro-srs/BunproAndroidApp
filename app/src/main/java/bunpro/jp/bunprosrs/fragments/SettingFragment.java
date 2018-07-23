@@ -50,6 +50,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     }
 
+    public static SettingFragment newInstance() {
+        return new SettingFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
