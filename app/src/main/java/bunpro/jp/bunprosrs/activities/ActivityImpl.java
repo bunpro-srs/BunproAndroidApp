@@ -22,4 +22,7 @@ public interface ActivityImpl {
     List<Lesson> getLessons();
     void setGrammarPoints(List<GrammarPoint> grammarPoints);
     List<GrammarPoint> getGrammarPoints();
+
+    void addFragment(Fragment fragment);
+
 }

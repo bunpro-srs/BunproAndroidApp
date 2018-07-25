@@ -154,6 +154,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     @Override
+    public void addFragment(Fragment fragment) {
+        if (fragNavController != null) {
+            fragNavController.pushFragment(fragment);
+        }
+    }
+
+    @Override
     public Fragment getRootFragment(int index) {
 
         switch (index) {

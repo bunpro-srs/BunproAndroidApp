@@ -116,11 +116,13 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
             public void positionClicked(int position) {
                 Fragment fragment = new StatusDetailFragment();
 
+
                 Bundle bundle = new Bundle();
                 bundle.putString("status", mStatus.get(position).getName());
                 bundle.putString("user", userName);
                 fragment.setArguments(bundle);
-                addFragment(fragment, true);
+                ((MainActivity)getActivity()).addFragment(fragment);
+                //addFragment(fragment, true);
             }
         });
 
@@ -138,10 +140,6 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     private void initialize() {
 
         mController.setName(this);
-
-        //mController.getStatus(this);
-        //mController.getReviews(this);
-
         mController.getLessons(this);
 
     }
@@ -198,6 +196,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         this.reviews = reviews;
         ((MainActivity)getActivity()).setReviews(this.reviews);
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
+        mController.getStatus(this);
     }
 
     @Override
