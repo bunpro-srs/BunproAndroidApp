@@ -82,7 +82,13 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void initialize() {
 
-        tvName.setText("Level 1");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+
+            int lesson = bundle.getInt("lesson");
+            tvName.setText(String.format("Lesson %s", String.valueOf(lesson)));
+
+        }
     }
 
     @Override

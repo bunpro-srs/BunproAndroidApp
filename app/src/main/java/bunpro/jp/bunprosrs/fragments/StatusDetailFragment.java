@@ -92,8 +92,11 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         mAdapter = new StatusDetailAdapter(pointsByLesson, new ClickListener() {
             @Override
             public void positionClicked(int position) {
-                Fragment fragment = new LevelDetailFragment();
-                addFragment(fragment, true);
+                Fragment fragment = LevelDetailFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putInt("lesson", position + 1);
+                fragment.setArguments(bundle);
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 
