@@ -30,6 +30,7 @@ import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.StatusContract;
 import bunpro.jp.bunprosrs.fragments.contract.StatusController;
+import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
 import bunpro.jp.bunprosrs.utils.Constants;
@@ -53,6 +54,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     List<Status> mStatus;
     String userName;
 
+
+    List<Lesson> lessons;
+    List<Review> reviews;
+
+
     public StatusFragment() {
 
     }
@@ -65,6 +71,8 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lessons = new ArrayList<>();
+        reviews = new ArrayList<>();
     }
 
     @Nullable
@@ -131,8 +139,8 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
         mController.setName(this);
 
-        mController.getStatus(this);
-        mController.getReviews(this);
+        //mController.getStatus(this);
+        //mController.getReviews(this);
 
         mController.getLessons(this);
 
@@ -187,7 +195,16 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void updateReviewStatus(List<Review> reviews) {
+        this.reviews = reviews;
+        ((MainActivity)getActivity()).setReviews(this.reviews);
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
+    }
+
+    @Override
+    public void updateLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+        ((MainActivity)getActivity()).setLessons(this.lessons);
+        mController.getReviews(this);
     }
 
 

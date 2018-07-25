@@ -125,7 +125,7 @@ public class StatusController implements StatusContract.Controller {
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 List<Lesson> lessons = JsonParser.getInstance(mContext).parseLessons(jsonArray);
-                
+                v.updateLessons(lessons);
             }
 
             @Override
