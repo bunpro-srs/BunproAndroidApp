@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import bunpro.jp.bunprosrs.activities.MainActivity;
+import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
@@ -91,47 +92,86 @@ public class StatusController implements StatusContract.Controller {
     @Override
     public void getReviews(final StatusContract.View v) {
 
-        ApiService apiService = new ApiService(mContext);
-        apiService.getReviews(new ApiService.CallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
+        List<Review> rs = ((MainActivity)mContext).getReviews();
+        if (rs.size() != 0) {
+            v.updateReviewStatus(rs);
+        } else {
+            ApiService apiService = new ApiService(mContext);
+            apiService.getReviews(new ApiService.CallbackListener() {
+                @Override
+                public void success(JSONObject jsonObject) {
 
-            }
+                }
 
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-                List<Review> reviews = JsonParser.getInstance(mContext).parseReviews(jsonArray);
-                v.updateReviewStatus(reviews);
-            }
+                @Override
+                public void successAsJSONArray(JSONArray jsonArray) {
+                    List<Review> reviews = JsonParser.getInstance(mContext).parseReviews(jsonArray);
+                    v.updateReviewStatus(reviews);
+                }
 
-            @Override
-            public void error(ANError anError) {
+                @Override
+                public void error(ANError anError) {
 
-                v.showError(anError.getErrorDetail());
-            }
-        });
+                    v.showError(anError.getErrorDetail());
+                }
+            });
+        }
     }
 
     @Override
     public void getLessons(final StatusContract.View v) {
 
-        ApiService apiService = new ApiService(mContext);
-        apiService.getLessons(new ApiService.CallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
+        List<Lesson> lessons = ((MainActivity)mContext).getLessons();
+        if (lessons.size() != 0) {
+            v.updateLessons(lessons);
+        } else {
+            ApiService apiService = new ApiService(mContext);
+            apiService.getLessons(new ApiService.CallbackListener() {
+                @Override
+                public void success(JSONObject jsonObject) {
 
-            }
+                }
 
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-                List<Lesson> lessons = JsonParser.getInstance(mContext).parseLessons(jsonArray);
-                v.updateLessons(lessons);
-            }
+                @Override
+                public void successAsJSONArray(JSONArray jsonArray) {
+                    List<Lesson> lessons = JsonParser.getInstance(mContext).parseLessons(jsonArray);
+                    v.updateLessons(lessons);
+                }
 
-            @Override
-            public void error(ANError anError) {
-                v.showError(anError.getErrorDetail());
-            }
-        });
+                @Override
+                public void error(ANError anError) {
+                    v.showError(anError.getErrorDetail());
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void getGrammarPoints(final StatusContract.View v) {
+
+        List<GrammarPoint> points = ((MainActivity)mContext).getGrammarPoints();
+        if (points.size() != 0) {
+            v.updateGrammarPoints(points);
+        } else {
+            ApiService apiService = new ApiService(mContext);
+            apiService.getGrammarPoints(new ApiService.CallbackListener() {
+                @Override
+                public void success(JSONObject jsonObject) {
+
+                }
+
+                @Override
+                public void successAsJSONArray(JSONArray jsonArray) {
+                    List<GrammarPoint> grammarPoints = JsonParser.getInstance(mContext).parseGrammarPoints(jsonArray);
+                    v.updateGrammarPoints(grammarPoints);
+                }
+
+                @Override
+                public void error(ANError anError) {
+                    v.showError(anError.getErrorDetail());
+                }
+            });
+        }
     }
 }

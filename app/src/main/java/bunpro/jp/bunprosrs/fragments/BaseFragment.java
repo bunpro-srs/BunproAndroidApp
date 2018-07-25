@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import bunpro.jp.bunprosrs.R;
+import bunpro.jp.bunprosrs.activities.MainActivity;
 
 public class BaseFragment extends Fragment {
 
@@ -41,10 +42,10 @@ public class BaseFragment extends Fragment {
     }
 
     protected void popFragment() {
-        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0){
-            boolean done = getActivity().getSupportFragmentManager().popBackStackImmediate();
-        }
-
+        ((MainActivity)getActivity()).popFragment();
+//        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0){
+//            boolean done = getActivity().getSupportFragmentManager().popBackStackImmediate();
+//        }
     }
 
 

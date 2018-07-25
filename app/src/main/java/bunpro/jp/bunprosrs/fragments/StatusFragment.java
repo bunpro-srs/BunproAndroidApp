@@ -30,6 +30,7 @@ import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.StatusContract;
 import bunpro.jp.bunprosrs.fragments.contract.StatusController;
+import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
@@ -57,6 +58,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     List<Lesson> lessons;
     List<Review> reviews;
+    List<GrammarPoint> grammarPoints;
 
 
     public StatusFragment() {
@@ -118,7 +120,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
                 Bundle bundle = new Bundle();
                 bundle.putString("status", mStatus.get(position).getName());
-                bundle.putString("user", userName);
+                bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
                 fragment.setArguments(bundle);
                 ((MainActivity)getActivity()).addFragment(fragment);
             }
@@ -138,8 +140,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     private void initialize() {
 
         mController.setName(this);
-        mController.getLessons(this);
-
+        mController.getGrammarPoints(this);
     }
 
     @Override
@@ -205,6 +206,13 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mController.getReviews(this);
     }
 
+    @Override
+    public void updateGrammarPoints(List<GrammarPoint> grammarPoints) {
+
+        ((MainActivity)getActivity()).setGrammarPoints(grammarPoints);
+        this.grammarPoints = grammarPoints;
+        mController.getReviews(this);
+    }
 
     private class StatusAdapter extends RecyclerView.Adapter<StatusViewHolder> {
 

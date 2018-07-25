@@ -24,5 +24,5 @@ public interface ActivityImpl {
     List<GrammarPoint> getGrammarPoints();
 
     void addFragment(Fragment fragment);
-
+    void popFragment();
 }

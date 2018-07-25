@@ -31,7 +31,6 @@ public class SearchController implements SearchContract.Controller {
     @Override
     public void getAllWords(final SearchContract.View v, final int filter) {
 
-        MainActivity activity = (MainActivity) mContext;
         if (grammarPoints.size() == 0) {
             ApiService apiService = new ApiService(mContext);
             apiService.getGrammarPoints(new ApiService.CallbackListener() {

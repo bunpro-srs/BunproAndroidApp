@@ -2,6 +2,7 @@ package bunpro.jp.bunprosrs.fragments.contract;
 
 import java.util.List;
 
+import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
@@ -14,6 +15,7 @@ public interface StatusContract {
         void updateUserName(String name);
         void updateReviewStatus(List<Review> reviews);
         void updateLessons(List<Lesson> lessons);
+        void updateGrammarPoints(List<GrammarPoint> grammarPoints);
     }
 
     interface Controller {
@@ -21,5 +23,7 @@ public interface StatusContract {
         void setName(StatusContract.View v);
         void getReviews(StatusContract.View v);
         void getLessons(StatusContract.View v);
+        void getGrammarPoints(StatusContract.View v);
+
     }
 }

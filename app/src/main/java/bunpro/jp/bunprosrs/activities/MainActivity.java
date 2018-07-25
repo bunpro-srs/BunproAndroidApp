@@ -161,6 +161,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     @Override
+    public void popFragment() {
+        if (fragNavController != null) {
+            fragNavController.popFragment();
+        }
+    }
+
+    @Override
     public Fragment getRootFragment(int index) {
 
         switch (index) {

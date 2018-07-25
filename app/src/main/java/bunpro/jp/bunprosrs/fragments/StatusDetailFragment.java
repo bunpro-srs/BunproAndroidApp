@@ -2,14 +2,12 @@ package bunpro.jp.bunprosrs.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,22 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.MainActivity;
+import bunpro.jp.bunprosrs.fragments.contract.StatusDetailContract;
+import bunpro.jp.bunprosrs.fragments.contract.StatusDetailController;
+import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
+import bunpro.jp.bunprosrs.models.Review;
 
-public class StatusDetailFragment extends BaseFragment implements View.OnClickListener {
+public class StatusDetailFragment extends BaseFragment implements View.OnClickListener, StatusDetailContract.View {
 
     private Context mContext;
     TextView tvName;
@@ -34,9 +41,17 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
     RecyclerView rvView;
     StatusDetailAdapter mAdapter;
     List<Lesson> lessons;
+    List<GrammarPoint> grammarPoints;
+    List<Review> reviews;
+    List<List<GrammarPoint>> pointsByLesson;
+
+    StatusDetailContract.Controller mController;
 
     public StatusDetailFragment() {
         lessons = new ArrayList<>();
+        grammarPoints = new ArrayList<>();
+        reviews = new ArrayList<>();
+        pointsByLesson = new ArrayList<>();
     }
 
     public static StatusDetailFragment newInstance() {
@@ -53,7 +68,9 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_status_detail, container, false);
         mContext = getActivity();
-        lessons = ((MainActivity)getActivity()).getLessons();
+
+        grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
+        reviews = ((MainActivity)getActivity()).getReviews();
         return rootView;
     }
 
@@ -70,7 +87,7 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new StatusDetailAdapter(new ClickListener() {
+        mAdapter = new StatusDetailAdapter(pointsByLesson, new ClickListener() {
             @Override
             public void positionClicked(int position) {
                 Fragment fragment = new LevelDetailFragment();
@@ -89,7 +106,10 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         Bundle bundle = getArguments();
         if (bundle != null) {
             String status = bundle.getString("status");
+            String levelStr = bundle.getString("level");
+            mController = new StatusDetailController(mContext, levelStr, grammarPoints, reviews);
             tvName.setText(status);
+            mController.getLessons(this);
         }
     }
 
@@ -102,13 +122,45 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    @Override
+    public void updateLessons(Map<String, List<GrammarPoint>> pointsByLesson) {
+
+        arrangeGrammarPoints(pointsByLesson);
+        mAdapter.updateData(this.pointsByLesson);
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    private void arrangeGrammarPoints(Map<String, List<GrammarPoint>> pointsByLesson) {
+
+        List<String> mapKeys = new ArrayList<>(pointsByLesson.keySet());
+        List<Integer> mapKeys_integer = new ArrayList<>();
+        for (String key : mapKeys) {
+            mapKeys_integer.add(Integer.parseInt(key));
+        }
+        Collections.sort(mapKeys_integer);
+        mapKeys = new ArrayList<>();
+        for (int k : mapKeys_integer) {
+            mapKeys.add(String.valueOf(k));
+        }
+        this.pointsByLesson = new ArrayList<>();
+        Iterator iterator = pointsByLesson.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
+            this.pointsByLesson.add(pointsByLesson.get(key));
+        }
+
+    }
+
 
     private class StatusDetailAdapter extends RecyclerView.Adapter<StatusDetailViewHolder> {
 
         ClickListener listener;
+        List<List<GrammarPoint>> pointsByLesson;
 
-        StatusDetailAdapter(ClickListener listener) {
+        StatusDetailAdapter(List<List<GrammarPoint>> pointsByLesson, ClickListener listener) {
             this.listener = listener;
+            this.pointsByLesson = pointsByLesson;
         }
 
         @NonNull
@@ -120,12 +172,34 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         @Override
         public void onBindViewHolder(@NonNull StatusDetailViewHolder viewHolder, int position) {
             viewHolder.tvName.setText(String.format("Lesson %s", String.valueOf(position+1)));
+            List<GrammarPoint> points = pointsByLesson.get(position);
 
+            viewHolder.tvStatus.setText(String.valueOf(String.valueOf(checkReview(points)) + " / " + String.valueOf(points.size())));
+            
         }
 
         @Override
         public int getItemCount() {
-            return 10;
+            return this.pointsByLesson.size();
+        }
+
+        void updateData(List<List<GrammarPoint>> pointsByLesson) {
+            this.pointsByLesson = pointsByLesson;
+        }
+
+        private int checkReview(List<GrammarPoint> points) {
+            int count = 0;
+            if (reviews.size() > 0) {
+                for (Review review : reviews) {
+                    for (GrammarPoint point : points) {
+                        if (point.id == review.grammar_point_id) {
+                            count = count + 1;
+                            break;
+                        }
+                    }
+                }
+            }
+            return count;
         }
     }
 
