@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.utils.UserData;
 
 public class SplashActivity extends AppCompatActivity {

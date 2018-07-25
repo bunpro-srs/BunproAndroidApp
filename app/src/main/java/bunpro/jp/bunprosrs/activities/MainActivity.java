@@ -22,6 +22,9 @@ import bunpro.jp.bunprosrs.fragments.SettingFragment;
 import bunpro.jp.bunprosrs.fragments.StatusDetailFragment;
 import bunpro.jp.bunprosrs.fragments.StatusFragment;
 import bunpro.jp.bunprosrs.fragments.WordDetailFragment;
+import bunpro.jp.bunprosrs.models.GrammarPoint;
+import bunpro.jp.bunprosrs.models.Lesson;
+import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,12 +43,20 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private static final int INDEX_SEARCH = 32;
     private static final int INDEX_SETTING = 33;
 
+    private List<Lesson> lessons;
+    private List<Review> reviews;
+    private List<GrammarPoint> grammarPoints;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        lessons = new ArrayList<>();
+        grammarPoints = new ArrayList<>();
+        reviews = new ArrayList<>();
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
 
@@ -110,6 +121,36 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public List<Status> getjlptLevel() {
         return jlptLevels;
+    }
+
+    @Override
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    @Override
+    public List<Review> getReviews() {
+        return this.reviews;
+    }
+
+    @Override
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    @Override
+    public List<Lesson> getLessons() {
+        return this.lessons;
+    }
+
+    @Override
+    public void setGrammarPoints(List<GrammarPoint> grammarPoints) {
+        this.grammarPoints = grammarPoints;
+    }
+
+    @Override
+    public List<GrammarPoint> getGrammarPoints() {
+        return this.grammarPoints;
     }
 
     @Override
