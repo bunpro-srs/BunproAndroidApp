@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -143,10 +145,9 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         for (int k : mapKeys_integer) {
             mapKeys.add(String.valueOf(k));
         }
+
         this.pointsByLesson = new ArrayList<>();
-        Iterator iterator = pointsByLesson.keySet().iterator();
-        while (iterator.hasNext()) {
-            String key = (String) iterator.next();
+        for (String key : mapKeys) {
             this.pointsByLesson.add(pointsByLesson.get(key));
         }
 
@@ -175,7 +176,8 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
             List<GrammarPoint> points = pointsByLesson.get(position);
 
             viewHolder.tvStatus.setText(String.valueOf(String.valueOf(checkReview(points)) + " / " + String.valueOf(points.size())));
-            
+            viewHolder.progressBar.setProgress(checkReview(points));
+            viewHolder.progressBar.setMax(points.size());
         }
 
         @Override
@@ -209,6 +211,8 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         WeakReference<ClickListener> ref;
         TextView tvName, tvStatus;
 
+        RoundCornerProgressBar progressBar;
+
         StatusDetailViewHolder(@NonNull View itemView, ClickListener listener) {
             super(itemView);
 
@@ -218,6 +222,8 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
             llContainer.setOnClickListener(this);
             tvName = itemView.findViewById(R.id.tvName);
             tvStatus = itemView.findViewById(R.id.tvStatus);
+
+            progressBar = itemView.findViewById(R.id.progressBar);
 
         }
 
