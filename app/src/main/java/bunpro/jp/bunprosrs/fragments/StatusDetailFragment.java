@@ -2,12 +2,14 @@ package bunpro.jp.bunprosrs.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
+import bunpro.jp.bunprosrs.activities.MainActivity;
+import bunpro.jp.bunprosrs.models.Lesson;
 
 public class StatusDetailFragment extends BaseFragment implements View.OnClickListener {
 
@@ -27,9 +33,10 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
 
     RecyclerView rvView;
     StatusDetailAdapter mAdapter;
+    List<Lesson> lessons;
 
     public StatusDetailFragment() {
-
+        lessons = new ArrayList<>();
     }
 
     public static StatusDetailFragment newInstance() {
@@ -46,6 +53,7 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_status_detail, container, false);
         mContext = getActivity();
+        lessons = ((MainActivity)getActivity()).getLessons();
         return rootView;
     }
 
@@ -110,7 +118,8 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         }
 
         @Override
-        public void onBindViewHolder(@NonNull StatusDetailViewHolder statusDetailViewHolder, int i) {
+        public void onBindViewHolder(@NonNull StatusDetailViewHolder viewHolder, int position) {
+            viewHolder.tvName.setText(String.format("Lesson %s", String.valueOf(position+1)));
 
         }
 
@@ -124,6 +133,7 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
 
         LinearLayout llContainer;
         WeakReference<ClickListener> ref;
+        TextView tvName, tvStatus;
 
         StatusDetailViewHolder(@NonNull View itemView, ClickListener listener) {
             super(itemView);
@@ -132,6 +142,8 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
 
             llContainer = itemView.findViewById(R.id.llContainer);
             llContainer.setOnClickListener(this);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
 
         }
 

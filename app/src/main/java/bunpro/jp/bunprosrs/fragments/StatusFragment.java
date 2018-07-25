@@ -114,15 +114,13 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mAdapter = new StatusAdapter(mStatus, new ClickListener() {
             @Override
             public void positionClicked(int position) {
-                Fragment fragment = new StatusDetailFragment();
-
+                Fragment fragment = StatusDetailFragment.newInstance();
 
                 Bundle bundle = new Bundle();
                 bundle.putString("status", mStatus.get(position).getName());
                 bundle.putString("user", userName);
                 fragment.setArguments(bundle);
                 ((MainActivity)getActivity()).addFragment(fragment);
-                //addFragment(fragment, true);
             }
         });
 
@@ -151,7 +149,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
             String token = UserData.getInstance(mContext).getUserKey();
             Map<String, String> header = new HashMap<>();
-            header.put("token", token);
+            header.put("Authorization", "Bearer " + token);
             new AwesomeWebView.Builder(mContext).setHeader(header).showUrl(false).show(Constants.APP_STUDY_URL);
 
         }
@@ -203,6 +201,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     public void updateLessons(List<Lesson> lessons) {
         this.lessons = lessons;
         ((MainActivity)getActivity()).setLessons(this.lessons);
+
         mController.getReviews(this);
     }
 
