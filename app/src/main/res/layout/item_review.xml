@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="3dp"
+    android:paddingEnd="3dp"
+    android:gravity="center">
+    <ImageView
+        android:id="@+id/ivReview"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/icon_mark_light"/>
+</LinearLayout>

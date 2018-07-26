@@ -164,6 +164,53 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     }
 
+    private class ReviewItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        LayoutInflater inflater;
+        Context mContext;
+
+        Review review;
+
+        ReviewItemAdapter(Review review, Context context) {
+            mContext = context;
+            inflater = LayoutInflater.from(context);
+            this.review = review;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+
+            View view = inflater.inflate(R.layout.item_review, viewGroup, false);
+            return new ReviewViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+            int streak = this.review.streak;
+            if (streak > position) {
+                ((ReviewViewHolder) viewHolder).ivReview.setAlpha(1.0f);
+            } else {
+                ((ReviewViewHolder) viewHolder).ivReview.setAlpha(0.2f);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 12;
+        }
+
+        class ReviewViewHolder extends RecyclerView.ViewHolder {
+
+            ImageView ivReview;
+            ReviewViewHolder(@NonNull View itemView) {
+                super(itemView);
+                ivReview = itemView.findViewById(R.id.ivReview);
+
+            }
+        }
+    }
+
     private class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private GrammarPoint point;
@@ -219,6 +266,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                 if (review != null) {
                     ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
+                    ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, mContext);
+                    ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);
 
                 } else {
                     ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.GONE);
@@ -304,6 +353,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             TextView tvCaution;
 
             LinearLayout llReviews;
+            RecyclerView rvReviews;
 
             WeakReference<ItemClickListener> ref;
             DescriptionHolder(@NonNull View itemView, ItemClickListener listener) {
@@ -322,7 +372,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 tvCaution = itemView.findViewById(R.id.tvCaution);
 
                 llReviews = itemView.findViewById(R.id.llReviews);
-
+                rvReviews = itemView.findViewById(R.id.rvReviews);
+                rvReviews.setItemAnimator(new DefaultItemAnimator());
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+                rvReviews.setLayoutManager(layoutManager);
             }
 
             @Override
