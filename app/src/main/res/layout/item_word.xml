@@ -1,49 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <RelativeLayout
-        android:id="@+id/rlContainer"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/bg_login">
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rlContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_login">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:gravity="start"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/ivIndicator"
+                android:layout_toLeftOf="@+id/ivIndicator">
+
+                <TextView
+                    android:id="@+id/tvJapanese"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tvEnglish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivIndicator"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_play_arrow_black_24dp"/>
+        </RelativeLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/llReadingContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_centerVertical="true"
-            android:gravity="start"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_toStartOf="@+id/ivIndicator"
-            android:layout_toLeftOf="@+id/ivIndicator">
+            android:layout_margin="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:background="@drawable/bg_login">
 
             <TextView
-                android:id="@+id/tvJapanese"
+                android:id="@+id/tvSite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorYellow"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"/>
             <TextView
-                android:id="@+id/tvEnglish"
+                android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
 
         </LinearLayout>
+    </FrameLayout>
 
-        <ImageView
-            android:id="@+id/ivIndicator"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_play_arrow_black_24dp"/>
-    </RelativeLayout>
 </LinearLayout>

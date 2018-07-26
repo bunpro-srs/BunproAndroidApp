@@ -461,9 +461,8 @@ public class JsonParser {
                         point.nuance = object.getString("nuance");
                     }
 
+                    List<ExampleSentence> sentences = new ArrayList<>();
                     if (object.has("example_sentences")) {
-                        List<ExampleSentence> sentences = new ArrayList<>();
-
                         JSONArray arr = object.getJSONArray("example_sentences");
                         if (arr.length() > 0) {
                             for (int j=0;j<arr.length();j++) {
@@ -496,9 +495,7 @@ public class JsonParser {
                                 if (obj.has("audio_link")) {
                                     sentence.audio_link = obj.getString("audio_link");
                                 }
-//                                if (obj.has("sentence_audio_id")) {
-//                                    sentence.sentence_audio_id = obj.getInt("sentence_audio_id");
-//                                }
+
                                 if (obj.has("nuance")) {
                                     sentence.nuance = obj.optString("nuance");
                                 }
@@ -507,6 +504,45 @@ public class JsonParser {
                         }
 
                         point.example_sentences = sentences;
+
+                        List<SupplementalLink> links = new ArrayList<>();
+                        if (object.has("supplemental_links")) {
+                            JSONArray arrr = object.getJSONArray("supplemental_links");
+
+
+                            if (arrr.length() > 0) {
+                                for (int j=0;j<arrr.length();j++) {
+                                    SupplementalLink link = new SupplementalLink();
+                                    JSONObject o = arrr.getJSONObject(j);
+
+                                    if (o.has("id")) {
+                                        link.id = o.getInt("id");
+                                    }
+                                    if (o.has("grammar_point_id")) {
+                                        link.grammar_point_id = o.optInt("grammar_point_id");
+                                    }
+                                    if (o.has("site")) {
+                                        link.site = o.optString("site");
+                                    }
+                                    if (o.has("link")) {
+                                        link.link = o.optString("link");
+                                    }
+                                    if (o.has("description")) {
+                                        link.description = o.optString("description");
+                                    }
+                                    if (o.has("created_at")) {
+                                        link.created_at = o.optString("created_at");
+                                    }
+                                    if (o.has("updated_at")) {
+                                        link.updated_at = o.optString("updated_at");
+                                    }
+                                    links.add(link);
+                                }
+                            }
+
+                            point.supplemental_links = links;
+                        }
+
                     }
 
                 } catch (JSONException e) {

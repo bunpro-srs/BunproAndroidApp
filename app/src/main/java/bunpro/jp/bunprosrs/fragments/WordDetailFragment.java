@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import bunpro.jp.bunprosrs.fragments.contract.WordDetailController;
 import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Review;
+import bunpro.jp.bunprosrs.models.SupplementalLink;
 import bunpro.jp.bunprosrs.utils.TextUtils;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -96,7 +98,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         review = mController.getReview(selectedPoint);
 
         if (selectedPoint != null) {
-            mAdapter = new StickAdapter(review, selectedPoint, mContext, new ItemClickListener() {
+            mAdapter = new StickAdapter(0, review, selectedPoint, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
                     if (position == 0) {
@@ -106,6 +108,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     } else {
 
                     }
+                }
+            }, new ItemChooseListener() {
+                @Override
+                public void chooseListener(int index) {
+                    mAdapter.updateType(index);
+                    mAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -216,16 +224,22 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private GrammarPoint point;
         private Review review;
 
+        private int type;
+
         private static final int TYPE_DESCRIPTION = 0;
         private static final int TYPE_ITEM = 1;
         private static final int TYPE_SELECTOR = 2;
+        private static final int TYPE_READING_ITEM = 3;
 
         private LayoutInflater inflater;
         private ItemClickListener listener;
+        private ItemChooseListener chooseListener;
 
-        StickAdapter(Review review, GrammarPoint point, Context context, ItemClickListener listener) {
+        StickAdapter(int type, Review review, GrammarPoint point, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
             inflater = LayoutInflater.from(context);
             this.listener = listener;
+            this.chooseListener = chooseListener;
+            this.type = type;
             this.point = point;
             this.review = review;
         }
@@ -239,7 +253,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 return new DescriptionHolder(view, listener);
             } else if (viewType == TYPE_SELECTOR) {
                 final View view = inflater.inflate(R.layout.item_word_header, viewGroup, false);
-                return new HeaderHolder(view);
+                return new HeaderHolder(view, this.chooseListener);
             } else {
                 final View view = inflater.inflate(R.layout.item_word, viewGroup, false);
                 return new ViewHolder(view, listener);
@@ -249,42 +263,88 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 
-            if (viewHolder instanceof DescriptionHolder) {
+            if (type == 0) {
+                if (viewHolder instanceof DescriptionHolder) {
 
-                ((DescriptionHolder) viewHolder).tvTitle.setText(point.title);
-                ((DescriptionHolder) viewHolder).tvMeaning.setText(point.meaning);
-                String structure = TextUtils.stripHtml(point.structure);
-                structure = structure.replaceAll(",", "\n");
-                ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
+                    ((DescriptionHolder) viewHolder).tvTitle.setText(point.title);
+                    ((DescriptionHolder) viewHolder).tvMeaning.setText(point.meaning);
+                    String structure = TextUtils.stripHtml(point.structure);
+                    structure = structure.replaceAll(",", "\n");
+                    ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
 
-                if (point.caution != null && point.caution.length() != 0) {
-                    ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.VISIBLE);
-                    ((DescriptionHolder) viewHolder).tvCaution.setText(TextUtils.stripHtml(point.caution));
-                } else {
-                    ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
+                    if (point.caution != null && point.caution.length() != 0) {
+                        ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.VISIBLE);
+                        ((DescriptionHolder) viewHolder).tvCaution.setText(TextUtils.stripHtml(point.caution));
+                    } else {
+                        ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
+                    }
+
+                    if (review != null) {
+                        ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
+                        ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, mContext);
+                        ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);
+
+                    } else {
+                        ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.GONE);
+                    }
+
+                } else if (viewHolder instanceof ViewHolder) {
+
+                    ((ViewHolder) viewHolder).rlContainer.setVisibility(View.VISIBLE);
+                    ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
+                    ExampleSentence sentence = point.example_sentences.get(position - 2);
+                    ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
+                    String japanese = TextUtils.removeKanji(sentence.japanese);
+                    ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
                 }
+            } else {
+                if (viewHolder instanceof DescriptionHolder) {
 
-                if (review != null) {
-                    ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
-                    ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, mContext);
-                    ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);
+                    ((DescriptionHolder) viewHolder).tvTitle.setText(point.title);
+                    ((DescriptionHolder) viewHolder).tvMeaning.setText(point.meaning);
+                    String structure = TextUtils.stripHtml(point.structure);
+                    structure = structure.replaceAll(",", "\n");
+                    ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
 
-                } else {
-                    ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.GONE);
+                    if (point.caution != null && point.caution.length() != 0) {
+                        ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.VISIBLE);
+                        ((DescriptionHolder) viewHolder).tvCaution.setText(TextUtils.stripHtml(point.caution));
+                    } else {
+                        ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
+                    }
+
+                    if (review != null) {
+                        ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
+                        ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, mContext);
+                        ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);
+
+                    } else {
+                        ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.GONE);
+                    }
+
+                } else if (viewHolder instanceof ViewHolder) {
+                    ((ViewHolder) viewHolder).rlContainer.setVisibility(View.GONE);
+                    ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.VISIBLE);
+
+                    SupplementalLink link = point.supplemental_links.get(position - 2);
+                    ((ViewHolder) viewHolder).tvSite.setText(link.site);
+                    ((ViewHolder) viewHolder).tvDescription.setText(link.description);
                 }
-
-            } else if (viewHolder instanceof ViewHolder) {
-                ExampleSentence sentence = point.example_sentences.get(position - 2);
-                ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
-                String japanese = TextUtils.removeKanji(sentence.japanese);
-                ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
             }
+        }
+
+        void updateType(int type) {
+            this.type = type;
         }
 
         @Override
         public int getItemCount() {
 
-            return point.example_sentences.size() + 2;
+            if (type == 0) {
+                return point.example_sentences.size() + 2;
+            } else {
+                return point.supplemental_links.size() + 2;
+            }
 
         }
 
@@ -297,13 +357,34 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             }
 
             return TYPE_ITEM;
+
+        }
+
+        class ReadingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            TextView tvSite, tvDescription;
+
+            ReadingViewHolder(@NonNull View itemView) {
+                super(itemView);
+                tvSite = itemView.findViewById(R.id.tvSite);
+                tvDescription = itemView.findViewById(R.id.tvDescription);
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
         }
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             RelativeLayout rlContainer;
             TextView tvEnglish, tvJapanese;
+            TextView tvSite, tvDescription;
             ImageView ivIndicator;
+
+            LinearLayout container;
+            LinearLayout llReadingContainer;
 
             WeakReference<ItemClickListener> ref;
 
@@ -317,30 +398,51 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 tvEnglish = itemView.findViewById(R.id.tvEnglish);
                 tvJapanese = itemView.findViewById(R.id.tvJapanese);
                 ivIndicator = itemView.findViewById(R.id.ivIndicator);
+
+                container = itemView.findViewById(R.id.container);
+                llReadingContainer = itemView.findViewById(R.id.llReadingContainer);
+                llReadingContainer.setOnClickListener(this);
+
+                tvSite = itemView.findViewById(R.id.tvSite);
+                tvDescription = itemView.findViewById(R.id.tvDescription);
+
             }
 
             @Override
             public void onClick(View view) {
-                int id = view.getId();
-                if (id == R.id.rlContainer) {
-                    ref.get().positionClicked(getAdapterPosition());
-                }
+
+                ref.get().positionClicked(getAdapterPosition());
             }
         }
 
-        class HeaderHolder extends RecyclerView.ViewHolder {
+        class HeaderHolder extends RecyclerView.ViewHolder implements RadioGroup.OnCheckedChangeListener {
 
             SegmentedGroup sgGroup;
             RadioButton rbExamples, rbReadings;
+            WeakReference<ItemChooseListener> ref;
 
-            HeaderHolder(@NonNull View itemView) {
+            HeaderHolder(@NonNull View itemView, ItemChooseListener listener) {
                 super(itemView);
+
+                ref = new WeakReference<>(listener);
 
                 sgGroup = itemView.findViewById(R.id.segmented);
                 rbExamples = itemView.findViewById(R.id.rbExamples);
                 rbReadings = itemView.findViewById(R.id.rbReadings);
                 rbExamples.setChecked(true);
                 rbReadings.setChecked(false);
+
+                sgGroup.setOnCheckedChangeListener(this);
+
+            }
+
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == R.id.rbExamples) {
+                    ref.get().chooseListener(0);
+                } else {
+                    ref.get().chooseListener(1);
+                }
             }
         }
 
@@ -387,6 +489,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             }
         }
 
+    }
+
+    private interface ItemChooseListener {
+        void chooseListener(int index);
     }
 
     private interface ItemClickListener {
