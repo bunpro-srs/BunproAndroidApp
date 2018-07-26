@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
@@ -29,8 +26,8 @@ import bunpro.jp.bunprosrs.fragments.contract.WordDetailContract;
 import bunpro.jp.bunprosrs.fragments.contract.WordDetailController;
 import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
+import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.utils.TextUtils;
-import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -47,6 +44,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private StickyHeaderDecoration decor;
 
     private GrammarPoint selectedPoint;
+    private Review review;
 
     public WordDetailFragment() {
 
@@ -95,9 +93,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private void initialize() {
 
         selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
-        if (selectedPoint != null) {
+        review = mController.getReview(selectedPoint);
 
-            mAdapter = new StickAdapter(selectedPoint, mContext, new ItemClickListener() {
+        if (selectedPoint != null) {
+            mAdapter = new StickAdapter(review, selectedPoint, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
                     if (position == 0) {
@@ -168,6 +167,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private GrammarPoint point;
+        private Review review;
 
         private static final int TYPE_DESCRIPTION = 0;
         private static final int TYPE_ITEM = 1;
@@ -176,10 +176,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private LayoutInflater inflater;
         private ItemClickListener listener;
 
-        StickAdapter(GrammarPoint point, Context context, ItemClickListener listener) {
+        StickAdapter(Review review, GrammarPoint point, Context context, ItemClickListener listener) {
             inflater = LayoutInflater.from(context);
             this.listener = listener;
             this.point = point;
+            this.review = review;
         }
 
         @NonNull
@@ -208,6 +209,20 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 String structure = TextUtils.stripHtml(point.structure);
                 structure = structure.replaceAll(",", "\n");
                 ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
+
+                if (point.caution != null && point.caution.length() != 0) {
+                    ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.VISIBLE);
+                    ((DescriptionHolder) viewHolder).tvCaution.setText(TextUtils.stripHtml(point.caution));
+                } else {
+                    ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
+                }
+
+                if (review != null) {
+                    ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
+
+                } else {
+                    ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.GONE);
+                }
 
             } else if (viewHolder instanceof ViewHolder) {
                 ExampleSentence sentence = point.example_sentences.get(position - 2);
@@ -285,6 +300,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             TextView tvTitle, tvMeaning, tvStructure;
             LinearLayout llDescription;
 
+            LinearLayout llCaution;
+            TextView tvCaution;
+
+            LinearLayout llReviews;
+
             WeakReference<ItemClickListener> ref;
             DescriptionHolder(@NonNull View itemView, ItemClickListener listener) {
                 super(itemView);
@@ -297,6 +317,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 tvTitle = itemView.findViewById(R.id.tvTitle);
                 tvMeaning = itemView.findViewById(R.id.tvMeaning);
                 tvStructure = itemView.findViewById(R.id.tvStructure);
+
+                llCaution = itemView.findViewById(R.id.llCaution);
+                tvCaution = itemView.findViewById(R.id.tvCaution);
+
+                llReviews = itemView.findViewById(R.id.llReviews);
 
             }
 
