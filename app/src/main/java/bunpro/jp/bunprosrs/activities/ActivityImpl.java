@@ -23,6 +23,9 @@ public interface ActivityImpl {
     void setGrammarPoints(List<GrammarPoint> grammarPoints);
     List<GrammarPoint> getGrammarPoints();
 
+    void setArrangedGrammarPoints(List<List<GrammarPoint>> grammarPoints);
+    List<List<GrammarPoint>> getArrangedGrammarPoints();
+
     void addFragment(Fragment fragment);
     void popFragment();
 }

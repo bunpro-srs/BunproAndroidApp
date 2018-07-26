@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<Lesson> lessons;
     private List<Review> reviews;
     private List<GrammarPoint> grammarPoints;
+    private List<List<GrammarPoint>> arrangedGrammarPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         lessons = new ArrayList<>();
         grammarPoints = new ArrayList<>();
         reviews = new ArrayList<>();
+        arrangedGrammarPoints = new ArrayList<>();
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
 
@@ -151,6 +153,16 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public List<GrammarPoint> getGrammarPoints() {
         return this.grammarPoints;
+    }
+
+    @Override
+    public void setArrangedGrammarPoints(List<List<GrammarPoint>> grammarPoints) {
+        this.arrangedGrammarPoints = grammarPoints;
+    }
+
+    @Override
+    public List<List<GrammarPoint>> getArrangedGrammarPoints() {
+        return this.arrangedGrammarPoints;
     }
 
     @Override

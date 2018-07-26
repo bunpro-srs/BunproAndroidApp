@@ -48,6 +48,17 @@ public class GrammarPoint implements Parcelable {
         }
     };
 
+    public static Comparator<GrammarPoint> IdComparator = new Comparator<GrammarPoint>() {
+        @Override
+        public int compare(GrammarPoint point1, GrammarPoint point2) {
+            if (point1.id > point2.id) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    };
+
     protected GrammarPoint(Parcel in) {
         id = in.readInt();
         title = in.readString();

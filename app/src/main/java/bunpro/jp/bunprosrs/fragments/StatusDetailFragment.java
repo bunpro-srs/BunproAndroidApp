@@ -95,13 +95,13 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
                 Fragment fragment = LevelDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putInt("lesson", position + 1);
+
                 fragment.setArguments(bundle);
                 ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 
         rvView.setAdapter(mAdapter);
-
         initialize();
 
     }
@@ -154,6 +154,7 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
             this.pointsByLesson.add(pointsByLesson.get(key));
         }
 
+        ((MainActivity)getActivity()).setArrangedGrammarPoints(this.pointsByLesson);
     }
 
 

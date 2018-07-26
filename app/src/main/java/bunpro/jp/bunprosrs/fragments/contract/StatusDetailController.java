@@ -59,4 +59,6 @@ public class StatusDetailController implements StatusDetailContract.Controller {
     public void getLessons(StatusDetailContract.View v) {
         v.updateLessons(pointsByLesson);
     }
+
+
 }
