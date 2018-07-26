@@ -94,40 +94,19 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     private void initialize() {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            selectedPoint = bundle.getParcelable("grammar_point");
-//            Log.d("examples", String.valueOf(selectedPoint.example_sentences.size()));
-//
-//            mAdapter = new StickAdapter(selectedPoint, mContext, new ItemClickListener() {
-//                @Override
-//                public void positionClicked(int position) {
-//                    if (position == 0) {
-//                        clickedDescription();
-//                    } else {
-//                        ExampleSentence sentence = selectedPoint.example_sentences.get(position - 1);
-//                        Bundle b = new Bundle();
-//                        b.putParcelable("example_sentence", sentence);
-//                        Fragment fragment = new ExampleFragment();
-//                        fragment.setArguments(b);
-//                        addFragment(fragment, true);
-//                    }
-//                }
-//            });
-//
-//            decor = new StickyHeaderDecoration(mAdapter);
-//            rvWords.addItemDecoration(decor, 0);
-//
-//            rvWords.setAdapter(mAdapter);
-//        }
-
         selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
         if (selectedPoint != null) {
 
             mAdapter = new StickAdapter(selectedPoint, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
+                    if (position == 0) {
+                        clickedDescription();
+                    } else if (position == 1) {
 
+                    } else {
+
+                    }
                 }
             });
 
