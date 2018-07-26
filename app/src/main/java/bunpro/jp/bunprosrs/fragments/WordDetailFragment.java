@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 
 import bunpro.jp.bunprosrs.R;
+import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.WordDetailContract;
 import bunpro.jp.bunprosrs.fragments.contract.WordDetailController;
 import bunpro.jp.bunprosrs.models.ExampleSentence;
@@ -93,29 +94,42 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     private void initialize() {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            selectedPoint = bundle.getParcelable("grammar_point");
-            Log.d("examples", String.valueOf(selectedPoint.example_sentences.size()));
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            selectedPoint = bundle.getParcelable("grammar_point");
+//            Log.d("examples", String.valueOf(selectedPoint.example_sentences.size()));
+//
+//            mAdapter = new StickAdapter(selectedPoint, mContext, new ItemClickListener() {
+//                @Override
+//                public void positionClicked(int position) {
+//                    if (position == 0) {
+//                        clickedDescription();
+//                    } else {
+//                        ExampleSentence sentence = selectedPoint.example_sentences.get(position - 1);
+//                        Bundle b = new Bundle();
+//                        b.putParcelable("example_sentence", sentence);
+//                        Fragment fragment = new ExampleFragment();
+//                        fragment.setArguments(b);
+//                        addFragment(fragment, true);
+//                    }
+//                }
+//            });
+//
+//            decor = new StickyHeaderDecoration(mAdapter);
+//            rvWords.addItemDecoration(decor, 0);
+//
+//            rvWords.setAdapter(mAdapter);
+//        }
+
+        selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
+        if (selectedPoint != null) {
 
             mAdapter = new StickAdapter(selectedPoint, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
-                    if (position == 0) {
-                        clickedDescription();
-                    } else {
-                        ExampleSentence sentence = selectedPoint.example_sentences.get(position - 1);
-                        Bundle b = new Bundle();
-                        b.putParcelable("example_sentence", sentence);
-                        Fragment fragment = new ExampleFragment();
-                        fragment.setArguments(b);
-                        addFragment(fragment, true);
-                    }
+
                 }
             });
-
-            decor = new StickyHeaderDecoration(mAdapter);
-            rvWords.addItemDecoration(decor, 0);
 
             rvWords.setAdapter(mAdapter);
         }
@@ -172,12 +186,13 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     }
 
-    private class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter<StickAdapter.HeaderHolder> {
+    private class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private GrammarPoint point;
 
         private static final int TYPE_DESCRIPTION = 0;
         private static final int TYPE_ITEM = 1;
+        private static final int TYPE_SELECTOR = 2;
 
         private LayoutInflater inflater;
         private ItemClickListener listener;
@@ -195,11 +210,13 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             if (viewType == TYPE_DESCRIPTION) {
                 final View view = inflater.inflate(R.layout.item_word_detail_description, viewGroup, false);
                 return new DescriptionHolder(view, listener);
+            } else if (viewType == TYPE_SELECTOR) {
+                final View view = inflater.inflate(R.layout.item_word_header, viewGroup, false);
+                return new HeaderHolder(view);
             } else {
                 final View view = inflater.inflate(R.layout.item_word, viewGroup, false);
                 return new ViewHolder(view, listener);
             }
-
         }
 
         @Override
@@ -213,9 +230,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 structure = structure.replaceAll(",", "\n");
                 ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
 
-            } else {
-
-                ExampleSentence sentence = point.example_sentences.get(position - 1);
+            } else if (viewHolder instanceof ViewHolder) {
+                ExampleSentence sentence = point.example_sentences.get(position - 2);
                 ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
                 String japanese = TextUtils.removeKanji(sentence.japanese);
                 ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
@@ -224,34 +240,17 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
         @Override
         public int getItemCount() {
-            return point.example_sentences.size() + 1;
-        }
 
-        @Override
-        public long getHeaderId(int position) {
-            if (position == 0) {
-                return StickyHeaderDecoration.NO_HEADER_ID;
-            }
-            return (long) 1;
-        }
-
-        @NonNull
-        @Override
-        public HeaderHolder onCreateHeaderViewHolder(@NonNull ViewGroup parent) {
-            final View view = inflater.inflate(R.layout.item_word_header, parent, false);
-            return new HeaderHolder(view);
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(@NonNull HeaderHolder viewHolder, int position) {
+            return point.example_sentences.size() + 2;
 
         }
-
 
         @Override
         public int getItemViewType(int position) {
             if (position == 0) {
                 return TYPE_DESCRIPTION;
+            } else if (position == 1) {
+                return TYPE_SELECTOR;
             }
 
             return TYPE_ITEM;
@@ -330,6 +329,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 }
             }
         }
+
     }
 
     private interface ItemClickListener {

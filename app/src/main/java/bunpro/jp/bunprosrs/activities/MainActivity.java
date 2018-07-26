@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<GrammarPoint> grammarPoints;
     private List<List<GrammarPoint>> arrangedGrammarPoints;
 
+    private GrammarPoint selectedGrammarPoint;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +165,16 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public List<List<GrammarPoint>> getArrangedGrammarPoints() {
         return this.arrangedGrammarPoints;
+    }
+
+    @Override
+    public void setGrammarPoint(GrammarPoint point) {
+        this.selectedGrammarPoint = point;
+    }
+
+    @Override
+    public GrammarPoint getGrammarPoint() {
+        return this.selectedGrammarPoint;
     }
 
     @Override

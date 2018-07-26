@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +86,9 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void positionClicked(int position) {
 
-                addFragment(new WordDetailFragment(), true);
+                Fragment fragment = WordDetailFragment.newInstance();
+                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 
@@ -122,9 +124,8 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
         Collections.sort(this.grammarPoints, GrammarPoint.IdComparator);
         mAdapter.updateGrammarPoints(this.reviews, pointList);
         mAdapter.notifyDataSetChanged();
+
     }
-
-
 
     private class LevelStatusAdapter extends RecyclerView.Adapter<LevelStatusViewHolder> {
 
