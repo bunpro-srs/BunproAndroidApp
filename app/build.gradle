@@ -34,4 +34,5 @@ dependencies {
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
     implementation 'com.github.edubarr:header-decor:master-SNAPSHOT'
     implementation 'com.ncapdevi:frag-nav:2.4.0'
+    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 }

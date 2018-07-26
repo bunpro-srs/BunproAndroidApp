@@ -36,6 +36,7 @@ import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
 import bunpro.jp.bunprosrs.utils.Constants;
 import bunpro.jp.bunprosrs.utils.UserData;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class StatusFragment extends BaseFragment implements View.OnClickListener, StatusContract.View {
 
@@ -196,6 +197,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         ((MainActivity)getActivity()).setReviews(this.reviews);
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);
+        updateBadge();
     }
 
     @Override
@@ -212,6 +214,15 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         ((MainActivity)getActivity()).setGrammarPoints(grammarPoints);
         this.grammarPoints = grammarPoints;
         mController.getReviews(this);
+    }
+
+    public void updateBadge() {
+        int number = this.reviews.size();
+        if (number != 0) {
+            ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
+        } else {
+            ShortcutBadger.removeCount(getActivity().getApplicationContext());
+        }
     }
 
     private class StatusAdapter extends RecyclerView.Adapter<StatusViewHolder> {
