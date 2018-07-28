@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
+import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.SearchContract;
 import bunpro.jp.bunprosrs.fragments.contract.SearchController;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
@@ -132,12 +133,15 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
             @Override
             public void positionClicked(int position) {
 
-                GrammarPoint point = grammarPoints.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("grammar_point", point);
-                Fragment fragment = new WordDetailFragment();
-                fragment.setArguments(bundle);
-                addFragment(fragment, true);
+//                GrammarPoint point = grammarPoints.get(position);
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("grammar_point", point);
+//                Fragment fragment = new WordDetailFragment();
+//                fragment.setArguments(bundle);
+//                addFragment(fragment, true);
+                Fragment fragment = WordDetailFragment.newInstance();
+                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 

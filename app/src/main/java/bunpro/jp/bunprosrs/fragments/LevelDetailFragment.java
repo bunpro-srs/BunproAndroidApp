@@ -106,6 +106,7 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
             int lesson = bundle.getInt("lesson");
             tvName.setText(String.format("Lesson %s", String.valueOf(lesson)));
             mController.getGrammarPoints(lesson -1, this);
+
         }
     }
 
@@ -184,7 +185,6 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
 
     private class LevelStatusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-
         LinearLayout llContainer;
         WeakReference<ClickListener> ref;
         TextView tvEnglish, tvJapanese;
@@ -201,6 +201,7 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
             tvEnglish = itemView.findViewById(R.id.tvEnglish);
             tvJapanese = itemView.findViewById(R.id.tvJapanese);
             ivReview = itemView.findViewById(R.id.ivReview);
+            
         }
 
         @Override

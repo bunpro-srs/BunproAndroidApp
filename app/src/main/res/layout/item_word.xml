@@ -67,6 +67,7 @@
                 android:textColor="@color/colorYellow"
                 android:textSize="18sp"
                 android:layout_marginTop="5dp"/>
+
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"

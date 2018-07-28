@@ -85,13 +85,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_status:
-                                fragNavController.switchTab(FragNavController.TAB1);
+                                fragNavController.replaceFragment(StatusFragment.newInstance());
                                 break;
                             case R.id.action_search:
-                                fragNavController.switchTab(FragNavController.TAB2);
+                                fragNavController.replaceFragment(SearchFragment.newInstance());
                                 break;
                             case R.id.action_settings:
-                                fragNavController.switchTab(FragNavController.TAB3);
+                                fragNavController.replaceFragment(SettingFragment.newInstance());
                                 break;
                         }
                         return true;
