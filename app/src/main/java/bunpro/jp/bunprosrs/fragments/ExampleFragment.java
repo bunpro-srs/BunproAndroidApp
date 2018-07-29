@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import bunpro.jp.bunprosrs.R;
+import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.ExampleContract;
 import bunpro.jp.bunprosrs.fragments.contract.ExampleController;
 import bunpro.jp.bunprosrs.models.ExampleSentence;
@@ -91,28 +92,21 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
     private void initialize() {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-
-            selectedSentence = bundle.getParcelable("example_sentence");
+        selectedSentence = ((MainActivity)getActivity()).getExampleSentence();
+        if (selectedSentence != null) {
             String english = TextUtils.stripHtml(selectedSentence.english);
             tvEnglish.setText(english);
 
             String japanese = TextUtils.removeKanji(selectedSentence.japanese);
             tvJapanese.setText(japanese);
 
-
             if (TextUtils.includeKanji(selectedSentence.japanese)) {
                 llKanjiReadings.setVisibility(View.VISIBLE);
                 rvWords.setVisibility(View.VISIBLE);
-
             } else {
-
                 llKanjiReadings.setVisibility(View.GONE);
                 rvWords.setVisibility(View.GONE);
-
             }
-
         }
 
     }

@@ -22,6 +22,7 @@ import bunpro.jp.bunprosrs.fragments.SettingFragment;
 import bunpro.jp.bunprosrs.fragments.StatusDetailFragment;
 import bunpro.jp.bunprosrs.fragments.StatusFragment;
 import bunpro.jp.bunprosrs.fragments.WordDetailFragment;
+import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<List<GrammarPoint>> arrangedGrammarPoints;
 
     private GrammarPoint selectedGrammarPoint;
+    private ExampleSentence selectedSentence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +177,16 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public GrammarPoint getGrammarPoint() {
         return this.selectedGrammarPoint;
+    }
+
+    @Override
+    public void setExampleSentense(ExampleSentence sentense) {
+        this.selectedSentence = sentense;
+    }
+
+    @Override
+    public ExampleSentence getExampleSentence() {
+        return this.selectedSentence;
     }
 
     @Override

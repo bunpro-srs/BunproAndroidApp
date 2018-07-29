@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -106,6 +107,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     } else if (position == 1) {
 
                     } else {
+
+                        ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
+                        ((MainActivity)getActivity()).setExampleSentense(sentence);
+                        Fragment fragment = ExampleFragment.newInstance();
+                        ((MainActivity)getActivity()).addFragment(fragment);
 
                     }
                 }

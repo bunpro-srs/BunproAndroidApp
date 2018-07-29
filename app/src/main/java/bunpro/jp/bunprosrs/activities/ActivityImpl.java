@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 
 import java.util.List;
 
+import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
@@ -28,6 +29,9 @@ public interface ActivityImpl {
 
     void setGrammarPoint(GrammarPoint point);
     GrammarPoint getGrammarPoint();
+
+    void setExampleSentense(ExampleSentence sentense);
+    ExampleSentence getExampleSentence();
 
     void addFragment(Fragment fragment);
     void popFragment();
