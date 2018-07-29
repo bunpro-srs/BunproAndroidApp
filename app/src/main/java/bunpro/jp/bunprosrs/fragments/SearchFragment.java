@@ -82,6 +82,29 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        rvWords = view.findViewById(R.id.rvWords);
+        rvWords.setHasFixedSize(true);
+        rvWords.setItemAnimator(new DefaultItemAnimator());
+
+        LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        rvWords.setLayoutManager(layoutManager);
+
+        grammarPoints = new ArrayList<>();
+
+        mAdapter = new SearchWordAdapter(grammarPoints, mContext, new ItemClickListener() {
+            @Override
+            public void positionClicked(int position) {
+
+                Fragment fragment = WordDetailFragment.newInstance();
+                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
+                ((MainActivity)getActivity()).addFragment(fragment);
+            }
+        });
+
+        decor = new StickyHeaderDecoration(mAdapter);
+        rvWords.addItemDecoration(decor, 0);
+
+        rvWords.setAdapter(mAdapter);
 
         filterGroup = view.findViewById(R.id.segmented);
         filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -119,37 +142,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         android.support.v7.widget.SearchView.SearchAutoComplete searchAutoComplete = (android.support.v7.widget.SearchView.SearchAutoComplete)svSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(Color.parseColor("#c7d1d3"));
         searchAutoComplete.setTextColor(Color.parseColor("#c7d1d3"));
-
-        rvWords = view.findViewById(R.id.rvWords);
-        rvWords.setHasFixedSize(true);
-        rvWords.setItemAnimator(new DefaultItemAnimator());
-
-        LayoutManager layoutManager = new LinearLayoutManager(mContext);
-        rvWords.setLayoutManager(layoutManager);
-
-        grammarPoints = new ArrayList<>();
-
-        mAdapter = new SearchWordAdapter(grammarPoints, mContext, new ItemClickListener() {
-            @Override
-            public void positionClicked(int position) {
-
-//                GrammarPoint point = grammarPoints.get(position);
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable("grammar_point", point);
-//                Fragment fragment = new WordDetailFragment();
-//                fragment.setArguments(bundle);
-//                addFragment(fragment, true);
-                Fragment fragment = WordDetailFragment.newInstance();
-                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
-                ((MainActivity)getActivity()).addFragment(fragment);
-            }
-        });
-
-        decor = new StickyHeaderDecoration(mAdapter);
-        rvWords.addItemDecoration(decor, 0);
-
-        rvWords.setAdapter(mAdapter);
-
         initialize();
 
     }

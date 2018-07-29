@@ -24,7 +24,7 @@ public class SearchController implements SearchContract.Controller {
 
     public SearchController(Context context) {
         mContext = context;
-        grammarPoints = new ArrayList<>();
+        grammarPoints = ((MainActivity) mContext).getGrammarPoints();
     }
 
 
