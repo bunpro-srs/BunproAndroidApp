@@ -13,6 +13,7 @@ import java.util.List;
 
 import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
+import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
 import bunpro.jp.bunprosrs.service.ApiService;
 import bunpro.jp.bunprosrs.service.JsonParser;
@@ -57,7 +58,10 @@ public class SearchController implements SearchContract.Controller {
     }
 
     private List<GrammarPoint> filtering(int filter) {
+
         List<GrammarPoint> points = new ArrayList<>();
+
+        List<Review> reviews = ((MainActivity)mContext).getReviews();
 
         Collections.sort(grammarPoints, GrammarPoint.levelComparator);
 
@@ -65,8 +69,38 @@ public class SearchController implements SearchContract.Controller {
             points = grammarPoints;
         } else if (filter == 1) {
 
+            if (reviews.size() > 0) {
+
+                for (GrammarPoint point : grammarPoints) {
+                    for (Review review : reviews) {
+                        if (review.grammar_point_id == point.id) {
+
+                            points.add(point);
+                            break;
+
+                        }
+                    }
+                }
+
+            }
+
         } else {
 
+            if (reviews.size() > 0) {
+
+                points = grammarPoints;
+                for (int k=0;k<points.size();k++) {
+                    for (Review review : reviews) {
+                        if (review.grammar_point_id == points.get(k).id) {
+                            points.remove(k);
+                            break;
+                        }
+                    }
+                }
+
+            } else {
+                points = grammarPoints;
+            }
         }
 
         return points;

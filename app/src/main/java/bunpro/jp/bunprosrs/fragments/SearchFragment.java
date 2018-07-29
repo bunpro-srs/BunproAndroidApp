@@ -118,6 +118,8 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
                     filter = 2;
                 }
 
+                sfLayout.setRefreshing(true);
+
                 mController.getAllWords(SearchFragment.this, filter);
             }
         });
@@ -134,28 +136,26 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
             }
         });
 
-        rbAll.setChecked(true);
-        rbLearned.setChecked(false);
-        rbUnlearned.setChecked(false);
 
         svSearch = view.findViewById(R.id.svSearch);
         android.support.v7.widget.SearchView.SearchAutoComplete searchAutoComplete = (android.support.v7.widget.SearchView.SearchAutoComplete)svSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(Color.parseColor("#c7d1d3"));
         searchAutoComplete.setTextColor(Color.parseColor("#c7d1d3"));
-        initialize();
 
-    }
 
-    private void initialize() {
         filter = 0;
-        sfLayout.setRefreshing(true);
+        rbAll.setChecked(true);
+        rbLearned.setChecked(false);
+        rbUnlearned.setChecked(false);
     }
 
     @Override
     public void showError(String msg) {
 
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-
+        if (sfLayout.isRefreshing()) {
+            sfLayout.setRefreshing(false);
+        }
     }
 
     @Override
