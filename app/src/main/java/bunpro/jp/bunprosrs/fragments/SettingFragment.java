@@ -19,6 +19,8 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.wuadam.awesomewebview.AwesomeWebView;
 
 
+import org.greenrobot.eventbus.EventBus;
+
 import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.LoginActivity;
 import bunpro.jp.bunprosrs.fragments.contract.SettingContract;
@@ -108,6 +110,18 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
         initialize();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override

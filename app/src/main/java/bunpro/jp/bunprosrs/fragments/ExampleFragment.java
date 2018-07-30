@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.MainActivity;
 import bunpro.jp.bunprosrs.fragments.contract.ExampleContract;
@@ -107,6 +109,9 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
                 llKanjiReadings.setVisibility(View.GONE);
                 rvWords.setVisibility(View.GONE);
             }
+
+            List<String> kanjis = TextUtils.getKanji(TextUtils.stripHtml(selectedSentence.japanese));
+
         }
 
     }

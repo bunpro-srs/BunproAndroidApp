@@ -2,7 +2,10 @@ package bunpro.jp.bunprosrs.utils;
 
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,4 +32,22 @@ public class TextUtils {
         boolean b = m.find();
         return b;
     }
+
+
+    public static List<String> getKanji(String str) {
+
+        List<String> kanjis = new ArrayList<>();
+
+        Pattern p = Pattern.compile("\\p{LC}", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(str);
+
+        while (m.find()) {
+            String s = m.group();
+            Log.d("Test", s);
+
+        }
+
+        return kanjis;
+    }
+
 }

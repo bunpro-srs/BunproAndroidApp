@@ -300,7 +300,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
                     ExampleSentence sentence = point.example_sentences.get(position - 2);
                     ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
-                    String japanese = TextUtils.removeKanji(sentence.japanese);
+                    String japanese = TextUtils.removeKanji(TextUtils.stripHtml(sentence.japanese));
                     ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
                 }
             } else {
