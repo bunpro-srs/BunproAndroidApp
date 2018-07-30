@@ -1,6 +1,8 @@
 package bunpro.jp.bunprosrs.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,6 +51,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private GrammarPoint selectedPoint;
     private Review review;
 
+    private int type;
+
     public WordDetailFragment() {
 
     }
@@ -69,6 +73,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         mContext = getActivity();
         mController = new WordDetailController(mContext);
         selectedPoint = null;
+        type = 0;
         return rootView;
     }
 
@@ -108,16 +113,25 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                     } else {
 
-                        ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
-                        ((MainActivity)getActivity()).setExampleSentense(sentence);
-                        Fragment fragment = ExampleFragment.newInstance();
-                        ((MainActivity)getActivity()).addFragment(fragment);
+                        if (type == 0) {
+                            ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
+                            ((MainActivity)getActivity()).setExampleSentense(sentence);
+                            Fragment fragment = ExampleFragment.newInstance();
+                            ((MainActivity)getActivity()).addFragment(fragment);
+                        } else {
+
+                            SupplementalLink link = selectedPoint.supplemental_links.get(position - 2);
+                            Intent bIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.link));
+                            startActivity(bIntent);
+
+                        }
 
                     }
                 }
             }, new ItemChooseListener() {
                 @Override
                 public void chooseListener(int index) {
+                    type = index;
                     mAdapter.updateType(index);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -364,22 +378,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
             return TYPE_ITEM;
 
-        }
-
-        class ReadingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-            TextView tvSite, tvDescription;
-
-            ReadingViewHolder(@NonNull View itemView) {
-                super(itemView);
-                tvSite = itemView.findViewById(R.id.tvSite);
-                tvDescription = itemView.findViewById(R.id.tvDescription);
-            }
-
-            @Override
-            public void onClick(View view) {
-
-            }
         }
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
