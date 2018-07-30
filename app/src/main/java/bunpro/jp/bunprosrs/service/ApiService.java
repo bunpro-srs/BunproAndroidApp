@@ -181,4 +181,26 @@ public class ApiService {
 
     }
 
+
+    public void userEdit(String hideEnglish, String furigana, String lightMode, String bunnyMode, final CallbackListener listener) {
+
+        String token = UserData.getInstance(mContext).getUserKey();
+        String url = Constants.BASE_URL + "user/edit?" + "user[furigana]=\"" + furigana + "\"&user[hide_english]=\"" + hideEnglish + "\"&user[light_mode]=\"" + lightMode + "\"&user[bunny_mode]=\"" + bunnyMode + "\"";
+        AndroidNetworking.post(url)
+                .setPriority(Priority.HIGH)
+                .addHeaders("Authorization", "Bearer " + token)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        listener.success(null);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        listener.error(anError);
+                    }
+                });
+    }
+
 }

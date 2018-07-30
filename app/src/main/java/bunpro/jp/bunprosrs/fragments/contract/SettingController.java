@@ -64,4 +64,48 @@ public class SettingController implements SettingContract.Controller {
             }
         });
     }
+
+    @Override
+    public void setEdit(String hideEnglish, String furigana, String lightMode, String bunnyMode, final SettingContract.View v) {
+
+        v.loadingProgress(true);
+        ApiService apiService = new ApiService(mContext);
+        apiService.userEdit(hideEnglish, furigana, lightMode, bunnyMode, new ApiService.CallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+
+                v.loadingProgress(false);
+                if (jsonObject == null) {
+
+                    v.updateView();
+                }
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+
+            }
+
+            @Override
+            public void error(ANError anError) {
+                v.loadingProgress(false);
+                String errorBody = anError.getErrorBody();
+                try {
+                    JSONObject jsonObject = new JSONObject(errorBody);
+                    if (jsonObject.has("errors")) {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("errors");
+                        JSONObject obj = jsonArray.getJSONObject(0);
+                        v.showError(obj.getString("detail"));
+
+                    } else {
+                        v.showError(errorBody);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
 }

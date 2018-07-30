@@ -20,6 +20,8 @@ import com.wuadam.awesomewebview.AwesomeWebView;
 
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.LoginActivity;
@@ -27,6 +29,7 @@ import bunpro.jp.bunprosrs.fragments.contract.SettingContract;
 import bunpro.jp.bunprosrs.fragments.contract.SettingController;
 import bunpro.jp.bunprosrs.utils.AppData;
 import bunpro.jp.bunprosrs.utils.Constants;
+import bunpro.jp.bunprosrs.utils.SettingEvent;
 import bunpro.jp.bunprosrs.utils.UserData;
 
 public class SettingFragment extends BaseFragment implements View.OnClickListener, SettingContract.View {
@@ -225,6 +228,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
                 tvFurigana.setText("Always");
                 AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_ALWAYS);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -235,6 +239,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             public void onClick(View view) {
                 tvFurigana.setText("Never");
                 AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_NEVER);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -245,6 +250,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             public void onClick(View view) {
                 tvFurigana.setText("WaniKani");
                 AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_WANIKANI);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -272,6 +278,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             public void onClick(View view) {
                 tvHideEnglish.setText("Yes");
                 AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_YES);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -282,6 +289,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             public void onClick(View view) {
                 tvHideEnglish.setText("No");
                 AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_NO);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -311,6 +319,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
                 tvBunnyMode.setText("On");
                 AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_ON);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -322,6 +331,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
                 tvBunnyMode.setText("Off");
                 AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_OFF);
+                setUserEdit();
                 dialog.dismiss();
             }
         });
@@ -362,6 +372,42 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+
+    public void onMessageEvent(SettingEvent event) {
+
+    }
+
+    private void setUserEdit() {
+
+        String furigana = "";
+        String bunny_mode = "";
+        String hide_english = "";
+        String light_mode = "Off";
+
+        if (AppData.getInstance(mContext).getFurigana() == Constants.SETTING_FURIGANA_ALWAYS) {
+            furigana = "Show";
+        } else if (AppData.getInstance(mContext).getFurigana() == Constants.SETTING_FURIGANA_NEVER) {
+            furigana = "Hide";
+        } else {
+            furigana = "Wanikani";
+        }
+
+        if (AppData.getInstance(mContext).getBunnyMode() == Constants.SETTING_BUNNY_MODE_ON) {
+            bunny_mode = "On";
+        } else {
+            bunny_mode = "Off";
+        }
+
+        if (AppData.getInstance(mContext).getHideEnglish() == Constants.SETTING_HIDE_ENGLISH_NO) {
+            hide_english = "No";
+        } else {
+            hide_english = "Yes";
+        }
+
+        mController.setEdit(hide_english, furigana, light_mode, bunny_mode, this);
+    }
+
     @Override
     public void loadingProgress(boolean stats) {
         if (progress != null) {
@@ -371,6 +417,12 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 progress.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void updateView() {
+        Toast.makeText(mContext, "Updated user setting", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
