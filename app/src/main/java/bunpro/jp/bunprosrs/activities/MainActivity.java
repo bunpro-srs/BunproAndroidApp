@@ -6,10 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.androidnetworking.error.ANError;
 import com.ncapdevi.fragnav.FragNavController;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,8 @@ import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Lesson;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.Status;
+import bunpro.jp.bunprosrs.service.ApiService;
+import bunpro.jp.bunprosrs.service.JsonParser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -66,6 +73,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
 
+        fetchReviews();
+
+    }
+
+    private void initializeUI() {
+
+
         final List<Fragment> fragments = new ArrayList<>();
         fragments.add(StatusFragment.newInstance());
         fragments.add(SearchFragment.newInstance());
@@ -99,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         return true;
                     }
                 });
-
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -216,4 +230,54 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         }
         throw new IllegalStateException("Need to send an index that we know");
     }
+
+    private void fetchGrammarPoints() {
+
+        ApiService apiService = new ApiService(this);
+        apiService.getGrammarPoints(new ApiService.CallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
+                setGrammarPoints(grammarPoints);
+
+                initializeUI();
+            }
+
+            @Override
+            public void error(ANError anError) {
+                Log.d("Error", anError.getErrorDetail());
+            }
+        });
+    }
+
+    private void fetchReviews() {
+
+        ApiService apiService = new ApiService(this);
+        apiService.getReviews(new ApiService.CallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonArray);
+                setReviews(reviews);
+                fetchGrammarPoints();
+            }
+
+            @Override
+            public void error(ANError anError) {
+
+                Log.d("Error", anError.getErrorDetail());
+            }
+        });
+
+    }
+
 }

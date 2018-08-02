@@ -141,7 +141,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     private void initialize() {
 
         mController.setName(this);
-        mController.getGrammarPoints(this);
+        this.grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
+        this.reviews = ((MainActivity)getActivity()).getReviews();
+        tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
+        mController.getStatus(this);
+        updateBadge();
     }
 
     @Override
