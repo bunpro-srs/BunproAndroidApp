@@ -17,6 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
@@ -25,6 +29,9 @@ import bunpro.jp.bunprosrs.fragments.contract.ExampleContract;
 import bunpro.jp.bunprosrs.fragments.contract.ExampleController;
 import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
+import bunpro.jp.bunprosrs.utils.AppData;
+import bunpro.jp.bunprosrs.utils.Constants;
+import bunpro.jp.bunprosrs.utils.SettingEvent;
 import bunpro.jp.bunprosrs.utils.TextUtils;
 
 public class ExampleFragment extends BaseFragment implements View.OnClickListener, ExampleContract.View {
@@ -110,6 +117,15 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
                 rvWords.setVisibility(View.GONE);
             }
 
+
+            int hideEnglish = AppData.getInstance(getActivity()).getHideEnglish();
+            if (hideEnglish == Constants.SETTING_HIDE_ENGLISH_NO) {
+                tvEnglish.setTextColor(Color.parseColor("#FFFFFF"));
+                tvEnglish.setText(TextUtils.stripHtml(selectedSentence.english));
+            } else {
+                tvEnglish.setText(R.string.show_english);
+                tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+            }
             List<String> kanjis = TextUtils.getKanji(TextUtils.stripHtml(selectedSentence.japanese));
 
         }
@@ -134,6 +150,32 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
         if (id == R.id.btnBack) {
             popFragment();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SettingEvent event) {
+        int hideEnglish = AppData.getInstance(getActivity()).getHideEnglish();
+        if (hideEnglish == Constants.SETTING_HIDE_ENGLISH_NO) {
+            tvEnglish.setTextColor(Color.parseColor("#FFFFFF"));
+            tvEnglish.setText(TextUtils.stripHtml(selectedSentence.english));
+        } else {
+            tvEnglish.setText(R.string.show_english);
+            tvEnglish.setTextColor(Color.parseColor("#ffff00"));
         }
     }
 

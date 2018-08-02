@@ -34,7 +34,7 @@ public class StatusController implements StatusContract.Controller {
     public void getStatus(final StatusContract.View v) {
 
         ApiService apiService = new ApiService(mContext);
-        v.loadingProgress(true);
+        //v.loadingProgress(true);
 
         apiService.getProgress(new ApiService.CallbackListener() {
             @Override
