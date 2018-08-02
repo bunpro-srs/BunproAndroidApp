@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,6 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         tvJapanese = view.findViewById(R.id.tvJapanese);
 
         llKanjiReadings = view.findViewById(R.id.llKanjiReadings);
-        llKanjiReadings.setOnClickListener(this);
 
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -100,7 +100,15 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         rvWords.setItemAnimator(new DefaultItemAnimator());
 
         kanjis = new ArrayList<>();
-        mAdapter = new KanjiWordAdapter(kanjis);
+        mAdapter = new KanjiWordAdapter(kanjis, new ClickListener() {
+            @Override
+            public void positionClicked(int position) {
+
+                clickedKanjiReadings(position);
+
+            }
+        });
+
         rvWords.setAdapter(mAdapter);
 
         initialize();
@@ -134,7 +142,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
                 tvEnglish.setTextColor(Color.parseColor("#ffff00"));
             }
 
-            kanjis = TextUtils.getKanji(TextUtils.stripHtml(selectedSentence.japanese));
+            kanjis = TextUtils.getKanjis(TextUtils.stripHtml(selectedSentence.japanese));
             mAdapter.update(kanjis);
             mAdapter.notifyDataSetChanged();
 
@@ -154,9 +162,6 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             clickedJapanese();
         }
 
-        if (id == R.id.llKanjiReadings) {
-            clickedKanjiReadings();
-        }
 
         if (id == R.id.btnBack) {
             popFragment();
@@ -242,7 +247,9 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    private void clickedKanjiReadings() {
+    private void clickedKanjiReadings(int position) {
+        final String s = kanjis.get(position);
+
         View view = getLayoutInflater().inflate(R.layout.layout_kanji_reading, null);
         final BottomSheetDialog dialog = new BottomSheetDialog(mContext);
 
@@ -254,6 +261,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onClick(View view) {
 
+                clipTextToBoard(TextUtils.getKanji(s));
                 dialog.dismiss();
             }
         });
@@ -262,6 +270,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         rlCopyKana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clipTextToBoard(TextUtils.getKana(s));
                 dialog.dismiss();
             }
         });
@@ -283,16 +292,18 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
     class KanjiWordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         List<String> kanjis;
+        ClickListener listener;
 
-        KanjiWordAdapter(List<String> kanjis) {
+        KanjiWordAdapter(List<String> kanjis, ClickListener listener) {
             this.kanjis = kanjis;
+            this.listener = listener;
         }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-            return new WordViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kanji_word, viewGroup, false));
+            return new WordViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kanji_word, viewGroup, false), listener);
         }
 
         @Override
@@ -312,16 +323,34 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    class WordViewHolder extends RecyclerView.ViewHolder {
+    class WordViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
 
         LinearLayout llContainer;
         TextView tvWord;
+        WeakReference<ClickListener> ref;
 
 
-        WordViewHolder(@NonNull View itemView) {
+        WordViewHolder(@NonNull View itemView, ClickListener listener) {
             super(itemView);
+
+            ref = new WeakReference<>(listener);
             llContainer = itemView.findViewById(R.id.llContainer);
+            llContainer.setOnClickListener(this);
             tvWord = itemView.findViewById(R.id.tvWord);
         }
+
+        @Override
+        public void onClick(View view) {
+
+            int id = view.getId();
+            if (id == R.id.llContainer) {
+                ref.get().positionClicked(getAdapterPosition());
+            }
+
+        }
+    }
+
+    interface ClickListener {
+        void positionClicked(int position);
     }
 }

@@ -33,7 +33,7 @@ public class TextUtils {
     }
 
 
-    public static List<String> getKanji(String str) {
+    public static List<String> getKanjis(String str) {
 
         List<String> kanjis = new ArrayList<>();
 
@@ -60,6 +60,24 @@ public class TextUtils {
         Pattern p = Pattern.compile("[ぁ-ゔゞァ-・ヽヾ゛゜ー]", Pattern.DOTALL);
         Matcher m = p.matcher(s);
         return m.find();
+    }
+
+    public static String getKana(String s) {
+        String s1 = "";
+        Pattern p = Pattern.compile("\\（[^\\（]*?\\）", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(s);
+        if (m.find()) {
+            s1 = m.group();
+            s1 = s1.replaceAll("（", "");
+            s1 = s1.replaceAll("）", "");
+        }
+
+        return s1;
+
+    }
+
+    public static String getKanji(String s) {
+        return s.replaceAll("\\（[^\\（]*?\\）", "");
     }
 
 }
