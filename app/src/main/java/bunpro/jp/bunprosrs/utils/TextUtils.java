@@ -29,8 +29,7 @@ public class TextUtils {
         Pattern p = Pattern.compile("\\（[^\\（]*?\\）", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(str);
 
-        boolean b = m.find();
-        return b;
+        return m.find();
     }
 
 
@@ -38,16 +37,29 @@ public class TextUtils {
 
         List<String> kanjis = new ArrayList<>();
 
-        Pattern p = Pattern.compile("\\p{LC}", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[\\p{L}]+（.+?）", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(str);
 
         while (m.find()) {
             String s = m.group();
-            Log.d("Test", s);
+            String c = String.valueOf(s.charAt(0));
+            while (isJapanese(c)) {
+                s = s.substring(1);
+                c = String.valueOf(s.charAt(0));
+            }
 
+            if (!kanjis.contains(s)) {
+                kanjis.add(s);
+            }
         }
 
         return kanjis;
+    }
+
+    public static boolean isJapanese(String s) {
+        Pattern p = Pattern.compile("[ぁ-ゔゞァ-・ヽヾ゛゜ー]", Pattern.DOTALL);
+        Matcher m = p.matcher(s);
+        return m.find();
     }
 
 }

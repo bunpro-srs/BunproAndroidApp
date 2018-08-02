@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
@@ -47,6 +48,8 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
     ExampleSentence selectedSentence;
 
     RecyclerView rvWords;
+    KanjiWordAdapter mAdapter;
+    List<String> kanjis;
 
     public ExampleFragment() {
 
@@ -96,6 +99,10 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         rvWords.setLayoutManager(layoutManager);
         rvWords.setItemAnimator(new DefaultItemAnimator());
 
+        kanjis = new ArrayList<>();
+        mAdapter = new KanjiWordAdapter(kanjis);
+        rvWords.setAdapter(mAdapter);
+
         initialize();
     }
 
@@ -126,7 +133,10 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
                 tvEnglish.setText(R.string.show_english);
                 tvEnglish.setTextColor(Color.parseColor("#ffff00"));
             }
-            List<String> kanjis = TextUtils.getKanji(TextUtils.stripHtml(selectedSentence.japanese));
+
+            kanjis = TextUtils.getKanji(TextUtils.stripHtml(selectedSentence.japanese));
+            mAdapter.update(kanjis);
+            mAdapter.notifyDataSetChanged();
 
         }
 
@@ -268,5 +278,50 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
     @Override
     protected void clipTextToBoard(String text) {
         super.clipTextToBoard(text);
+    }
+
+    class KanjiWordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        List<String> kanjis;
+
+        KanjiWordAdapter(List<String> kanjis) {
+            this.kanjis = kanjis;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+            return new WordViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kanji_word, viewGroup, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+            String word = kanjis.get(i);
+            ((WordViewHolder)viewHolder).tvWord.setText(word);
+        }
+
+        @Override
+        public int getItemCount() {
+            return kanjis.size();
+        }
+
+        public void update(List<String> kanjis) {
+            this.kanjis = kanjis;
+        }
+    }
+
+    class WordViewHolder extends RecyclerView.ViewHolder {
+
+        LinearLayout llContainer;
+        TextView tvWord;
+
+
+        WordViewHolder(@NonNull View itemView) {
+            super(itemView);
+            llContainer = itemView.findViewById(R.id.llContainer);
+            tvWord = itemView.findViewById(R.id.tvWord);
+        }
     }
 }
