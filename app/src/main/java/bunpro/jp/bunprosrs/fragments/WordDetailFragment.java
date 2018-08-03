@@ -152,7 +152,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                             startActivity(bIntent);
 
                         }
-
                     }
                 }
             }, new ItemChooseListener() {
