@@ -76,6 +76,23 @@ public class TextUtils {
 
     }
 
+    public static String getFuriganaText(String s) {
+
+        List<String> kanjis = getKanjis(s);
+        if (kanjis.size() > 0) {
+            for (int k=0;k<kanjis.size();k++) {
+                String kanji = kanjis.get(k);
+
+                String c = "<ruby>" + getKanji(kanji) + "<rt>" + getKana(kanji) + "</rt></ruby>";
+                s = s.replaceAll(kanji, c);
+
+            }
+        }
+
+        return s;
+
+    }
+
     public static String getKanji(String s) {
         return s.replaceAll("\\（[^\\（]*?\\）", "");
     }

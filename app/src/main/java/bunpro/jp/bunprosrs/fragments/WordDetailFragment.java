@@ -322,15 +322,24 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                         ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
                         ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
-
+                        String japanese = TextUtils.stripHtml(sentence.japanese);
+                        ((ViewHolder) viewHolder).tvJapaneseFurigana.setFuriganaText(TextUtils.getFuriganaText(japanese));
 
                     } else if (furigana == Constants.SETTING_FURIGANA_NEVER) {
+
                         ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.GONE);
                         ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.VISIBLE);
                         String japanese = TextUtils.removeKanji(TextUtils.stripHtml(sentence.japanese));
                         ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
-                    }
 
+                    } else {
+
+                        ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.GONE);
+                        ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.VISIBLE);
+                        String japanese = TextUtils.removeKanji(TextUtils.stripHtml(sentence.japanese));
+                        ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
+
+                    }
                 }
             } else {
                 if (viewHolder instanceof DescriptionHolder) {
