@@ -141,10 +141,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     } else {
 
                         if (type == 0) {
+
                             ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
                             ((MainActivity)getActivity()).setExampleSentense(sentence);
                             Fragment fragment = ExampleFragment.newInstance();
                             ((MainActivity)getActivity()).addFragment(fragment);
+
                         } else {
 
                             SupplementalLink link = selectedPoint.supplemental_links.get(position - 2);
