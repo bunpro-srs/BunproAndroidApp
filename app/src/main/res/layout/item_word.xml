@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -26,12 +27,26 @@
                 android:layout_toStartOf="@+id/ivIndicator"
                 android:layout_toLeftOf="@+id/ivIndicator">
 
-                <TextView
-                    android:id="@+id/tvJapanese"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorYellow"
-                    android:textSize="18sp"/>
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvJapanese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="18sp"/>
+                    <se.fekete.furiganatextview.furiganaview.FuriganaTextView
+                        android:id="@+id/tvJapanese_furigana"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColor="@color/colorYellow"
+                        app:contains_ruby_tags="true"
+                        app:furigana_text_color="@color/colorYellow"
+                        android:textSize="18sp"/>
+                </FrameLayout>
                 <TextView
                     android:id="@+id/tvEnglish"
                     android:layout_width="wrap_content"
@@ -48,7 +63,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_play_arrow_black_24dp"/>
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:contentDescription="@string/todo" />
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/llReadingContainer"

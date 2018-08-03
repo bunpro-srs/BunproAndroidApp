@@ -32,9 +32,12 @@ import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.SupplementalLink;
+import bunpro.jp.bunprosrs.utils.AppData;
+import bunpro.jp.bunprosrs.utils.Constants;
 import bunpro.jp.bunprosrs.utils.TextUtils;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;
+import se.fekete.furiganatextview.furiganaview.FuriganaTextView;
 
 
 public class WordDetailFragment extends BaseFragment implements View.OnClickListener, WordDetailContract.View {
@@ -314,8 +317,20 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
                     ExampleSentence sentence = point.example_sentences.get(position - 2);
                     ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
-                    String japanese = TextUtils.removeKanji(TextUtils.stripHtml(sentence.japanese));
-                    ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
+                    int furigana = AppData.getInstance(mContext).getFurigana();
+                    if (furigana == Constants.SETTING_FURIGANA_ALWAYS) {
+
+                        ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
+                        ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
+
+
+                    } else if (furigana == Constants.SETTING_FURIGANA_NEVER) {
+                        ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.GONE);
+                        ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.VISIBLE);
+                        String japanese = TextUtils.removeKanji(TextUtils.stripHtml(sentence.japanese));
+                        ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
+                    }
+
                 }
             } else {
                 if (viewHolder instanceof DescriptionHolder) {
@@ -384,6 +399,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
             RelativeLayout rlContainer;
             TextView tvEnglish, tvJapanese;
+            FuriganaTextView tvJapaneseFurigana;
             TextView tvSite, tvDescription;
             ImageView ivIndicator;
 
@@ -401,6 +417,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                 tvEnglish = itemView.findViewById(R.id.tvEnglish);
                 tvJapanese = itemView.findViewById(R.id.tvJapanese);
+                tvJapaneseFurigana = itemView.findViewById(R.id.tvJapanese_furigana);
                 ivIndicator = itemView.findViewById(R.id.ivIndicator);
 
                 container = itemView.findViewById(R.id.container);
