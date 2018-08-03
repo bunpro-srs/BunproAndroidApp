@@ -2,6 +2,7 @@ package bunpro.jp.bunprosrs.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.lang.ref.WeakReference;
 
 import bunpro.jp.bunprosrs.R;
@@ -34,6 +39,7 @@ import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.SupplementalLink;
 import bunpro.jp.bunprosrs.utils.AppData;
 import bunpro.jp.bunprosrs.utils.Constants;
+import bunpro.jp.bunprosrs.utils.SettingEvent;
 import bunpro.jp.bunprosrs.utils.TextUtils;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -99,6 +105,24 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
         initialize();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SettingEvent event) {
+
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initialize() {
