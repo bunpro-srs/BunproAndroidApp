@@ -56,7 +56,7 @@ public class TextUtils {
         return kanjis;
     }
 
-    public static boolean isJapanese(String s) {
+    private static boolean isJapanese(String s) {
         Pattern p = Pattern.compile("[ぁ-ゔゞァ-・ヽヾ゛゜ー]", Pattern.DOTALL);
         Matcher m = p.matcher(s);
         return m.find();
