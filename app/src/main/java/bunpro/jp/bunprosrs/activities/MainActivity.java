@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.androidnetworking.error.ANError;
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.ncapdevi.fragnav.FragNavController;
 
 import org.json.JSONArray;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private GrammarPoint selectedGrammarPoint;
     private ExampleSentence selectedSentence;
 
+    SVProgressHUD hud;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         arrangedGrammarPoints = new ArrayList<>();
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
+
+        hud = new SVProgressHUD(this);
 
         fetchReviews();
 
@@ -242,9 +247,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
+
+                if (hud.isShowing()) {
+                    hud.dismissImmediately();
+                }
+
                 List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
                 setGrammarPoints(grammarPoints);
-
                 initializeUI();
             }
 
@@ -256,6 +265,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     private void fetchReviews() {
+
+        hud.show();
 
         ApiService apiService = new ApiService(this);
         apiService.getReviews(new ApiService.CallbackListener() {
