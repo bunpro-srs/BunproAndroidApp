@@ -37,5 +37,5 @@ dependencies {
     implementation 'com.ncapdevi:frag-nav:2.4.0'
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
     implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.bigkoo:svprogresshud:1.0.6'
+    implementation 'com.kaopiz:kprogresshud:1.1.0'
 }

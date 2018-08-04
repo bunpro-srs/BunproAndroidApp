@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.androidnetworking.error.ANError;
-import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.ncapdevi.fragnav.FragNavController;
 
 import org.json.JSONArray;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private GrammarPoint selectedGrammarPoint;
     private ExampleSentence selectedSentence;
 
-    SVProgressHUD hud;
+    KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,11 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
 
-        hud = new SVProgressHUD(this);
+        hud = KProgressHUD.create(MainActivity.this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
 
         fetchReviews();
 
@@ -249,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             public void successAsJSONArray(JSONArray jsonArray) {
 
                 if (hud.isShowing()) {
-                    hud.dismissImmediately();
+                    hud.dismiss();
                 }
 
                 List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
@@ -266,7 +270,9 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
     private void fetchReviews() {
 
-        hud.show();
+        if (!hud.isShowing()) {
+            hud.show();
+        }
 
         ApiService apiService = new ApiService(this);
         apiService.getReviews(new ApiService.CallbackListener() {
