@@ -34,7 +34,6 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvName;
     Button btnBack;
 
-
     RecyclerView rvView;
     LevelStatusAdapter mAdapter;
     List<Review> reviews;

@@ -318,7 +318,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             return kanjis.size();
         }
 
-        public void update(List<String> kanjis) {
+        void update(List<String> kanjis) {
             this.kanjis = kanjis;
         }
     }

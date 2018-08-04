@@ -34,4 +34,6 @@
     <string name="next_reviews">Next Reviews</string>
     <string name="structure">Structure</string>
     <string name="todo">TODO</string>
+    <string name="remove_from_reviews">Remove from Reviews</string>
+    <string name="reset_review_progress">Reset Review Progress</string>
 </resources>

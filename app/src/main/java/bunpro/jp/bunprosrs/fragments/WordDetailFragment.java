@@ -204,9 +204,51 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         }
 
         if (id == R.id.btnReset) {
-
+            int tag = (int)btnReset.getTag();
+            if (tag == 1003) {
+                addToReview();
+            } else {
+                resetOrRemove();
+            }
         }
 
+    }
+
+    private void addToReview() {
+
+    }
+
+    private void resetOrRemove() {
+
+        View view = getLayoutInflater().inflate(R.layout.layout_reset_remove, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(mContext);
+
+        dialog.setContentView(view);
+        dialog.show();
+
+        RelativeLayout rlRemoveFromReviews = view.findViewById(R.id.rlRemoveFromReviews);
+        rlRemoveFromReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        RelativeLayout rlResetReviewProgress = view.findViewById(R.id.rlResetReviewProgress);
+        rlResetReviewProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        RelativeLayout rlCancel = view.findViewById(R.id.rlCancel);
+        rlCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void clickedDescription() {
