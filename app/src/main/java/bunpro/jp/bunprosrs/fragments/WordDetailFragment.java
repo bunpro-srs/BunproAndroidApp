@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
 import bunpro.jp.bunprosrs.activities.MainActivity;
@@ -128,9 +129,18 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private void initialize() {
 
         selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
+        if (!isReviewed(selectedPoint)) {
+            btnReset.setText("Add to Reviews");
+            btnReset.setTag(1003);
+        } else {
+            btnReset.setText("Reset/Remove");
+            btnReset.setTag(1004);
+        }
+
         review = mController.getReview(selectedPoint);
 
         if (selectedPoint != null) {
+
             mAdapter = new StickAdapter(0, review, selectedPoint, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
@@ -167,6 +177,23 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
             rvWords.setAdapter(mAdapter);
         }
+    }
+
+    private boolean isReviewed(GrammarPoint point) {
+        boolean status = false;
+        List<Review> reviews = ((MainActivity)getActivity()).getReviews();
+        if (reviews.size() > 0) {
+
+            for (int k=0;k<reviews.size();k++) {
+                if (reviews.get(k).grammar_point_id == point.id) {
+                    status = true;
+                    break;
+                }
+            }
+
+        }
+
+        return status;
     }
 
     @Override

@@ -18,9 +18,11 @@ import bunpro.jp.bunprosrs.utils.UserData;
 public class ApiService {
 
     public interface CallbackListener {
+
         void success(JSONObject jsonObject);
         void successAsJSONArray(JSONArray jsonArray);
         void error(ANError anError);
+
     }
 
     private Context mContext;
@@ -178,7 +180,6 @@ public class ApiService {
                         listener.error(anError);
                     }
                 });
-
     }
 
 
