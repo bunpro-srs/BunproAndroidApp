@@ -65,6 +65,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_play_arrow_black_24dp"
                 android:contentDescription="@string/todo" />
+
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/llReadingContainer"

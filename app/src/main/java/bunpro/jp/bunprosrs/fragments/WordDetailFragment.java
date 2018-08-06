@@ -3,6 +3,8 @@ package bunpro.jp.bunprosrs.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -148,8 +153,9 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         clickedDescription();
                     } else if (position == 1) {
 
-                    } else {
+                        Log.d("WordDetailFragment", "header clicked");
 
+                    } else {
                         if (type == 0) {
 
                             ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
@@ -346,11 +352,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private static final int TYPE_DESCRIPTION = 0;
         private static final int TYPE_ITEM = 1;
         private static final int TYPE_SELECTOR = 2;
-        private static final int TYPE_READING_ITEM = 3;
 
         private LayoutInflater inflater;
         private ItemClickListener listener;
         private ItemChooseListener chooseListener;
+
+        MediaPlayer mediaPlayer;
 
         StickAdapter(int type, Review review, GrammarPoint point, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
             inflater = LayoutInflater.from(context);
@@ -359,6 +366,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             this.type = type;
             this.point = point;
             this.review = review;
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
         }
 
         @NonNull
@@ -378,7 +389,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
 
             if (type == 0) {
                 if (viewHolder instanceof DescriptionHolder) {
@@ -434,6 +445,16 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
 
                     }
+
+                    ((ViewHolder) viewHolder).ivIndicator.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            ExampleSentence sentence = point.example_sentences.get(position -2);
+                            Toast.makeText(mContext, sentence.audio_link, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             } else {
                 if (viewHolder instanceof DescriptionHolder) {
@@ -522,6 +543,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 tvJapanese = itemView.findViewById(R.id.tvJapanese);
                 tvJapaneseFurigana = itemView.findViewById(R.id.tvJapanese_furigana);
                 ivIndicator = itemView.findViewById(R.id.ivIndicator);
+                ivIndicator.setOnClickListener(this);
+                ivIndicator.setTag(true);
 
                 container = itemView.findViewById(R.id.container);
                 llReadingContainer = itemView.findViewById(R.id.llReadingContainer);
@@ -535,7 +558,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onClick(View view) {
 
-                ref.get().positionClicked(getAdapterPosition());
+                int id = view.getId();
+                if (id != R.id.ivIndicator) {
+                    ref.get().positionClicked(getAdapterPosition());
+                }
             }
         }
 
