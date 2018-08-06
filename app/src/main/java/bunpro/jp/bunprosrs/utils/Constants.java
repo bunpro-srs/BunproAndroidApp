@@ -4,6 +4,8 @@ public class Constants {
 
     public static String BASE_URL = "https://www.bunpro.jp/api/v3/";
 
+    public static String AUDIO_BASE_URL = "https://bunpro.jp/";
+
     public static String PRIVACY_URL = "https://bunpro.jp/privacy";
     public static String TERMS_URL = "https://bunpro.jp/terms";
     public static String ABOUT_URL = "https://bunpro.jp/about";

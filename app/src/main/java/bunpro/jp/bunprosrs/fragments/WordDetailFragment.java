@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.rtp.AudioStream;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.URI;
 import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
@@ -62,7 +64,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     RecyclerView rvWords;
 
     StickAdapter mAdapter;
-    private StickyHeaderDecoration decor;
+    //private StickyHeaderDecoration decor;
 
     private GrammarPoint selectedPoint;
     private Review review;
@@ -369,8 +371,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             this.point = point;
             this.review = review;
 
-
-
         }
 
         @NonNull
@@ -421,7 +421,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                     ((ViewHolder) viewHolder).rlContainer.setVisibility(View.VISIBLE);
                     ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
-                    ExampleSentence sentence = point.example_sentences.get(position - 2);
+                    final ExampleSentence sentence = point.example_sentences.get(position - 2);
                     ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
                     int furigana = AppData.getInstance(mContext).getFurigana();
                     if (furigana == Constants.SETTING_FURIGANA_ALWAYS) {
@@ -449,22 +449,49 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                     ((ViewHolder) viewHolder).ivIndicator.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(final View view) {
 
+                            ExampleSentence sentence = point.example_sentences.get(position -2);
                             boolean tag = (boolean)((ViewHolder) viewHolder).ivIndicator.getTag();
+
+                            MediaPlayer mediaPlayer = new MediaPlayer();
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            Uri uri = Uri.parse(Constants.AUDIO_BASE_URL + sentence.audio_link);
+
+                            Log.d("audio_link", Constants.AUDIO_BASE_URL + sentence.audio_link);
+
+                            try {
+                                mediaPlayer.setDataSource(mContext, uri);
+                                mediaPlayer.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             if (tag) {
 
-                                ((ViewHolder) viewHolder).ivIndicator.setImageResource(R.drawable.ic_stop_24dp);
-                                ExampleSentence sentence = point.example_sentences.get(position -2);
+                                mediaPlayer.start();
 
 
                             } else {
 
                                 ((ViewHolder) viewHolder).ivIndicator.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                }
 
                             }
 
+                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mediaPlayer) {
+                                    if (mediaPlayer != null) {
+                                        ((ViewHolder) viewHolder).ivIndicator.setTag(true);
+                                        ((ViewHolder) viewHolder).ivIndicator.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                    }
+                                }
+                            });
+
                             ((ViewHolder) viewHolder).ivIndicator.setTag(!tag);
+
                         }
                     });
 
