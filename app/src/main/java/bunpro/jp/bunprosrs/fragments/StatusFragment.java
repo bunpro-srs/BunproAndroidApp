@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,6 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     LinearLayout llReview;
 
     SwipeRefreshLayout slContainer;
-
-    SwipeRefreshLayout slCotainer;
     RecyclerView rvView;
     StatusAdapter mAdapter;
 
@@ -55,7 +52,6 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     List<Status> mStatus;
     String userName;
-
 
     List<Lesson> lessons;
     List<Review> reviews;
@@ -93,9 +89,9 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        slCotainer = view.findViewById(R.id.slContainer);
+        slContainer = view.findViewById(R.id.slContainer);
 
-        slCotainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        slContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -105,7 +101,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         });
 
         tvName = view.findViewById(R.id.tvName);
-        slCotainer = view.findViewById(R.id.slContainer);
+        slContainer = view.findViewById(R.id.slContainer);
         rvView = view.findViewById(R.id.rvView);
 
         mStatus = new ArrayList<>();
@@ -170,12 +166,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     public void loadingProgress(boolean stats) {
 
         if (stats) {
-            if (!slCotainer.isRefreshing()) {
-                slCotainer.setRefreshing(true);
+            if (!slContainer.isRefreshing()) {
+                slContainer.setRefreshing(true);
             }
         } else {
-            if (slCotainer.isRefreshing()) {
-                slCotainer.setRefreshing(false);
+            if (slContainer.isRefreshing()) {
+                slContainer.setRefreshing(false);
             }
         }
     }

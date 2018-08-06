@@ -357,9 +357,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private ItemClickListener listener;
         private ItemChooseListener chooseListener;
 
-        MediaPlayer mediaPlayer;
+
 
         StickAdapter(int type, Review review, GrammarPoint point, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
+
             inflater = LayoutInflater.from(context);
             this.listener = listener;
             this.chooseListener = chooseListener;
@@ -367,8 +368,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             this.point = point;
             this.review = review;
 
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
 
         }
 
