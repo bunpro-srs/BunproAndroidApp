@@ -43,6 +43,7 @@ import bunpro.jp.bunprosrs.models.ExampleSentence;
 import bunpro.jp.bunprosrs.models.GrammarPoint;
 import bunpro.jp.bunprosrs.models.Review;
 import bunpro.jp.bunprosrs.models.SupplementalLink;
+import bunpro.jp.bunprosrs.service.BackgroundAudioService;
 import bunpro.jp.bunprosrs.utils.AppData;
 import bunpro.jp.bunprosrs.utils.Constants;
 import bunpro.jp.bunprosrs.utils.SettingEvent;
@@ -450,8 +451,20 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         @Override
                         public void onClick(View view) {
 
-                            ExampleSentence sentence = point.example_sentences.get(position -2);
-                            Toast.makeText(mContext, sentence.audio_link, Toast.LENGTH_SHORT).show();
+                            boolean tag = (boolean)((ViewHolder) viewHolder).ivIndicator.getTag();
+                            if (tag) {
+
+                                ((ViewHolder) viewHolder).ivIndicator.setImageResource(R.drawable.ic_stop_24dp);
+                                ExampleSentence sentence = point.example_sentences.get(position -2);
+
+
+                            } else {
+
+                                ((ViewHolder) viewHolder).ivIndicator.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+
+                            }
+
+                            ((ViewHolder) viewHolder).ivIndicator.setTag(!tag);
                         }
                     });
 
