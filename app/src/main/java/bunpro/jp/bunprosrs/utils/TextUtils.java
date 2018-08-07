@@ -20,6 +20,18 @@ public class TextUtils {
         }
     }
 
+    public static String removeSub(String s) {
+
+        Pattern p = Pattern.compile("\\[[^\\（]*?\\]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(s);
+        while (m.find()) {
+            String str = m.group();
+            s = s.replaceAll(str, "");
+        }
+
+        return s;
+    }
+
     public static String removeKanji(String str) {
 
         return str.replaceAll("\\（[^\\（]*?\\）", "");

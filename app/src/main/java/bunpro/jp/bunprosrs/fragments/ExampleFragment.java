@@ -80,7 +80,6 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         llEnglish = view.findViewById(R.id.llEnglish);
-        llEnglish.setTag(false);
         llEnglish.setOnClickListener(this);
         tvEnglish = view.findViewById(R.id.tvEnglish);
 
@@ -119,6 +118,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         selectedSentence = ((MainActivity)getActivity()).getExampleSentence();
         if (selectedSentence != null) {
             String english = TextUtils.stripHtml(selectedSentence.english);
+            english = TextUtils.removeSub(english);
             tvEnglish.setText(english);
 
             String japanese = TextUtils.removeKanji(selectedSentence.japanese);
@@ -135,9 +135,11 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
             int hideEnglish = AppData.getInstance(getActivity()).getHideEnglish();
             if (hideEnglish == Constants.SETTING_HIDE_ENGLISH_NO) {
+                llEnglish.setTag(false);
                 tvEnglish.setTextColor(Color.parseColor("#FFFFFF"));
-                tvEnglish.setText(TextUtils.stripHtml(selectedSentence.english));
+                tvEnglish.setText(TextUtils.removeSub(TextUtils.stripHtml(selectedSentence.english)));
             } else {
+                llEnglish.setTag(true);
                 tvEnglish.setText(R.string.show_english);
                 tvEnglish.setTextColor(Color.parseColor("#ffff00"));
             }
@@ -187,7 +189,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         int hideEnglish = AppData.getInstance(getActivity()).getHideEnglish();
         if (hideEnglish == Constants.SETTING_HIDE_ENGLISH_NO) {
             tvEnglish.setTextColor(Color.parseColor("#FFFFFF"));
-            tvEnglish.setText(TextUtils.stripHtml(selectedSentence.english));
+            tvEnglish.setText(TextUtils.removeSub(TextUtils.stripHtml(selectedSentence.english)));
         } else {
             tvEnglish.setText(R.string.show_english);
             tvEnglish.setTextColor(Color.parseColor("#ffff00"));
@@ -200,7 +202,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         if (stats) {
 
             tvEnglish.setTextColor(Color.parseColor("#FFFFFF"));
-            tvEnglish.setText(TextUtils.stripHtml(selectedSentence.english));
+            tvEnglish.setText(TextUtils.removeSub(TextUtils.stripHtml(selectedSentence.english)));
 
         } else {
 
