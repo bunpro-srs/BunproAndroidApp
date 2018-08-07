@@ -64,7 +64,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     RecyclerView rvWords;
 
     StickAdapter mAdapter;
-    //private StickyHeaderDecoration decor;
 
     private GrammarPoint selectedPoint;
     private Review review;
@@ -359,8 +358,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private LayoutInflater inflater;
         private ItemClickListener listener;
         private ItemChooseListener chooseListener;
-
-
 
         StickAdapter(int type, Review review, GrammarPoint point, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
 
