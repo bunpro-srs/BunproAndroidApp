@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 import bunpro.jp.bunprosrs.R;
@@ -367,6 +368,9 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             this.type = type;
             this.point = point;
             this.review = review;
+
+            Collections.sort(this.point.example_sentences, ExampleSentence.IdComparator);
+            Collections.sort(this.point.supplemental_links, SupplementalLink.IdComparator);
 
         }
 

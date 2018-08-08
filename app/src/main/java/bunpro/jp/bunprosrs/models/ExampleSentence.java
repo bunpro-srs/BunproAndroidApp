@@ -1,5 +1,7 @@
 package bunpro.jp.bunprosrs.models;
 
+import java.util.Comparator;
+
 public class ExampleSentence {
 
     public int id;
@@ -16,4 +18,14 @@ public class ExampleSentence {
 
     }
 
+    public static Comparator<ExampleSentence> IdComparator = new Comparator<ExampleSentence>() {
+        @Override
+        public int compare(ExampleSentence point1, ExampleSentence point2) {
+            if (point1.id > point2.id) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    };
 }
