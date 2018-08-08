@@ -3,6 +3,7 @@ package bunpro.jp.bunprosrs.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Review {
@@ -30,5 +31,15 @@ public class Review {
 
     }
 
+    public static Comparator<Review> IdComparator = new Comparator<Review>() {
+        @Override
+        public int compare(Review point1, Review point2) {
+            if (point1.id > point2.id) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    };
 
 }

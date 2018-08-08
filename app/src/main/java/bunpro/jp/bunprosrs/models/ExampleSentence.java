@@ -17,7 +17,7 @@ public class ExampleSentence {
     public ExampleSentence() {
 
     }
-
+    
     public static Comparator<ExampleSentence> IdComparator = new Comparator<ExampleSentence>() {
         @Override
         public int compare(ExampleSentence point1, ExampleSentence point2) {
