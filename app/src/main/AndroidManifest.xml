@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bunpro.jp.bunprosrs">
+    package="bunpro.jp.bunproapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,11 +13,11 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name="bunpro.jp.bunproapp.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"/>
 
-        <activity android:name=".activities.SplashActivity"
+        <activity android:name="bunpro.jp.bunproapp.activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity"
+        <activity android:name="bunpro.jp.bunproapp.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"/>
 
@@ -36,7 +36,7 @@
             android:hardwareAccelerated="true"
             android:theme="@style/WebTheme" />
 
-        <service android:name=".service.BackgroundAudioService"/>
+        <service android:name="bunpro.jp.bunproapp.service.BackgroundAudioService"/>
     </application>
 
 </manifest>
