@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Lesson;
@@ -20,6 +21,8 @@ import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class StatusController implements StatusContract.Controller {
 
@@ -28,13 +31,11 @@ public class StatusController implements StatusContract.Controller {
     public StatusController(Context context) {
         mContext = context;
     }
-
-
+    
     @Override
     public void getStatus(final StatusContract.View v) {
 
         ApiService apiService = new ApiService(mContext);
-        //v.loadingProgress(true);
 
         apiService.getProgress(new ApiService.CallbackListener() {
             @Override
@@ -118,39 +119,11 @@ public class StatusController implements StatusContract.Controller {
         }
     }
 
-    @Override
-    public void getLessons(final StatusContract.View v) {
-
-        List<Lesson> lessons = ((MainActivity)mContext).getLessons();
-        if (lessons.size() != 0) {
-            v.updateLessons(lessons);
-        } else {
-            ApiService apiService = new ApiService(mContext);
-            apiService.getLessons(new ApiService.CallbackListener() {
-                @Override
-                public void success(JSONObject jsonObject) {
-
-                }
-
-                @Override
-                public void successAsJSONArray(JSONArray jsonArray) {
-                    List<Lesson> lessons = JsonParser.getInstance(mContext).parseLessons(jsonArray);
-                    v.updateLessons(lessons);
-                }
-
-                @Override
-                public void error(ANError anError) {
-                    v.showError(anError.getErrorDetail());
-                }
-            });
-        }
-
-    }
 
     @Override
     public void getGrammarPoints(final StatusContract.View v) {
 
-        List<GrammarPoint> points = ((MainActivity)mContext).getGrammarPoints();
+        final List<GrammarPoint> points = ((MainActivity)mContext).getGrammarPoints();
         if (points.size() != 0) {
             v.updateGrammarPoints(points);
         } else {
@@ -164,6 +137,7 @@ public class StatusController implements StatusContract.Controller {
                 @Override
                 public void successAsJSONArray(JSONArray jsonArray) {
                     List<GrammarPoint> grammarPoints = JsonParser.getInstance(mContext).parseGrammarPoints(jsonArray);
+                    saveSupplementalLinks(grammarPoints);
                     v.updateGrammarPoints(grammarPoints);
                 }
 
@@ -172,6 +146,29 @@ public class StatusController implements StatusContract.Controller {
                     v.showError(anError.getErrorDetail());
                 }
             });
+        }
+    }
+
+    private void saveSupplementalLinks(List<GrammarPoint> points) {
+
+        if (points.size() > 0) {
+            for (int k=0;k<points.size();k++) {
+                List<SupplementalLink> links = points.get(k).supplemental_links;
+                if (links.size() > 0) {
+                    for (int i=0;i<links.size();i++) {
+                        SupplementalLink link = links.get(i);
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmResults<SupplementalLink> results = realm.where(SupplementalLink.class).equalTo("id", link.id).findAll();
+                        if (results.size() == 0) {
+
+                            realm.beginTransaction();
+                            realm.copyToRealm(link);
+                            realm.commitTransaction();
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

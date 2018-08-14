@@ -22,8 +22,6 @@ public interface StatusContract {
         void getStatus(StatusContract.View v);
         void setName(StatusContract.View v);
         void getReviews(StatusContract.View v);
-        void getLessons(StatusContract.View v);
         void getGrammarPoints(StatusContract.View v);
-
     }
 }
