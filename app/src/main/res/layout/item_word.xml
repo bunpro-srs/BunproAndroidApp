@@ -67,11 +67,10 @@
                 android:contentDescription="@string/todo" />
 
         </RelativeLayout>
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/llReadingContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="5dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -83,7 +82,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorYellow"
                 android:textSize="18sp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toStartOf="@+id/btnCheck"
+                android:layout_toLeftOf="@+id/btnCheck"
+                android:layout_alignParentLeft="true" />
 
             <TextView
                 android:id="@+id/tvDescription"
@@ -91,10 +97,26 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
+                android:layout_below="@+id/tvSite"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/btnCheck"
+                android:layout_toLeftOf="@+id/btnCheck" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btnCheck"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_unchecked"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
     </FrameLayout>
 
 </LinearLayout>

@@ -563,7 +563,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             ImageView ivIndicator;
 
             LinearLayout container;
-            LinearLayout llReadingContainer;
+            RelativeLayout llReadingContainer;
 
             WeakReference<ItemClickListener> ref;
 

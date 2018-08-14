@@ -5,7 +5,7 @@
         android:id="@+id/action_status"
         android:enabled="true"
         android:icon="@drawable/ic_status"
-        android:title="@string/status"
+        android:title="@string/home"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_search"

@@ -36,4 +36,5 @@
     <string name="todo">TODO</string>
     <string name="remove_from_reviews">Remove from Reviews</string>
     <string name="reset_review_progress">Reset Review Progress</string>
+    <string name="home">Home</string>
 </resources>

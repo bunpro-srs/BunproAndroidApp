@@ -114,10 +114,16 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void positionClicked(int position) {
                 Fragment fragment = StatusDetailFragment.newInstance();
-
                 Bundle bundle = new Bundle();
-                bundle.putString("status", mStatus.get(position).getName());
-                bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
+
+                if (position == mStatus.size()) {
+                    bundle.putString("status", "N1");
+                    bundle.putString("level", "JLPT1");
+                } else {
+                    bundle.putString("status", mStatus.get(position).getName());
+                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
+                }
+
                 fragment.setArguments(bundle);
                 ((MainActivity)getActivity()).addFragment(fragment);
             }

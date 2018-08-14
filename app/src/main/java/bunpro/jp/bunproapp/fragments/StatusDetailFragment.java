@@ -127,10 +127,12 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void updateLessons(Map<String, List<GrammarPoint>> pointsByLesson) {
 
-        arrangeGrammarPoints(pointsByLesson);
-        mAdapter.updateData(this.pointsByLesson);
-        mAdapter.notifyDataSetChanged();
+        if (!pointsByLesson.isEmpty()) {
+            arrangeGrammarPoints(pointsByLesson);
+            mAdapter.updateData(this.pointsByLesson);
+            mAdapter.notifyDataSetChanged();
 
+        }
     }
 
     private void arrangeGrammarPoints(Map<String, List<GrammarPoint>> pointsByLesson) {

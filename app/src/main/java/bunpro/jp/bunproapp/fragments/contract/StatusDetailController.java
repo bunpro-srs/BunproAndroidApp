@@ -38,16 +38,19 @@ public class StatusDetailController implements StatusDetailContract.Controller {
                 }
                 pointsByLevel.get(level).add(point);
             }
-
-            levelPoints = pointsByLevel.get(levelStr);
-
             pointsByLesson = new HashMap<>();
-            for (GrammarPoint point : levelPoints) {
-                String lesson = point.lesson_id;
-                if (!pointsByLesson.containsKey(lesson)) {
-                    pointsByLesson.put(lesson, new ArrayList<GrammarPoint>());
+            if (pointsByLevel.containsKey(levelStr)) {
+                levelPoints = pointsByLevel.get(levelStr);
+
+                if (levelPoints.size() > 0) {
+                    for (GrammarPoint point : levelPoints) {
+                        String lesson = point.lesson_id;
+                        if (!pointsByLesson.containsKey(lesson)) {
+                            pointsByLesson.put(lesson, new ArrayList<GrammarPoint>());
+                        }
+                        pointsByLesson.get(lesson).add(point);
+                    }
                 }
-                pointsByLesson.get(lesson).add(point);
             }
 
         }
