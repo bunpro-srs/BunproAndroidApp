@@ -149,7 +149,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (id == R.id.rlHideEnglish) {
-
             showHideEnglish();
         }
 

@@ -57,7 +57,6 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     List<Review> reviews;
     List<GrammarPoint> grammarPoints;
 
-
     public StatusFragment() {
 
     }
