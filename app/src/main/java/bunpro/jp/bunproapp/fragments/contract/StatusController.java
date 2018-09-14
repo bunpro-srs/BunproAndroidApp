@@ -16,7 +16,6 @@ import bunpro.jp.bunproapp.activities.MainActivity;
 import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.models.GrammarPoint;
-import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
@@ -31,7 +30,7 @@ public class StatusController implements StatusContract.Controller {
     public StatusController(Context context) {
         mContext = context;
     }
-    
+
     @Override
     public void getStatus(final StatusContract.View v) {
 

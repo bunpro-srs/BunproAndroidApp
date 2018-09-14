@@ -12,6 +12,8 @@ public class Constants {
     public static String CONTACT_URL = "https://bunpro.jp/contact";
     public static String COMMUNITY_URL = "https://community.bunpro.jp";
     public static String APP_STUDY_URL = "https://www.bunpro.jp/app_study";
+    public static String APP_CRAM = "https://www.bunpro.jp/app_cram";
+    public static String APP_LEARN = "https://www.bunpro.jp/app_learn";
 
     public static final int SETTING_FURIGANA_ALWAYS = 3001;
     public static final int SETTING_FURIGANA_NEVER = 3002;

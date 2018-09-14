@@ -54,12 +54,50 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
+                    <RelativeLayout
+                        android:id="@+id/cram"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="40dp"
+                        android:background="@drawable/bg_login">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cram"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17sp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/study"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_login">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Study"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17sp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp" />
+                    </RelativeLayout>
+
                     <LinearLayout
                         android:id="@+id/llReview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/bg_login"
                         android:padding="10dp">
 
@@ -180,8 +218,6 @@
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
-
-
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

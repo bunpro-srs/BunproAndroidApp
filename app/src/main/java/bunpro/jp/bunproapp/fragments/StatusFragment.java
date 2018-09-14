@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     TextView tvName;
     TextView tvReviews;
     LinearLayout llReview;
+
+    RelativeLayout study, cram;
 
     SwipeRefreshLayout slContainer;
     RecyclerView rvView;
@@ -135,6 +138,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
         tvReviews = view.findViewById(R.id.tvReviews);
 
+        study = view.findViewById(R.id.study);
+        study.setOnClickListener(this);
+        cram = view.findViewById(R.id.cram);
+        cram.setOnClickListener(this);
+
         initialize();
 
     }
@@ -159,6 +167,20 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
             header.put("Authorization", "Bearer " + token);
             new AwesomeWebView.Builder(mContext).setHeader(header).showUrl(false).show(Constants.APP_STUDY_URL);
 
+        }
+
+        if (id == R.id.cram) {
+            String token = UserData.getInstance(mContext).getUserKey();
+            Map<String, String> header = new HashMap<>();
+            header.put("Authorization", "Bearer " + token);
+            new AwesomeWebView.Builder(mContext).setHeader(header).showUrl(false).show(Constants.APP_CRAM);
+        }
+
+        if (id == R.id.study) {
+            String token = UserData.getInstance(mContext).getUserKey();
+            Map<String, String> header = new HashMap<>();
+            header.put("Authorization", "Bearer " + token);
+            new AwesomeWebView.Builder(mContext).setHeader(header).showUrl(false).show(Constants.APP_LEARN);
         }
     }
 
