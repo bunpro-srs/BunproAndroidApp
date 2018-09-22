@@ -39,6 +39,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     RelativeLayout logout;
     RelativeLayout privacy;
     RelativeLayout terms;
+    RelativeLayout community;
 
     SpinKitView progress;
 
@@ -103,6 +104,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         logout = view.findViewById(R.id.rlLogout);
         logout.setOnClickListener(this);
 
+        community = view.findViewById(R.id.rlCommunity);
+        community.setOnClickListener(this);
+
         tvFurigana = view.findViewById(R.id.tvFurigana);
         tvHideEnglish = view.findViewById(R.id.tvHideEnglish);
         tvBunnyMode = view.findViewById(R.id.tvBunnyMode);
@@ -160,6 +164,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             showLogout();
         }
 
+        if (id == R.id.rlCommunity) {
+            showCommunity();
+        }
     }
 
     private void initialize() {
@@ -431,5 +438,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         Intent intent = new Intent(mContext, LoginActivity.class);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    public void showCommunity() {
+
     }
 }

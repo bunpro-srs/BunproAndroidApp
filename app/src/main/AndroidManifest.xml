@@ -38,6 +38,9 @@
             android:theme="@style/WebTheme" />
 
         <service android:name="bunpro.jp.bunproapp.service.BackgroundAudioService"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="330482544163f5e0ede4d181ee5286d659619aa6" />
     </application>
 
 </manifest>

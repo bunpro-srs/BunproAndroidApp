@@ -191,13 +191,34 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlAbout"
+                android:id="@+id/rlCommunity"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_width"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/bg_corner_left_right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/community"
+                    android:textColor="@color/colorYellow"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16sp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAbout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_width"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/colorPrimaryDark">
 
                 <TextView
                     android:layout_width="wrap_content"
