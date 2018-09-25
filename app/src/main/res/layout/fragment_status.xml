@@ -116,40 +116,42 @@
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentLeft="true"/>
 
-                            <com.github.ybq.android.spinkit.SpinKitView
-                                android:id="@+id/review_spin_kit"
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
-                                style="@style/SpinKitView.Small.FadingCircle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                app:SpinKit_Color="@android:color/white"/>
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
+                                android:orientation="horizontal"
                                 android:layout_centerVertical="true"
-                                android:layout_toStartOf="@+id/review_spin_kit"
-                                android:layout_toLeftOf="@+id/review_spin_kit"
                                 android:layout_marginEnd="10dp"
-                                android:gravity="end"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:gravity="center_vertical"
                                 android:layout_marginRight="10dp">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Now"
-                                    android:textColor="@color/colorGrey"/>
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/now"
+                                        android:textColor="@color/colorGrey"/>
 
-                                <TextView
+                                    <TextView
+                                        android:id="@+id/tvUpdateText"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorGrey"/>
+                                </LinearLayout>
+
+                                <com.github.ybq.android.spinkit.SpinKitView
+                                    android:id="@+id/review_spin_kit"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    style="@style/SpinKitView.Small.FadingCircle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Updated: Today, 5:08 PM"
-                                    android:textColor="@color/colorGrey"/>
-
+                                    app:SpinKit_Color="@android:color/white"/>
                             </LinearLayout>
 
                         </RelativeLayout>
@@ -170,6 +172,7 @@
                                 android:layout_centerVertical="true"/>
 
                             <TextView
+                                android:id="@+id/tvUpdate1Hour"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="+0"
@@ -196,6 +199,7 @@
                                 android:layout_centerVertical="true"/>
 
                             <TextView
+                                android:id="@+id/tvUpdate24Hours"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="+0"

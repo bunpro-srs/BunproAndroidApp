@@ -2,6 +2,7 @@ package bunpro.jp.bunproapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +20,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.wuadam.awesomewebview.AwesomeWebView;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
@@ -59,6 +68,9 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     List<Lesson> lessons;
     List<Review> reviews;
     List<GrammarPoint> grammarPoints;
+
+    TextView tvReviewTimeTextView, tvUpdate1Hour, tvUpdate24Hours;
+    SpinKitView spinKitView;
 
     public StatusFragment() {
 
@@ -96,9 +108,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         slContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 mController.getStatus(StatusFragment.this);
-
             }
         });
 
@@ -143,11 +153,39 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         cram = view.findViewById(R.id.cram);
         cram.setOnClickListener(this);
 
+        tvReviewTimeTextView = view.findViewById(R.id.tvUpdateText);
+        spinKitView = view.findViewById(R.id.review_spin_kit);
+
+        tvUpdate1Hour = view.findViewById(R.id.tvUpdate1Hour);
+        tvUpdate24Hours = view.findViewById(R.id.tvUpdate24Hours);
+
         initialize();
+
+        final Handler handler = new Handler();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!spinKitView.isShown()) {
+                    spinKitView.setVisibility(View.VISIBLE);
+                }
+                mController.getReviews(StatusFragment.this);
+                handler.postDelayed(this, 1000 * 60 * 5);
+            }
+        }, 1000 * 60 * 5);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 
     private void initialize() {
+
+        if (!spinKitView.isShown()) {
+            spinKitView.setVisibility(View.VISIBLE);
+        }
 
         mController.setName(this);
         this.grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
@@ -209,13 +247,20 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mStatus = status;
         mAdapter.setStatus(mStatus);
         mAdapter.notifyDataSetChanged();
-
+        if (spinKitView.isShown()) {
+            spinKitView.setVisibility(View.GONE);
+        }
+        updateReviewTime();
+        calculateReviewsNumber();
+        updateBadge();
     }
 
     @Override
     public void updateUserName(String name) {
+
         tvName.setText(name);
         userName = name;
+
     }
 
     @Override
@@ -224,6 +269,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         ((MainActivity)getActivity()).setReviews(this.reviews);
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);
+        if (spinKitView.isShown()) {
+            spinKitView.setVisibility(View.GONE);
+
+        }
+        updateReviewTime();
+        calculateReviewsNumber();
         updateBadge();
     }
 
@@ -241,6 +292,52 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         ((MainActivity)getActivity()).setGrammarPoints(grammarPoints);
         this.grammarPoints = grammarPoints;
         mController.getReviews(this);
+    }
+
+    public void updateReviewTime() {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat spf= new SimpleDateFormat("hh:mm aaa");
+        String dateStr = spf.format(currentTime);
+        tvReviewTimeTextView.setText(String.format("Updated: Today, %s", dateStr));
+
+    }
+
+    public void calculateReviewsNumber() {
+
+        if (this.reviews.size() > 0) {
+
+            int oneHours = 0;
+            int oneDayHours = 0;
+
+            Date currentDate = Calendar.getInstance().getTime();
+            for (int k=0;k<this.reviews.size();k++) {
+
+                try {
+                    SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    Date reviewDate = spf.parse(this.reviews.get(k).next_review);
+
+                    long diff = currentDate.getTime() - reviewDate.getTime();
+                    if (diff <= 3600 * 1000) {
+                        oneHours = oneHours + 1;
+                    }
+
+                    if (diff <= 3600 * 1000 * 24) {
+                        oneDayHours = oneDayHours + 1;
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            oneDayHours = oneDayHours - oneHours;
+
+            tvUpdate24Hours.setText(String.format("+%s", String.valueOf(oneDayHours)));
+            tvUpdate1Hour.setText(String.format("+%s", String.valueOf(oneHours)));
+
+        }
     }
 
     public void updateBadge() {
@@ -327,8 +424,8 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
             tvStatus = itemView.findViewById(R.id.tvStatus);
 
             progressBar = itemView.findViewById(R.id.progressBar);
-
             llContainer.setOnClickListener(this);
+
         }
 
         @Override
