@@ -442,5 +442,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     public void showCommunity() {
 
+        new AwesomeWebView.Builder(mContext).showUrl(true).show(Constants.COMMUNITY_URL);
+
     }
 }
