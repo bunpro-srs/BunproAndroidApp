@@ -22,7 +22,7 @@ android {
         applicationId "bunpro.jp.bunproapp"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
+        versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation project(':furiganatextview')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
-    implementation 'com.android.support:design:28.0.0-rc02'
+    implementation 'com.android.support:design:28.0.0'
     implementation 'info.hoang8f:android-segmented:1.0.6'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.github.hzw1199:AwesomeWebView-Android:1.2'
@@ -54,7 +54,7 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true;
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+        transitive = true
     }
 }
