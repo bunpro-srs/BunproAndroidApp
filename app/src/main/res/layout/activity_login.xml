@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background"
+    android:background="@color/colorBackground"
     tools:context="bunpro.jp.bunproapp.activities.LoginActivity">
 
 
@@ -17,7 +17,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginTop="70dp"
         android:gravity="center_horizontal"
-        android:background="@drawable/bg_login">
+        android:background="@drawable/box_shadow">
 
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/spin_kit"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="@string/login"
-            android:textColor="@color/colorYellow"
+            android:textColor="@color/colorBlue"
             android:background="@android:color/transparent"
             android:textAllCaps="false"
             android:textSize="16sp"
@@ -83,7 +83,7 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/privacy"
         android:textAllCaps="false"
-        android:textColor="@color/colorYellow"
+        android:textColor="@color/colorBlue"
         android:background="@android:color/transparent"
         android:layout_marginTop="5dp"
         android:textSize="16sp"/>

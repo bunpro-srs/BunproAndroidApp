@@ -71,7 +71,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -90,7 +90,7 @@
                 android:id="@+id/rlHideEnglish"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_width"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/default_header_color"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginTop="2dp">
@@ -102,7 +102,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -132,7 +132,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -203,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/community"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
@@ -218,13 +218,13 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/colorPrimaryDark">
+                android:background="@color/default_header_color">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/about"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
@@ -239,7 +239,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/colorPrimaryDark">
+                android:background="@color/default_header_color">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -248,7 +248,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:text="@string/contact"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:textSize="16sp"/>
             </RelativeLayout>
 
@@ -259,7 +259,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/colorPrimaryDark">
+                android:background="@color/default_header_color">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -268,7 +268,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:text="@string/privacy"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:textSize="16sp"/>
             </RelativeLayout>
 
@@ -287,7 +287,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/colorYellow"
+                    android:textColor="@color/colorBlue"
                     android:text="@string/terms_and_conditions"
                     android:textSize="16sp"/>
 
@@ -298,7 +298,7 @@
                 android:id="@+id/rlLogout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_width"
-                android:background="@drawable/bg_logout"
+                android:background="@drawable/bg_login"
                 android:layout_marginTop="50dp"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
@@ -308,7 +308,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorBlue"
                     android:text="@string/logout"
                     android:textSize="16sp"/>
 
