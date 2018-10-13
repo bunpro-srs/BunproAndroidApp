@@ -25,10 +25,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -41,6 +41,7 @@ import bunpro.jp.bunproapp.fragments.contract.WordDetailController;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
+import bunpro.jp.bunproapp.utils.FuriganaView;
 import bunpro.jp.bunproapp.utils.SettingEvent;
 import bunpro.jp.bunproapp.utils.TextUtils;
 import bunpro.jp.bunproapp.models.GrammarPoint;
@@ -424,7 +425,16 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
                         ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
                         String japanese = TextUtils.stripHtml(sentence.japanese);
-                        ((ViewHolder) viewHolder).tvJapaneseFurigana.setFuriganaText(TextUtils.getFuriganaText(japanese));
+                        if (TextUtils.includeKanji(japanese)) {
+                            ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
+                            ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
+                            String furiText = TextUtils.getFuriganaText(japanese);
+                            ((ViewHolder) viewHolder).tvJapaneseFurigana.setFuriganaText(furiText);
+                        } else {
+                            ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.VISIBLE);
+                            ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.GONE);
+                            ((ViewHolder) viewHolder).tvJapanese.setText(japanese);
+                        }
 
                     } else if (furigana == Constants.SETTING_FURIGANA_NEVER) {
 

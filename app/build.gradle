@@ -22,7 +22,7 @@ android {
         applicationId "bunpro.jp.bunproapp"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 4
+        versionCode 1
         versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

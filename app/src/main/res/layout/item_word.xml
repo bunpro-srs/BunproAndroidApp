@@ -29,29 +29,33 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp">
 
                     <TextView
                         android:id="@+id/tvJapanese"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorYellow"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
                     <se.fekete.furiganatextview.furiganaview.FuriganaTextView
                         android:id="@+id/tvJapanese_furigana"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/colorYellow"
                         app:contains_ruby_tags="true"
                         app:furigana_text_color="@color/colorYellow"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
+
                 </FrameLayout>
                 <TextView
                     android:id="@+id/tvEnglish"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:textSize="18sp"/>
 
             </LinearLayout>
