@@ -107,7 +107,7 @@ class FuriganaTextView : TextView {
         // Text
         m_paint_k_norm = TextPaint(tp)
         m_paint_f = TextPaint(tp)
-        m_paint_f.textSize = m_paint_f.textSize / 2.0f
+        m_paint_f.textSize = m_paint_f.textSize / 3.0f
 
         // Linesize
         m_height_n = m_paint_k_norm.descent() - m_paint_k_norm.ascent()
