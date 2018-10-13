@@ -141,7 +141,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             } else {
                 llEnglish.setTag(true);
                 tvEnglish.setText(R.string.show_english);
-                tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+                tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
             }
 
             kanjis = TextUtils.getKanjis(TextUtils.stripHtml(selectedSentence.japanese));
@@ -192,7 +192,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             tvEnglish.setText(TextUtils.removeSub(TextUtils.stripHtml(selectedSentence.english)));
         } else {
             tvEnglish.setText(R.string.show_english);
-            tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+            tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
         }
     }
 
@@ -207,7 +207,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         } else {
 
             tvEnglish.setText(R.string.show_english);
-            tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+            tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
         }
 
         llEnglish.setTag(!stats);
