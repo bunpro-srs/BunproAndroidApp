@@ -8,7 +8,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.TextView;
 
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -19,7 +18,7 @@ import bunpro.jp.bunproapp.R;
 /**
  * Created by Noda Hikaru on 2016/06/24.
  */
-public class FuriganaView extends android.support.v7.widget.AppCompatTextView {
+public class FuriganaView extends androidx.appcompat.widget.AppCompatTextView {
     private static final String TAG = FuriganaView.class.getSimpleName();
     private static final boolean DEBUG = true;
     private static final int TIME_LONG_CLICK = 1000;

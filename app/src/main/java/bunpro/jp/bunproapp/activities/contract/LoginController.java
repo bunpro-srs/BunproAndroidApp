@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.activities.contract;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -35,6 +36,7 @@ public class LoginController implements LoginContract.Controller {
                 if (jsonObject.has("bunpro_api_token")) {
 
                     try {
+                        Log.d("TAG", jsonObject.getString("bunpro_api_token"));
                         UserData.getInstance(mContext).setUserKey(jsonObject.getString("bunpro_api_token"));
                         apiService.getUser(new ApiService.CallbackListener() {
                             @Override

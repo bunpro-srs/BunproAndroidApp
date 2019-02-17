@@ -150,24 +150,24 @@ public class StatusController implements StatusContract.Controller {
 
     private void saveSupplementalLinks(List<GrammarPoint> points) {
 
-        if (points.size() > 0) {
-            for (int k=0;k<points.size();k++) {
-                List<SupplementalLink> links = points.get(k).supplemental_links;
-                if (links.size() > 0) {
-                    for (int i=0;i<links.size();i++) {
-                        SupplementalLink link = links.get(i);
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmResults<SupplementalLink> results = realm.where(SupplementalLink.class).equalTo("id", link.id).findAll();
-                        if (results.size() == 0) {
-
-                            realm.beginTransaction();
-                            realm.copyToRealm(link);
-                            realm.commitTransaction();
-
-                        }
-                    }
-                }
-            }
-        }
+//        if (points.size() > 0) {
+//            for (int k=0;k<points.size();k++) {
+//                List<SupplementalLink> links = points.get(k).supplemental_links;
+//                if (links.size() > 0) {
+//                    for (int i=0;i<links.size();i++) {
+//                        SupplementalLink link = links.get(i);
+//                        Realm realm = Realm.getDefaultInstance();
+//                        RealmResults<SupplementalLink> results = realm.where(SupplementalLink.class).equalTo("id", link.id).findAll();
+//                        if (results.size() == 0) {
+//
+//                            realm.beginTransaction();
+//                            realm.copyToRealm(link);
+//                            realm.commitTransaction();
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

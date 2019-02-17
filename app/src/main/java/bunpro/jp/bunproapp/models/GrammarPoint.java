@@ -7,19 +7,15 @@ public class GrammarPoint {
 
     public int id;
     public String title;
-    public String created_at, updated_at;
-    public String alternate;
     public String meaning;
     public String caution;
     public String structure;
-    public boolean formal;
     public String level;
-    public String lesson_id;
-    public boolean new_grammar;
+    public int lesson_id;
     public String yomikata;
     public String nuance;
-    public List<ExampleSentence> example_sentences;
-    public List<SupplementalLink> supplemental_links;
+    public boolean incomplete;
+    public int grammar_order;
 
     public GrammarPoint() {
 

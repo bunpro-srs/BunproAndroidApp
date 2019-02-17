@@ -1,10 +1,10 @@
 package bunpro.jp.bunproapp.activities;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,6 +29,7 @@ import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
+import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
 import butterknife.BindView;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<Review> reviews;
     private List<GrammarPoint> grammarPoints;
     private List<List<GrammarPoint>> arrangedGrammarPoints;
+    private List<ExampleSentence> exampleSentences;
+    private List<SupplementalLink> supplementalLinks;
 
     private GrammarPoint selectedGrammarPoint;
     private ExampleSentence selectedSentence;
@@ -118,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                     }
                 });
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -203,8 +205,28 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     @Override
+    public void setExampleSentences(List<ExampleSentence> sentences) {
+        this.exampleSentences = sentences;
+    }
+
+    @Override
+    public List<ExampleSentence> getExampleSentences() {
+        return this.exampleSentences;
+    }
+
+    @Override
     public ExampleSentence getExampleSentence() {
         return this.selectedSentence;
+    }
+
+    @Override
+    public void setSupplimentalLinks(List<SupplementalLink> links) {
+        this.supplementalLinks = links;
+    }
+
+    @Override
+    public List<SupplementalLink> getSupplimentalLinks() {
+        return this.supplementalLinks;
     }
 
     @Override
@@ -247,12 +269,57 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
 
+                List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
+                setGrammarPoints(grammarPoints);
+                fetchExampleSentences();
+            }
+
+            @Override
+            public void error(ANError anError) {
+                Log.d("Error", anError.getErrorDetail());
+            }
+        });
+    }
+
+    private void fetchExampleSentences() {
+        ApiService apiService = new ApiService(this);
+        apiService.getExampleSentences(new ApiService.CallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+
+                List<ExampleSentence> exampleSentences = JsonParser.getInstance(MainActivity.this).parseExampleSentences(jsonArray);
+                setExampleSentences(exampleSentences);
+                fetchSupplimentalLinks();
+            }
+
+            @Override
+            public void error(ANError anError) {
+                Log.d("Error", anError.getErrorDetail());
+            }
+        });
+    }
+
+    private void fetchSupplimentalLinks() {
+        ApiService apiService = new ApiService(MainActivity.this);
+        apiService.getSupplimentalLinks(new ApiService.CallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
                 if (hud.isShowing()) {
                     hud.dismiss();
                 }
 
-                List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
-                setGrammarPoints(grammarPoints);
+                List<SupplementalLink> supplementalLinks = JsonParser.getInstance(MainActivity.this).parseSupplimentalLinks(jsonArray);
+                setSupplimentalLinks(supplementalLinks);
                 initializeUI();
             }
 

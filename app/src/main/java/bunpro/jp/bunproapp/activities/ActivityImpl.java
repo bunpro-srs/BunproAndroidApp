@@ -1,6 +1,6 @@
 package bunpro.jp.bunproapp.activities;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
+import bunpro.jp.bunproapp.models.SupplementalLink;
 
 public interface ActivityImpl {
 
@@ -31,7 +32,12 @@ public interface ActivityImpl {
     GrammarPoint getGrammarPoint();
 
     void setExampleSentense(ExampleSentence sentense);
+    void setExampleSentences(List<ExampleSentence> sentences);
+    List<ExampleSentence> getExampleSentences();
     ExampleSentence getExampleSentence();
+
+    void setSupplimentalLinks(List<SupplementalLink> links);
+    List<SupplementalLink> getSupplimentalLinks();
 
     void addFragment(Fragment fragment);
     void popFragment();

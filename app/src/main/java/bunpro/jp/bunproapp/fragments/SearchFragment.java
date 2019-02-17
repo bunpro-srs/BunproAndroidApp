@@ -3,14 +3,14 @@ package bunpro.jp.bunproapp.fragments;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +33,7 @@ import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-import static android.support.v7.widget.RecyclerView.*;
+import static androidx.recyclerview.widget.RecyclerView.*;
 
 public class SearchFragment extends BaseFragment implements SearchContract.View {
 
@@ -137,9 +137,9 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
 
         svSearch = view.findViewById(R.id.svSearch);
-        android.support.v7.widget.SearchView.SearchAutoComplete searchAutoComplete = (android.support.v7.widget.SearchView.SearchAutoComplete)svSearch.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(Color.parseColor("#c7d1d3"));
-        searchAutoComplete.setTextColor(Color.parseColor("#c7d1d3"));
+        //androidx.appcompat.widget.SearchView.SearchAutoComplete searchAutoComplete = (androidx.appcompat.widget.SearchView.SearchAutoComplete)svSearch.findViewById(androidx.appcompat.appcompat.R.id.search_src_text);
+        //searchAutoComplete.setHintTextColor(Color.parseColor("#c7d1d3"));
+        //searchAutoComplete.setTextColor(Color.parseColor("#c7d1d3"));
 
 
         filter = 0;

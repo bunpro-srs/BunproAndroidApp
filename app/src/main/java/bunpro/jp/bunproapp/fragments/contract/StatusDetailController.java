@@ -44,7 +44,7 @@ public class StatusDetailController implements StatusDetailContract.Controller {
 
                 if (levelPoints.size() > 0) {
                     for (GrammarPoint point : levelPoints) {
-                        String lesson = point.lesson_id;
+                        String lesson = String.valueOf(point.lesson_id);
                         if (!pointsByLesson.containsKey(lesson)) {
                             pointsByLesson.put(lesson, new ArrayList<GrammarPoint>());
                         }
