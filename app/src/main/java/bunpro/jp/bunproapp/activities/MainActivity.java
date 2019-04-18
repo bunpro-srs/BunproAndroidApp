@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.androidnetworking.error.ANError;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
     FragNavController.Builder builder;
     FragNavController fragNavController;
+    Toast exitToast;
 
     private static final int INDEX_STATUS = 31;
     private static final int INDEX_SEARCH = 32;
@@ -125,6 +127,17 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         return true;
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exitToast == null || exitToast.getView() == null || exitToast.getView().getWindowToken() == null) {
+            exitToast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
+            exitToast.show();
+        } else {
+            exitToast.cancel();
+            super.onBackPressed();
+        }
     }
 
     @Override
