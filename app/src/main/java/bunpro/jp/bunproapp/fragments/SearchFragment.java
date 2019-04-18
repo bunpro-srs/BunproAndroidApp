@@ -212,8 +212,11 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
             GrammarPoint point = points.get(position);
             String numberStr = point.level.replaceAll("[^0-9]", "");
 
-            return Integer.parseInt(numberStr);
-
+            try {
+                return Integer.parseInt(numberStr);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
         }
 
         @NonNull

@@ -1,9 +1,6 @@
 package bunpro.jp.bunproapp.models;
 
-import android.util.Log;
-
 import java.util.Comparator;
-import java.util.List;
 
 public class GrammarPoint {
 

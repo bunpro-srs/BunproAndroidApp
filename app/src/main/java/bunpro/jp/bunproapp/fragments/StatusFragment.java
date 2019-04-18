@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -340,10 +341,14 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     private void updateBadge() {
         int number = this.reviews.size();
-        if (number != 0) {
-            ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
-        } else {
-            ShortcutBadger.removeCount(getActivity().getApplicationContext());
+        try {
+            if (number != 0) {
+                ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
+            } else {
+                ShortcutBadger.removeCount(getActivity().getApplicationContext());
+            }
+        } catch (NullPointerException e) {
+            Log.e("NullPointerException", "No activity context when trying to update the badge !");
         }
     }
 
