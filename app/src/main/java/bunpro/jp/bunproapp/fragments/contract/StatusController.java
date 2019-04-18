@@ -100,13 +100,12 @@ public class StatusController implements StatusContract.Controller {
             apiService.getReviews(new ApiService.CallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
-
+                    List<Review> reviews = JsonParser.getInstance(mContext).parseReviews(jsonObject);
+                    v.updateReviewStatus(reviews);
                 }
 
                 @Override
                 public void successAsJSONArray(JSONArray jsonArray) {
-                    List<Review> reviews = JsonParser.getInstance(mContext).parseReviews(jsonArray);
-                    v.updateReviewStatus(reviews);
                 }
 
                 @Override

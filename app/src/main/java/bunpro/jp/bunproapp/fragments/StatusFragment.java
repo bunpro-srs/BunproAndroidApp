@@ -190,7 +190,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mController.setName(this);
         this.grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
         this.reviews = ((MainActivity)getActivity()).getReviews();
-        tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
+        calculateReviewsNumber();
         mController.getStatus(this);
         updateBadge();
     }
@@ -309,40 +309,21 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void calculateReviewsNumber() {
-
-        if (this.reviews.size() > 0) {
-
-            int oneHours = 0;
-            int oneDayHours = 0;
-
-            Date currentDate = Calendar.getInstance().getTime();
-            for (int k=0;k<this.reviews.size();k++) {
-
-                try {
-                    SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    Date reviewDate = spf.parse(this.reviews.get(k).next_review);
-
-                    long diff = currentDate.getTime() - reviewDate.getTime();
-                    if (diff <= 3600 * 1000) {
-                        oneHours = oneHours + 1;
-                    }
-
-                    if (diff <= 3600 * 1000 * 24) {
-                        oneDayHours = oneDayHours + 1;
-                    }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+        int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
+        for (Review review : this.reviews) {
+            long remainingHours = review.getRemainingHoursBeforeReview();
+            if (remainingHours <= 0) {
+                pendingReviewCount++;
+            } else if (remainingHours == 1) {
+                withinAnHourReviewCount++;
+            } else if (remainingHours <= 24) {
+                withinADayReviewCount++;
             }
-
-            oneDayHours = oneDayHours - oneHours;
-
-            tvUpdate24Hours.setText(String.format("+%s", String.valueOf(oneDayHours)));
-            tvUpdate1Hour.setText(String.format("+%s", String.valueOf(oneHours)));
-
         }
+
+        tvReviews.setText(String.format("%s Reviews", String.valueOf(pendingReviewCount)));
+        tvUpdate24Hours.setText(String.format("+%s", String.valueOf(withinADayReviewCount)));
+        tvUpdate1Hour.setText(String.format("+%s", String.valueOf(withinAnHourReviewCount)));
     }
 
     private void updateBadge() {

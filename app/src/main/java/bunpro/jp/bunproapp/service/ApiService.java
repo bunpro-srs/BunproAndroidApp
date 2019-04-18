@@ -127,14 +127,14 @@ public class ApiService {
 
         String token = UserData.getInstance(mContext).getUserKey();
 
-        AndroidNetworking.get(Constants.BASE_URL_v3 + "reviews/all_reviews")
+        AndroidNetworking.get(Constants.BASE_URL_v3 + "reviews/all_reviews_total")
                 .setPriority(Priority.HIGH)
                 .addHeaders("Authorization", "Bearer " + token)
                 .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        listener.successAsJSONArray(response);
+                    public void onResponse(JSONObject response) {
+                        listener.success(response);
                     }
 
                     @Override

@@ -347,14 +347,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         apiService.getReviews(new ApiService.CallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-
+                List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonObject);
+                setReviews(reviews);
+                fetchGrammarPoints();
             }
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-                List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonArray);
-                setReviews(reviews);
-                fetchGrammarPoints();
             }
 
             @Override
