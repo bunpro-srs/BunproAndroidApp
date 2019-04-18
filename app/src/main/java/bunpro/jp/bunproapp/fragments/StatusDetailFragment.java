@@ -198,10 +198,10 @@ public class StatusDetailFragment extends BaseFragment implements View.OnClickLi
         private int checkReview(List<GrammarPoint> points) {
             int count = 0;
             if (reviews.size() > 0) {
-                for (Review review : reviews) {
-                    for (GrammarPoint point : points) {
+                for (GrammarPoint point : points) {
+                    for (Review review : reviews) {
                         if (point.id == review.grammar_point_id) {
-                            count = count + 1;
+                            count++;
                             break;
                         }
                     }
