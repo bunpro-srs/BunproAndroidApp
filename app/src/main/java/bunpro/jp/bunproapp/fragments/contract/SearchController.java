@@ -69,31 +69,29 @@ public class SearchController implements SearchContract.Controller {
             relevantPoints = new ArrayList<>(grammarPoints);
         } else if (filter == 1) {
             // Filter on : unlearned grammar points only
-            if (reviewsCopy.size() > 0) {
-                relevantPoints = new ArrayList<>(grammarPoints);
-                for (int k=0;k<relevantPoints.size();k++) {
-                    for (Review review : reviewsCopy) {
-                        if (review.grammar_point_id == relevantPoints.get(k).id) {
-                            relevantPoints.remove(k);
-                            break;
-                        }
-                    }
-                }
-            }
+            List<GrammarPoint> grammarPointsToRemove = getLearnedGrammarPoints(grammarPoints, reviewsCopy);
+            relevantPoints = new ArrayList<>(grammarPoints);
+            relevantPoints.removeAll(grammarPointsToRemove);
         } else {
             // Filter on : learned grammar points only
-            if (reviewsCopy.size() > 0) {
-                for (GrammarPoint grammarPoint : grammarPoints) {
-                    for (Review review : reviewsCopy) {
-                        if (review.grammar_point_id == grammarPoint.id) {
-                            relevantPoints.add(grammarPoint);
-                            break;
-                        }
+            relevantPoints = getLearnedGrammarPoints(grammarPoints, reviewsCopy);
+        }
+
+        return relevantPoints;
+    }
+
+    private List<GrammarPoint> getLearnedGrammarPoints(List<GrammarPoint> grammarPoints, List<Review> userReviews) {
+        List<GrammarPoint> relevantPoints = new ArrayList<>();
+        if (userReviews.size() > 0) {
+            for (GrammarPoint grammarPoint : grammarPoints) {
+                for (Review review : userReviews) {
+                    if (review.grammar_point_id == grammarPoint.id) {
+                        relevantPoints.add(grammarPoint);
+                        break;
                     }
                 }
             }
         }
-
         return relevantPoints;
     }
 }
