@@ -270,7 +270,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         if (mainActivity != null) {
             mainActivity.setReviews(this.reviews);
         } else {
-            Log.e("Null activity", "Getting a null activity when trying to update the status");
+            Log.e("Null activity", "Getting a null activity when trying to update the status !");
         }
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);

@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.fragments.contract;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -20,11 +21,11 @@ import bunpro.jp.bunproapp.service.JsonParser;
 public class SearchController implements SearchContract.Controller {
 
     private Context mContext;
-    List<GrammarPoint> grammarPoints;
+    private List<GrammarPoint> grammarPoints;
 
     public SearchController(Context context) {
         mContext = context;
-        grammarPoints = ((MainActivity) mContext).getGrammarPoints();
+        grammarPoints = new ArrayList<>(((MainActivity) mContext).getGrammarPoints());
     }
 
 
@@ -57,51 +58,42 @@ public class SearchController implements SearchContract.Controller {
     }
 
     private List<GrammarPoint> filtering(int filter) {
-
-        List<GrammarPoint> points = new ArrayList<>();
-
-        List<Review> reviews = ((MainActivity)mContext).getReviews();
-
         Collections.sort(grammarPoints, GrammarPoint.levelComparator);
 
+        List<GrammarPoint> relevantPoints = new ArrayList<>();
+        List<Review> reviewsOriginal = ((MainActivity)mContext).getReviews();
+        List<Review> reviewsCopy = new ArrayList<>(reviewsOriginal);
+
         if (filter == 0) {
-            points = grammarPoints;
+            // Filter off : all grammar points active
+            relevantPoints = new ArrayList<>(grammarPoints);
         } else if (filter == 1) {
-
-            if (reviews.size() > 0) {
-
-                for (GrammarPoint point : grammarPoints) {
-                    for (Review review : reviews) {
-                        if (review.grammar_point_id == point.id) {
-
-                            points.add(point);
+            // Filter on : unlearned grammar points only
+            if (reviewsCopy.size() > 0) {
+                relevantPoints = new ArrayList<>(grammarPoints);
+                for (int k=0;k<relevantPoints.size();k++) {
+                    for (Review review : reviewsCopy) {
+                        if (review.grammar_point_id == relevantPoints.get(k).id) {
+                            relevantPoints.remove(k);
                             break;
-
                         }
                     }
                 }
-
             }
-
         } else {
-
-            if (reviews.size() > 0) {
-
-                points = grammarPoints;
-                for (int k=0;k<points.size();k++) {
-                    for (Review review : reviews) {
-                        if (review.grammar_point_id == points.get(k).id) {
-                            points.remove(k);
+            // Filter on : learned grammar points only
+            if (reviewsCopy.size() > 0) {
+                for (GrammarPoint grammarPoint : grammarPoints) {
+                    for (Review review : reviewsCopy) {
+                        if (review.grammar_point_id == grammarPoint.id) {
+                            relevantPoints.add(grammarPoint);
                             break;
                         }
                     }
                 }
-
-            } else {
-                points = grammarPoints;
             }
         }
 
-        return points;
+        return relevantPoints;
     }
 }

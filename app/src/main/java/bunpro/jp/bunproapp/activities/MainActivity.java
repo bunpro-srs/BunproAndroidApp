@@ -93,8 +93,13 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         fragments.add(SettingFragment.newInstance());
         builder.rootFragments(fragments);
 
-        fragNavController = builder.build();
-        builder.rootFragmentListener(this, 3);
+        // Workaround for random crash ; see https://github.com/hulab/debugkit/issues/3
+        try {
+            fragNavController = builder.build();
+            builder.rootFragmentListener(this, 3);
+        } catch (IllegalStateException e) {
+            Log.e("IllegalStateException", "Initializing UI failed due to a button event called after a state saving.");
+        }
 
         /*  Initialization  */
 
@@ -124,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        // Bug happening on API > 11 causing a random crash when saving instance : https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa/10261438#10261438
+        outState.putString("WORKAROUND_FOR_RANDOM_CRASH", "WORKAROUND_FOR_RANDOM_CRASH");
         super.onSaveInstanceState(outState);
         if (fragNavController != null) {
             fragNavController.onSaveInstanceState(outState);

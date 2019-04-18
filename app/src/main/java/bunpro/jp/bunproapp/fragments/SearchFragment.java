@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,7 +234,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         }
 
         void update(List<GrammarPoint> points) {
-
             this.points = points;
 
         }
