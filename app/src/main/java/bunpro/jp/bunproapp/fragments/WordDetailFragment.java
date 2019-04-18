@@ -503,6 +503,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                             MediaPlayer mediaPlayer = new MediaPlayer();
                             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                            if (sentence.audio_link == null || sentence.audio_link.equals("null")) {
+                                Log.w("Audio not found", "The audio resource \"" + sentence.english + "\" was not found");
+                                return;
+                            }
+
                             Uri uri = Uri.parse(Constants.AUDIO_BASE_URL + sentence.audio_link);
 
                             try {

@@ -6,6 +6,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -265,7 +266,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void updateReviewStatus(List<Review> reviews) {
         this.reviews = reviews;
-        ((MainActivity)getActivity()).setReviews(this.reviews);
+        MainActivity mainActivity = ((MainActivity)getActivity());
+        if (mainActivity != null) {
+            mainActivity.setReviews(this.reviews);
+        } else {
+            Log.e("Null activity", "Getting a null activity when trying to update the status");
+        }
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);
         if (spinKitView.isShown()) {
@@ -341,14 +347,15 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
     private void updateBadge() {
         int number = this.reviews.size();
-        try {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
             if (number != 0) {
                 ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
             } else {
                 ShortcutBadger.removeCount(getActivity().getApplicationContext());
             }
-        } catch (NullPointerException e) {
-            Log.e("NullPointerException", "No activity context when trying to update the badge !");
+        } else {
+            Log.e("Null activity", "No activity context when trying to update the badge !");
         }
     }
 
