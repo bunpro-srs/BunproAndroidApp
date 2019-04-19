@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <uses-library android:name="android.test.runner" android:required="false" />
+
         <activity
             android:name="bunpro.jp.bunproapp.activities.MainActivity"
             android:screenOrientation="portrait"

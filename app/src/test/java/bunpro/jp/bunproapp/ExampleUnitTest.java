@@ -1,4 +1,4 @@
-package bunpro.jp.bunprosrs;
+package bunpro.jp.bunproapp;
 
 import org.junit.Test;
 
