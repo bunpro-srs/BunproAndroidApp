@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<List<GrammarPoint>> arrangedGrammarPoints;
     private List<ExampleSentence> exampleSentences;
     private List<SupplementalLink> supplementalLinks;
+    // Temporary lists for /user/progress workaround
+    public List<Integer> n2GrammarPointsTotal = new ArrayList<>();
+    public List<Integer> n1GrammarPointsTotal = new ArrayList<>();
+    public List<Integer> n2GrammarPointsLearned = new ArrayList<>();
+    public List<Integer> n1GrammarPointsLearned = new ArrayList<>();
 
     private GrammarPoint selectedGrammarPoint;
     private ExampleSentence selectedSentence;
@@ -84,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                 .setDimAmount(0.5f);
 
         fetchReviews();
-
     }
 
     private void initializeUI() {
@@ -127,6 +131,12 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         return true;
                     }
                 });
+
+
+        // Workaround for /user/progress v3 endpoint not working
+        if (n2GrammarPointsTotal.size() == 0) {
+            countProgress(this.reviews);
+        }
     }
 
     @Override
@@ -172,6 +182,47 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    /**
+     * Temporary workaround for the non working /user/progress v3 endpoint
+     */
+    public void countProgress(List<Review> reviews) {
+        n2GrammarPointsLearned = new ArrayList<>();
+        n1GrammarPointsLearned = new ArrayList<>();
+        n2GrammarPointsTotal = new ArrayList<>();
+        n1GrammarPointsTotal = new ArrayList<>();
+        List<GrammarPoint> n2GrammarPoints = new ArrayList<>(), n1GrammarPoints = new ArrayList<>();
+
+        for (GrammarPoint grammarPointExample : grammarPoints) {
+            if (grammarPointExample.level.equals("JLPT2")) {
+                if (!n2GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n2GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n2GrammarPoints.add(grammarPointExample);
+            } else if (grammarPointExample.level.equals("JLPT1")) {
+                if (!n1GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n1GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n1GrammarPoints.add(grammarPointExample);
+            }
+        }
+        for (Review review : reviews) {
+            for (GrammarPoint grammarConcernedByReview : n2GrammarPoints) {
+                if (review.grammar_point_id == grammarConcernedByReview.id) {
+                    if (review.times_correct > 0 && n2GrammarPointsLearned.contains(review.id)) {
+                        n2GrammarPointsLearned.add(review.id);
+                    }
+                }
+            }
+            for (GrammarPoint grammarConcernedByReview : n1GrammarPoints) {
+                if (review.grammar_point_id == grammarConcernedByReview.id) {
+                    if (review.times_correct > 0 && n1GrammarPointsLearned.contains(review.id)) {
+                        n1GrammarPointsLearned.add(review.id);
+                    }
+                }
+            }
+        }
     }
 
     @Override

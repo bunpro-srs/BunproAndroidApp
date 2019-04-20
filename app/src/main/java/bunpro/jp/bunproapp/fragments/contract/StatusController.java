@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.fragments.contract;
 
 import android.content.Context;
+import android.util.SparseIntArray;
 
 import com.androidnetworking.error.ANError;
 
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import bunpro.jp.bunproapp.activities.MainActivity;
 import bunpro.jp.bunproapp.models.SupplementalLink;
@@ -59,11 +61,19 @@ public class StatusController implements StatusContract.Controller {
                     }
 
                     Status s = new Status(key, sk, tk);
-                    status.add(s);
+                    // Dirty fix condition for missing N1/wrong N2 values
+                    if (!s.name.equals("N2") && !s.name.equals("N1")) {
+                        status.add(s);
+                    }
 
                 }
 
                 MainActivity activity = (MainActivity) mContext;
+
+                // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
+                status.add(new Status("N2", activity.n2GrammarPointsLearned.size(), activity.n2GrammarPointsTotal.size()));
+                status.add(new Status("N1", activity.n1GrammarPointsLearned.size(), activity.n1GrammarPointsTotal.size()));
+
                 activity.setjlptLevel(status);
 
                 v.updateView(status);
