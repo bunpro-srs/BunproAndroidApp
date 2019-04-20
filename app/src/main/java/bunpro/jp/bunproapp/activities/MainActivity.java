@@ -141,12 +141,18 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
     @Override
     public void onBackPressed() {
-        if (exitToast == null || exitToast.getView() == null || exitToast.getView().getWindowToken() == null) {
-            exitToast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
-            exitToast.show();
+        // Allowing double back button to exit if it is status fragment. Else go to status
+        Fragment currentFragment = fragNavController.getCurrentFrag();
+        if (currentFragment instanceof StatusFragment || currentFragment instanceof SearchFragment || currentFragment instanceof SettingFragment) {
+            if (exitToast == null || exitToast.getView() == null || exitToast.getView().getWindowToken() == null) {
+                exitToast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
+                exitToast.show();
+            } else {
+                exitToast.cancel();
+                super.onBackPressed();
+            }
         } else {
-            exitToast.cancel();
-            super.onBackPressed();
+            fragNavController.replaceFragment(StatusFragment.newInstance());
         }
     }
 
