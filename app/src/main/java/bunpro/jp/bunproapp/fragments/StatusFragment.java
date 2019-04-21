@@ -133,7 +133,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
                     bundle.putString("level", "JLPT1");
                 } else {
                     bundle.putString("status", mStatus.get(position).getName());
-                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
+                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() - position));
                 }
 
                 fragment.setArguments(bundle);
@@ -383,7 +383,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         @Override
         public int getItemCount() {
             if (mStatus.size() != 0) {
-                return mStatus.size() + 1;
+                return mStatus.size();
             } else {
                 return 0;
             }
