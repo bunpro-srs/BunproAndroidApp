@@ -1,7 +1,6 @@
 package bunpro.jp.bunproapp.fragments.contract;
 
 import android.content.Context;
-import android.util.SparseIntArray;
 
 import com.androidnetworking.error.ANError;
 
@@ -12,18 +11,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class StatusController implements StatusContract.Controller {
 
@@ -38,7 +33,7 @@ public class StatusController implements StatusContract.Controller {
 
         ApiService apiService = new ApiService(mContext);
 
-        apiService.getProgress(new ApiService.CallbackListener() {
+        apiService.getProgress(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 
@@ -107,7 +102,7 @@ public class StatusController implements StatusContract.Controller {
             v.updateReviewStatus(rs);
         } else {
             ApiService apiService = new ApiService(mContext);
-            apiService.getReviews(new ApiService.CallbackListener() {
+            apiService.getReviews(new ApiService.ApiCallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
                     List<Review> reviews = JsonParser.getInstance(mContext).parseReviews(jsonObject);
@@ -136,7 +131,7 @@ public class StatusController implements StatusContract.Controller {
             v.updateGrammarPoints(points);
         } else {
             ApiService apiService = new ApiService(mContext);
-            apiService.getGrammarPoints(new ApiService.CallbackListener() {
+            apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
 

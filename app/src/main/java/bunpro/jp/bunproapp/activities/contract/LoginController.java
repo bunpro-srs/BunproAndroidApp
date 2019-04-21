@@ -16,126 +16,126 @@ import bunpro.jp.bunproapp.service.ApiService;
 
 public class LoginController implements LoginContract.Controller {
 
+    public interface SimpleCallbackListener {
+        void success();
+        void error(String errorMessage);
+    }
+
+    private ApiService apiService;
     private Context mContext;
+
     public LoginController(Context context) {
         mContext = context;
     }
 
-
     @Override
-    public void login(final LoginContract.View v, String email, String password) {
-
-        v.loadingProgress(true);
-
-        final ApiService apiService = new ApiService(mContext);
-        apiService.login(email, password, new ApiService.CallbackListener() {
+    public void login(String email, String password, final SimpleCallbackListener callback) {
+        apiService = new ApiService(mContext);
+        apiService.login(email, password, new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-
                 UserData.getInstance(mContext).setUserLogin();
+                String errorMessage = "";
                 if (jsonObject.has("bunpro_api_token")) {
-
                     try {
-                        Log.d("TAG", jsonObject.getString("bunpro_api_token"));
+                        Log.d("Bunpro API token", jsonObject.getString("bunpro_api_token"));
                         UserData.getInstance(mContext).setUserKey(jsonObject.getString("bunpro_api_token"));
-                        apiService.getUser(new ApiService.CallbackListener() {
-                            @Override
-                            public void success(JSONObject jsonObject) {
-
-                                v.loadingProgress(false);
-                                try {
-                                    String hideEnglish = jsonObject.getString("hide_english");
-                                    if (hideEnglish.equalsIgnoreCase("no")) {
-                                        AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_NO);
-                                    } else {
-                                        AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_YES);
-                                    }
-
-                                    String furigana = jsonObject.getString("furigana");
-                                    if (furigana.equalsIgnoreCase("on")) {
-                                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_ALWAYS);
-                                    } else if (furigana.equalsIgnoreCase("off")) {
-                                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_NEVER);
-                                    } else {
-                                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_WANIKANI);
-                                    }
-
-                                    String username = jsonObject.getString("username");
-                                    UserData.getInstance(mContext).setUserName(username);
-
-                                    String lightMode = jsonObject.getString("light_mode");
-                                    if (lightMode.equalsIgnoreCase("off")) {
-                                        AppData.getInstance(mContext).setLightMode(Constants.SETTING_LIGHT_MODE_OFF);
-                                    } else {
-                                        AppData.getInstance(mContext).setLightMode(Constants.SETTING_LIGHT_MODE_ON);
-                                    }
-
-                                    String bunnyMode = jsonObject.getString("bunny_mode");
-                                    if (bunnyMode.equalsIgnoreCase("off")) {
-                                        AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_OFF);
-                                    } else {
-                                        AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_ON);
-                                    }
-
-                                    boolean subscription = jsonObject.getBoolean("subscriber");
-                                    if (subscription) {
-                                        AppData.getInstance(mContext).setSubscription(Constants.SETTING_SUBSCRIPTION_YES);
-                                    } else {
-                                        AppData.getInstance(mContext).setSubscription(Constants.SETTING_SUBSCRIPTION_NO);
-                                    }
-
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                v.gotoMain();
-                            }
-
-                            @Override
-                            public void successAsJSONArray(JSONArray jsonArray) {
-
-                            }
-
-                            @Override
-                            public void error(ANError anError) {
-
-                                v.loadingProgress(false);
-                                v.showError(anError.getErrorDetail());
-                            }
-                        });
+                        callback.success();
+                        return;
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        errorMessage = "Unable to parse JSON Bunpro API token !";
                     }
-
                 } else {
-
+                    errorMessage = "Unable to find Bunpro API token within response !";
                     try {
                         JSONArray jsonArray = jsonObject.getJSONArray("errors");
                         if (jsonArray.length() > 0) {
                             JSONObject obj = jsonArray.getJSONObject(0);
-                            v.showError(obj.getString("detail"));
+                            errorMessage = obj.getString("detail");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-
+                callback.error(errorMessage);
             }
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-
+                Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Login)");
+                callback.error("Login API reponse format changed !");
             }
 
             @Override
             public void error(ANError anError) {
-
-                v.loadingProgress(false);
-                v.showError(anError.getErrorDetail());
+                callback.error(anError.getErrorDetail());
             }
         });
 
+    }
+
+    public void configureSettings(final SimpleCallbackListener callback) {
+        apiService.getUser(new ApiService.ApiCallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+                try {
+                    String hideEnglish = jsonObject.getString("hide_english");
+                    if (hideEnglish.equalsIgnoreCase("no")) {
+                        AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_NO);
+                    } else {
+                        AppData.getInstance(mContext).setHideEnglish(Constants.SETTING_HIDE_ENGLISH_YES);
+                    }
+
+                    String furigana = jsonObject.getString("furigana");
+                    if (furigana.equalsIgnoreCase("on")) {
+                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_ALWAYS);
+                    } else if (furigana.equalsIgnoreCase("off")) {
+                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_NEVER);
+                    } else {
+                        AppData.getInstance(mContext).setFurigana(Constants.SETTING_FURIGANA_WANIKANI);
+                    }
+
+                    String username = jsonObject.getString("username");
+                    UserData.getInstance(mContext).setUserName(username);
+
+                    String lightMode = jsonObject.getString("light_mode");
+                    if (lightMode.equalsIgnoreCase("off")) {
+                        AppData.getInstance(mContext).setLightMode(Constants.SETTING_LIGHT_MODE_OFF);
+                    } else {
+                        AppData.getInstance(mContext).setLightMode(Constants.SETTING_LIGHT_MODE_ON);
+                    }
+
+                    String bunnyMode = jsonObject.getString("bunny_mode");
+                    if (bunnyMode.equalsIgnoreCase("off")) {
+                        AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_OFF);
+                    } else {
+                        AppData.getInstance(mContext).setBunnyMode(Constants.SETTING_BUNNY_MODE_ON);
+                    }
+
+                    boolean subscription = jsonObject.getBoolean("subscriber");
+                    if (subscription) {
+                        AppData.getInstance(mContext).setSubscription(Constants.SETTING_SUBSCRIPTION_YES);
+                    } else {
+                        AppData.getInstance(mContext).setSubscription(Constants.SETTING_SUBSCRIPTION_NO);
+                    }
+                    callback.success();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.error("Unable to parse user settings JSON response !");
+                }
+            }
+
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (User settings)");
+                callback.error("User settings API reponse format changed !");
+            }
+
+            @Override
+            public void error(ANError anError) {
+                callback.error(anError.getErrorDetail());
+            }
+        });
     }
 }

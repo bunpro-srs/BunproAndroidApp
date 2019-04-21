@@ -53,8 +53,32 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
+        LoginContract.View loginView = this;
+
         if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
-            mController.login(this, email, password);
+            // Attempt to login
+            mController.login(email, password, new LoginController.SimpleCallbackListener() {
+                @Override
+                public void success() {
+                    // Attempt to fetch user settings and configure the local ones
+                    mController.configureSettings(new LoginController.SimpleCallbackListener() {
+                        @Override
+                        public void success() {
+                            gotoMain();
+                        }
+
+                        @Override
+                        public void error(String errorMessage) {
+                            showError(errorMessage);
+                        }
+                    });
+                }
+
+                @Override
+                public void error(String errorMessage) {
+                    showError(errorMessage);
+                }
+            });
         }
     }
 

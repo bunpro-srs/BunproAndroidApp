@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private void fetchGrammarPoints() {
 
         ApiService apiService = new ApiService(this);
-        apiService.getGrammarPoints(new ApiService.CallbackListener() {
+        apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
     private void fetchExampleSentences() {
         ApiService apiService = new ApiService(this);
-        apiService.getExampleSentences(new ApiService.CallbackListener() {
+        apiService.getExampleSentences(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 
@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
                 List<ExampleSentence> exampleSentences = JsonParser.getInstance(MainActivity.this).parseExampleSentences(jsonArray);
                 setExampleSentences(exampleSentences);
-                fetchSupplimentalLinks();
+                fetchSupplementalLinks();
             }
 
             @Override
@@ -381,9 +381,9 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         });
     }
 
-    private void fetchSupplimentalLinks() {
+    private void fetchSupplementalLinks() {
         ApiService apiService = new ApiService(MainActivity.this);
-        apiService.getSupplimentalLinks(new ApiService.CallbackListener() {
+        apiService.getSupplementalLinks(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         }
 
         ApiService apiService = new ApiService(this);
-        apiService.getReviews(new ApiService.CallbackListener() {
+        apiService.getReviews(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
                 List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonObject);

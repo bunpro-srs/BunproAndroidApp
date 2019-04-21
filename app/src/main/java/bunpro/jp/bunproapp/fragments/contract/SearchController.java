@@ -1,7 +1,6 @@
 package bunpro.jp.bunproapp.fragments.contract;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -34,7 +33,7 @@ public class SearchController implements SearchContract.Controller {
 
         if (grammarPoints.size() == 0) {
             ApiService apiService = new ApiService(mContext);
-            apiService.getGrammarPoints(new ApiService.CallbackListener() {
+            apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
 

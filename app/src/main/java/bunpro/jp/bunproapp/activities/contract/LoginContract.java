@@ -8,6 +8,7 @@ public interface LoginContract {
     }
 
     interface Controller {
-        void login(LoginContract.View v, String email, String password);
+        void login(String email, String password, final LoginController.SimpleCallbackListener callback);
+        void configureSettings(final LoginController.SimpleCallbackListener callback);
     }
 }
