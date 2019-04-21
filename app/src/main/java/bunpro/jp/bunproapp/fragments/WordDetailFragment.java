@@ -1,7 +1,6 @@
 package bunpro.jp.bunproapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import androidx.core.util.Supplier;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +33,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
@@ -637,7 +633,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 ivIndicator.setOnClickListener(this);
                 ivIndicator.setTag(true);
 
-                container = itemView.findViewById(R.id.container);
+                container = itemView.findViewById(R.id.main_container);
                 llReadingContainer = itemView.findViewById(R.id.llReadingContainer);
                 llReadingContainer.setOnClickListener(this);
 

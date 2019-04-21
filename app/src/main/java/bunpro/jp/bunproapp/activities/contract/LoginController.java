@@ -26,7 +26,7 @@ public class LoginController implements LoginContract.Controller {
     @Override
     public void login(final LoginContract.View v, String email, String password) {
         v.loadingProgress(true);
-        EspressoTestingIdlingResource.increment();
+        EspressoTestingIdlingResource.increment("login_and_loading");
 
         final ApiService apiService = new ApiService(mContext);
         apiService.login(email, password, new ApiService.CallbackListener() {
@@ -44,7 +44,6 @@ public class LoginController implements LoginContract.Controller {
                             public void success(JSONObject jsonObject) {
 
                                 v.loadingProgress(false);
-                                EspressoTestingIdlingResource.decrement();
                                 try {
                                     String hideEnglish = jsonObject.getString("hide_english");
                                     if (hideEnglish.equalsIgnoreCase("no")) {
@@ -103,8 +102,8 @@ public class LoginController implements LoginContract.Controller {
                             public void error(ANError anError) {
 
                                 v.loadingProgress(false);
-                                EspressoTestingIdlingResource.decrement();
                                 v.showError(anError.getErrorDetail());
+                                EspressoTestingIdlingResource.decrement("login_and_loading");
                             }
                         });
                     } catch (JSONException e) {
@@ -136,7 +135,7 @@ public class LoginController implements LoginContract.Controller {
             public void error(ANError anError) {
 
                 v.loadingProgress(false);
-                EspressoTestingIdlingResource.decrement();
+                EspressoTestingIdlingResource.decrement("login_and_loading");
                 v.showError(anError.getErrorDetail());
             }
         });

@@ -33,13 +33,14 @@ import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements ActivityImpl, FragNavController.RootFragmentListener {
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
-    @BindView(R.id.container) FrameLayout container;
+    @BindView(R.id.main_container) FrameLayout container;
 
     List<Status> jlptLevels;
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         reviews = new ArrayList<>();
         arrangedGrammarPoints = new ArrayList<>();
 
-        builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
+        builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.main_container);
 
         hud = KProgressHUD.create(MainActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -137,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         if (n2GrammarPointsTotal.size() == 0) {
             countProgress(this.reviews);
         }
+
+        EspressoTestingIdlingResource.decrement("login_and_loading");
     }
 
     @Override
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, fragment);
+        ft.replace(R.id.main_container, fragment);
         ft.commit();
     }
 
