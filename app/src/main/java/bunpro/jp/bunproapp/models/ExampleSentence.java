@@ -13,6 +13,8 @@ public class ExampleSentence {
     public String created_at, updated_at;
     public String audio_link;
     public String nuance;
+    public int sentence_order;
+    public String type;
 
     public ExampleSentence() {
 

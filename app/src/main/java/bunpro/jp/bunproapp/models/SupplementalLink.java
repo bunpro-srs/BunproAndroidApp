@@ -7,16 +7,11 @@ import io.realm.RealmObject;
 public class SupplementalLink extends RealmObject {
 
     public int id;
+    public String type;
     public int grammar_point_id;
     public String site;
     public String link;
     public String description;
-    public String created_at, updated_at;
-    public boolean read;
-
-    public SupplementalLink() {
-        read = false;
-    }
 
     public static Comparator<SupplementalLink> IdComparator = new Comparator<SupplementalLink>() {
         @Override

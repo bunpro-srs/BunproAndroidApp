@@ -6,13 +6,15 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import androidx.core.util.Supplier;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +27,16 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
@@ -55,6 +59,9 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private Context mContext;
     private WordDetailContract.Controller mController;
 
+    List<ExampleSentence> exampleSentences;
+    List<SupplementalLink> supplementalLinks;
+
     Button btnBack, btnReset;
     RecyclerView rvWords;
 
@@ -66,7 +73,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     private int type;
 
     public WordDetailFragment() {
-
+        exampleSentences = new ArrayList<>();
+        supplementalLinks = new ArrayList<>();
     }
 
     public static WordDetailFragment newInstance() {
@@ -128,6 +136,34 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         mAdapter.notifyDataSetChanged();
     }
 
+    private List<ExampleSentence> getExampleSentences(GrammarPoint point) {
+        List<ExampleSentence> exampleSentences = ((MainActivity)getActivity()).getExampleSentences();
+        List<ExampleSentence> point_example_sentences = new ArrayList<>();
+        if (exampleSentences.size() > 0) {
+            for (int i=0;i<exampleSentences.size();i++) {
+                if (exampleSentences.get(i).grammar_point_id == point.id) {
+                    point_example_sentences.add(exampleSentences.get(i));
+                }
+            }
+        }
+
+        return point_example_sentences;
+    }
+
+    private List<SupplementalLink> getSupplimentalLinks(GrammarPoint point) {
+        List<SupplementalLink> supplementalLinks = ((MainActivity)getActivity()).getSupplimentalLinks();
+        List<SupplementalLink> point_supplimental_links = new ArrayList<>();
+
+        if (supplementalLinks.size() > 0) {
+            for (int i=0;i<supplementalLinks.size();i++) {
+                if (supplementalLinks.get(i).grammar_point_id == point.id) {
+                    point_supplimental_links.add(supplementalLinks.get(i));
+                }
+            }
+        }
+        return point_supplimental_links;
+    }
+
     private void initialize() {
 
         selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
@@ -142,8 +178,10 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         review = mController.getReview(selectedPoint);
 
         if (selectedPoint != null) {
+            exampleSentences = getExampleSentences(selectedPoint);
+            supplementalLinks = getSupplimentalLinks(selectedPoint);
 
-            mAdapter = new StickAdapter(0, review, selectedPoint, mContext, new ItemClickListener() {
+            mAdapter = new StickAdapter(0, review, selectedPoint, exampleSentences, supplementalLinks, mContext, new ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
                     if (position == 0) {
@@ -155,16 +193,16 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     } else {
                         if (type == 0) {
 
-                            ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
-                            ((MainActivity)getActivity()).setExampleSentense(sentence);
-                            Fragment fragment = ExampleFragment.newInstance();
-                            ((MainActivity)getActivity()).addFragment(fragment);
+//                            ExampleSentence sentence = selectedPoint.example_sentences.get(position - 2);
+//                            ((MainActivity)getActivity()).setExampleSentense(sentence);
+//                            Fragment fragment = ExampleFragment.newInstance();
+//                            ((MainActivity)getActivity()).addFragment(fragment);
 
                         } else {
 
-                            SupplementalLink link = selectedPoint.supplemental_links.get(position - 2);
-                            Intent bIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.link));
-                            startActivity(bIntent);
+//                            SupplementalLink link = selectedPoint.supplemental_links.get(position - 2);
+//                            Intent bIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.link));
+//                            startActivity(bIntent);
 
                         }
                     }
@@ -345,6 +383,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private Review review;
 
         private int type;
+        private List<ExampleSentence> exampleSentences;
+        private List<SupplementalLink> supplementalLinks;
 
         private static final int TYPE_DESCRIPTION = 0;
         private static final int TYPE_ITEM = 1;
@@ -354,7 +394,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         private ItemClickListener listener;
         private ItemChooseListener chooseListener;
 
-        StickAdapter(int type, Review review, GrammarPoint point, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
+        StickAdapter(int type, Review review, GrammarPoint point, List<ExampleSentence> sentences, List<SupplementalLink> links, Context context, ItemClickListener listener, ItemChooseListener chooseListener) {
 
             inflater = LayoutInflater.from(context);
             this.listener = listener;
@@ -363,8 +403,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             this.point = point;
             this.review = review;
 
-            Collections.sort(this.point.example_sentences, ExampleSentence.IdComparator);
-            Collections.sort(this.point.supplemental_links, SupplementalLink.IdComparator);
+            this.exampleSentences = sentences;
+            this.supplementalLinks = links;
+
+            Collections.sort(this.exampleSentences, ExampleSentence.IdComparator);
+            Collections.sort(this.supplementalLinks, SupplementalLink.IdComparator);
 
         }
 
@@ -416,7 +459,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
                     ((ViewHolder) viewHolder).rlContainer.setVisibility(View.VISIBLE);
                     ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
-                    final ExampleSentence sentence = point.example_sentences.get(position - 2);
+                    final ExampleSentence sentence = exampleSentences.get(position - 2);
                     ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
                     int furigana = AppData.getInstance(mContext).getFurigana();
                     if (furigana == Constants.SETTING_FURIGANA_ALWAYS) {
@@ -424,13 +467,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
                         ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
                         String japanese = TextUtils.stripHtml(sentence.japanese);
-
                         if (TextUtils.includeKanji(japanese)) {
                             ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.GONE);
                             ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.VISIBLE);
                             String furiText = TextUtils.getFuriganaText(japanese);
                             ((ViewHolder) viewHolder).tvJapaneseFurigana.setFuriganaText(furiText, true);
-
                         } else {
                             ((ViewHolder) viewHolder).tvJapanese.setVisibility(View.VISIBLE);
                             ((ViewHolder) viewHolder).tvJapaneseFurigana.setVisibility(View.GONE);
@@ -457,14 +498,18 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                         @Override
                         public void onClick(final View view) {
 
-                            ExampleSentence sentence = point.example_sentences.get(position -2);
+                            ExampleSentence sentence = exampleSentences.get(position -2);
                             boolean tag = (boolean)((ViewHolder) viewHolder).ivIndicator.getTag();
 
                             MediaPlayer mediaPlayer = new MediaPlayer();
                             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            Uri uri = Uri.parse(Constants.AUDIO_BASE_URL + sentence.audio_link);
 
-                            Log.d("audio_link", Constants.AUDIO_BASE_URL + sentence.audio_link);
+                            if (sentence.audio_link == null || sentence.audio_link.equals("null")) {
+                                Log.w("Audio not found", "The audio resource \"" + sentence.english + "\" was not found");
+                                return;
+                            }
+
+                            Uri uri = Uri.parse(Constants.AUDIO_BASE_URL + sentence.audio_link);
 
                             try {
                                 mediaPlayer.setDataSource(mContext, uri);
@@ -531,7 +576,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                     ((ViewHolder) viewHolder).rlContainer.setVisibility(View.GONE);
                     ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.VISIBLE);
 
-                    SupplementalLink link = point.supplemental_links.get(position - 2);
+                    SupplementalLink link = supplementalLinks.get(position - 2);
                     ((ViewHolder) viewHolder).tvSite.setText(link.site);
                     ((ViewHolder) viewHolder).tvDescription.setText(link.description);
                 }
@@ -546,9 +591,9 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         public int getItemCount() {
 
             if (type == 0) {
-                return point.example_sentences.size() + 2;
+                return exampleSentences.size() + 2;
             } else {
-                return point.supplemental_links.size() + 2;
+                return supplementalLinks.size() + 2;
             }
 
         }

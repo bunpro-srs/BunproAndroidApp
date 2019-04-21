@@ -2,7 +2,8 @@ package bunpro.jp.bunproapp.utils;
 
 public class Constants {
 
-    public static String BASE_URL = "https://www.bunpro.jp/api/v3/";
+    public static String BASE_URL_v4 = "https://www.bunpro.jp/api/v4/";
+    public static String BASE_URL_v3 = "https://www.bunpro.jp/api/v3/";
 
     public static String AUDIO_BASE_URL = "https://bunpro.jp/audio/";
 

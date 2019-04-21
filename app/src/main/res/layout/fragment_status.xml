@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@android:color/transparent">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -30,7 +30,7 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
     <LinearLayout
@@ -38,12 +38,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/slContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v4.widget.NestedScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -59,12 +59,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:layout_marginTop="40dp"
-                        android:background="@drawable/bg_login">
+                        android:background="@drawable/box_shadow">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cram"
-                            android:textColor="@color/colorYellow"
+                            android:textColor="@color/colorBlue"
                             android:textSize="17sp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -78,12 +78,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_login">
+                        android:background="@drawable/box_shadow">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Study"
-                            android:textColor="@color/colorYellow"
+                            android:textColor="@color/colorBlue"
                             android:textSize="17sp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_login"
+                        android:background="@drawable/box_shadow"
                         android:padding="10dp">
 
                         <RelativeLayout
@@ -111,7 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="20sp"
                                 android:text="@string/next_reviews"
-                                android:textColor="@color/colorYellow"
+                                android:textColor="@color/colorBlue"
                                 android:layout_centerVertical="true"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentLeft="true"/>
@@ -213,7 +213,7 @@
 
                     </LinearLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -221,9 +221,9 @@
 
                 </LinearLayout>
 
-            </android.support.v4.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

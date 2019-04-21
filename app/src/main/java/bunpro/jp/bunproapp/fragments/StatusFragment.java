@@ -3,13 +3,15 @@ package bunpro.jp.bunproapp.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +34,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
@@ -125,6 +125,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mAdapter = new StatusAdapter(mStatus, new ClickListener() {
             @Override
             public void positionClicked(int position) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if (mainActivity.getGrammarPoints().isEmpty() || mainActivity.getReviews().isEmpty()) {
+                    Toast.makeText(mContext, "Grammar points and reviews are not loaded yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Fragment fragment = StatusDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
 
@@ -133,11 +139,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
                     bundle.putString("level", "JLPT1");
                 } else {
                     bundle.putString("status", mStatus.get(position).getName());
-                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
+                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() - position));
                 }
 
                 fragment.setArguments(bundle);
-                ((MainActivity)getActivity()).addFragment(fragment);
+                mainActivity.addFragment(fragment);
             }
         });
 
@@ -190,7 +196,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mController.setName(this);
         this.grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
         this.reviews = ((MainActivity)getActivity()).getReviews();
-        tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
+        calculateReviewsNumber();
         mController.getStatus(this);
         updateBadge();
     }
@@ -266,7 +272,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void updateReviewStatus(List<Review> reviews) {
         this.reviews = reviews;
-        ((MainActivity)getActivity()).setReviews(this.reviews);
+        MainActivity mainActivity = ((MainActivity)getActivity());
+        if (mainActivity != null) {
+            mainActivity.setReviews(this.reviews);
+        } else {
+            Log.e("Null activity", "Getting a null activity when trying to update the status !");
+        }
         tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);
         if (spinKitView.isShown()) {
@@ -304,48 +315,34 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void calculateReviewsNumber() {
-
-        if (this.reviews.size() > 0) {
-
-            int oneHours = 0;
-            int oneDayHours = 0;
-
-            Date currentDate = Calendar.getInstance().getTime();
-            for (int k=0;k<this.reviews.size();k++) {
-
-                try {
-                    SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    Date reviewDate = spf.parse(this.reviews.get(k).next_review);
-
-                    long diff = currentDate.getTime() - reviewDate.getTime();
-                    if (diff <= 3600 * 1000) {
-                        oneHours = oneHours + 1;
-                    }
-
-                    if (diff <= 3600 * 1000 * 24) {
-                        oneDayHours = oneDayHours + 1;
-                    }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+        int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
+        for (Review review : this.reviews) {
+            long remainingHours = review.getRemainingHoursBeforeReview();
+            if (remainingHours <= 0) {
+                pendingReviewCount++;
+            } else if (remainingHours == 1) {
+                withinAnHourReviewCount++;
+            } else if (remainingHours <= 24) {
+                withinADayReviewCount++;
             }
-
-            oneDayHours = oneDayHours - oneHours;
-
-            tvUpdate24Hours.setText(String.format("+%s", String.valueOf(oneDayHours)));
-            tvUpdate1Hour.setText(String.format("+%s", String.valueOf(oneHours)));
-
         }
+
+        tvReviews.setText(String.format("%s Reviews", String.valueOf(pendingReviewCount)));
+        tvUpdate24Hours.setText(String.format("+%s", String.valueOf(withinADayReviewCount)));
+        tvUpdate1Hour.setText(String.format("+%s", String.valueOf(withinAnHourReviewCount)));
     }
 
-    public void updateBadge() {
+    private void updateBadge() {
         int number = this.reviews.size();
-        if (number != 0) {
-            ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            if (number != 0) {
+                ShortcutBadger.applyCount(getActivity().getApplicationContext(), number);
+            } else {
+                ShortcutBadger.removeCount(getActivity().getApplicationContext());
+            }
         } else {
-            ShortcutBadger.removeCount(getActivity().getApplicationContext());
+            Log.e("Null activity", "No activity context when trying to update the badge !");
         }
     }
 
@@ -392,7 +389,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         @Override
         public int getItemCount() {
             if (mStatus.size() != 0) {
-                return mStatus.size() + 1;
+                return mStatus.size();
             } else {
                 return 0;
             }

@@ -3,12 +3,12 @@ package bunpro.jp.bunproapp.fragments;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +141,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             } else {
                 llEnglish.setTag(true);
                 tvEnglish.setText(R.string.show_english);
-                tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+                tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
             }
 
             kanjis = TextUtils.getKanjis(TextUtils.stripHtml(selectedSentence.japanese));
@@ -192,7 +192,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
             tvEnglish.setText(TextUtils.removeSub(TextUtils.stripHtml(selectedSentence.english)));
         } else {
             tvEnglish.setText(R.string.show_english);
-            tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+            tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
         }
     }
 
@@ -207,7 +207,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         } else {
 
             tvEnglish.setText(R.string.show_english);
-            tvEnglish.setTextColor(Color.parseColor("#ffff00"));
+            tvEnglish.setTextColor(Color.parseColor("#67B4F1"));
         }
 
         llEnglish.setTag(!stats);

@@ -1,6 +1,9 @@
 package bunpro.jp.bunproapp.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class Review {
@@ -26,6 +29,18 @@ public class Review {
 
     public Review() {
 
+    }
+
+    public long getRemainingHoursBeforeReview() {
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            Date reviewDate = dateFormat.parse(next_review);
+            long dateDiff = reviewDate.getTime() - currentDate.getTime();
+            return dateDiff / (60 * 60 * 1000);
+        } catch (ParseException e) {
+            return 1000; // Returning a long we won't care about because it is too big
+        }
     }
 
     public static Comparator<Review> IdComparator = new Comparator<Review>() {

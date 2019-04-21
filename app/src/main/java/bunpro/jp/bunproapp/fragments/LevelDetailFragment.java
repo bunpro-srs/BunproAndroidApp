@@ -2,12 +2,14 @@ package bunpro.jp.bunproapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -84,10 +87,16 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
         mAdapter = new LevelStatusAdapter(this.reviews, this.grammarPoints, new ClickListener() {
             @Override
             public void positionClicked(int position) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if (mainActivity.getExampleSentences().isEmpty() || mainActivity.getSupplimentalLinks().isEmpty()) {
+                    Toast.makeText(mContext, "Examples and links are not loaded yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Fragment fragment = WordDetailFragment.newInstance();
-                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
-                ((MainActivity)getActivity()).addFragment(fragment);
+                Log.d("TAG", grammarPoints.get(position).toString());
+                mainActivity.setGrammarPoint(grammarPoints.get(position));
+                mainActivity.addFragment(fragment);
             }
         });
 

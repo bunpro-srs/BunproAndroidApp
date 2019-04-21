@@ -25,14 +25,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This is my pen"
-                android:textColor="@color/colorYellow"
+                android:textColor="@color/colorBlue"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tvEnglish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This is my pen"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorGrey"
                 android:textSize="18sp"/>
 
         </LinearLayout>

@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +33,35 @@ public class JsonParser {
         return instance;
     }
 
-    public List<Review> parseReviews(JSONArray jsonArray) {
-
+    // Changing from jsonArray to jsonObject to match v3 endpoint all_reviews_total
+    public List<Review> parseReviews(JSONObject jsonObject) {
         List<Review> reviews = new ArrayList<>();
+
+        // Splitting the JSONObject into three JSONArray
+        JSONArray standardReviewsArray = new JSONArray(), ghostReviewsArray = new JSONArray(), selfStudyReviewsArray = new JSONArray();
+        try {
+            standardReviewsArray = jsonObject.getJSONArray("reviews");
+            ghostReviewsArray = jsonObject.getJSONArray("ghost_reviews");
+            selfStudyReviewsArray = jsonObject.getJSONArray("self_study_reviews");
+        } catch (JSONException e) {
+            Log.e("JSONException", "All reviews could not be fetched from API !");
+        }
+
+        // Merging the JSONArray together
+        JSONArray jsonArray = new JSONArray();
+        try {
+            for (int i = 0; i < standardReviewsArray.length(); i++) {
+                jsonArray.put(standardReviewsArray.getJSONObject(i));
+            }
+            for (int i = 0; i < ghostReviewsArray.length(); i++) {
+                jsonArray.put(ghostReviewsArray.getJSONObject(i));
+            }
+            for (int i = 0; i < selfStudyReviewsArray.length(); i++) {
+                jsonArray.put(selfStudyReviewsArray.getJSONObject(i));
+            }
+        } catch (JSONException e) {
+            Log.e("JSONException", "All reviews from API could not be parsed !");
+        }
 
         if (jsonArray.length() > 0) {
 
@@ -42,93 +69,93 @@ public class JsonParser {
 
                 Review review = new Review();
                 try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(k);
-                    if (jsonObject.has("id")) {
-                        review.id = jsonObject.getInt("id");
+                    JSONObject json = jsonArray.getJSONObject(k);
+                    if (json.has("id")) {
+                        review.id = json.getInt("id");
                     } else {
                         review.id = -1;
                     }
 
-                    if (jsonObject.has("user_id")) {
-                        review.user_id = jsonObject.getInt("user_id");
+                    if (json.has("user_id")) {
+                        review.user_id = json.getInt("user_id");
                     } else {
                         review.user_id = -1;
                     }
 
-                    if (jsonObject.has("study_question_id")) {
-                        review.study_question_id = jsonObject.getInt("study_question_id");
+                    if (json.has("study_question_id")) {
+                        review.study_question_id = json.getInt("study_question_id");
                     } else {
                         review.study_question_id = -1;
                     }
 
-                    if (jsonObject.has("grammar_point_id")) {
-                        review.grammar_point_id = jsonObject.getInt("grammar_point_id");
+                    if (json.has("grammar_point_id")) {
+                        review.grammar_point_id = json.getInt("grammar_point_id");
                     } else {
                         review.grammar_point_id = -1;
                     }
 
-                    if (jsonObject.has("times_correct")) {
-                        review.times_correct = jsonObject.getInt("times_correct");
+                    if (json.has("times_correct")) {
+                        review.times_correct = json.getInt("times_correct");
                     } else {
                         review.times_correct = 0;
                     }
 
-                    if (jsonObject.has("times_incorrect")) {
-                        review.times_incorrect = jsonObject.getInt("times_incorrect");
+                    if (json.has("times_incorrect")) {
+                        review.times_incorrect = json.getInt("times_incorrect");
                     } else {
                         review.times_incorrect = 0;
                     }
 
-                    if (jsonObject.has("streak")) {
-                        review.streak = jsonObject.getInt("streak");
+                    if (json.has("streak")) {
+                        review.streak = json.getInt("streak");
                     } else {
                         review.streak = 0;
                     }
 
-                    if (jsonObject.has("next_review")) {
-                        review.next_review = jsonObject.getString("next_review");
+                    if (json.has("next_review")) {
+                        review.next_review = json.getString("next_review");
                     } else {
                         review.next_review = null;
                     }
 
-                    if (jsonObject.has("created_at")) {
-                        review.created_at = jsonObject.getString("created_at");
+                    if (json.has("created_at")) {
+                        review.created_at = json.getString("created_at");
                     } else {
                         review.created_at = null;
                     }
 
-                    if (jsonObject.has("updated_at")) {
-                        review.updated_at = jsonObject.getString("updated_at");
+                    if (json.has("updated_at")) {
+                        review.updated_at = json.getString("updated_at");
                     } else {
                         review.updated_at = null;
                     }
 
-                    if (jsonObject.has("complete")) {
-                        review.complete = jsonObject.getBoolean("complete");
+                    if (json.has("complete")) {
+                        review.complete = json.getBoolean("complete");
                     } else {
                         review.complete = false;
                     }
 
-                    if (jsonObject.has("last_studied_at") || !jsonObject.isNull("last_studied_at")) {
-                        review.last_studied_at = jsonObject.getString("last_studied_at");
+                    if (json.has("last_studied_at") || !json.isNull("last_studied_at")) {
+                        review.last_studied_at = json.getString("last_studied_at");
                     } else {
                         review.last_studied_at = null;
                     }
 
-                    if (jsonObject.has("was_correct") || !jsonObject.isNull("was_correct"))
-                        review.was_correct = jsonObject.optBoolean("was_correct");
+                    if (json.has("was_correct") || !json.isNull("was_correct"))
+                        review.was_correct = json.optBoolean("was_correct");
 
-                    if (jsonObject.has("self_study") || !jsonObject.isNull("self_study")) {
-                        review.self_study = jsonObject.getBoolean("self_study");
+                    if (json.has("self_study") || !json.isNull("self_study")) {
+                        review.self_study = json.getBoolean("self_study");
                     }
 
-                    if (jsonObject.has("review_misses")) {
-                        review.review_misses = jsonObject.getInt("review_misses");
+                    if (json.has("review_misses")) {
+                        review.review_misses = json.getInt("review_misses");
                     }
 
-                    if (jsonObject.has("history")) {
+                    if (json.has("history")) {
                         List<History> histories = new ArrayList<>();
-                        JSONArray array = jsonObject.getJSONArray("history");
+                        JSONArray array = json.getJSONArray("history");
                         if (array.length() > 0) {
                             History history = new History();
                             for (int i=0;i<array.length();i++) {
@@ -149,8 +176,8 @@ public class JsonParser {
                         review.history = new ArrayList<>();
                     }
 
-                    if (jsonObject.has("missed_question_ids") || !jsonObject.isNull("missed_question_ids")) {
-                        JSONArray array = jsonObject.getJSONArray("missed_question_ids");
+                    if (json.has("missed_question_ids") || !json.isNull("missed_question_ids")) {
+                        JSONArray array = json.getJSONArray("missed_question_ids");
                         List<Integer> misses = new ArrayList<>();
 
                         if (array.length() > 0) {
@@ -163,8 +190,8 @@ public class JsonParser {
                         review.missed_question_ids = new ArrayList<>();
                     }
 
-                    if (jsonObject.has("studied_question_ids") || !jsonObject.isNull("studied_question_ids")) {
-                        JSONArray array = jsonObject.getJSONArray("studied_question_ids");
+                    if (json.has("studied_question_ids") || !json.isNull("studied_question_ids")) {
+                        JSONArray array = json.getJSONArray("studied_question_ids");
                         List<Integer> questions = new ArrayList<>();
 
                         if (array.length() > 0) {
@@ -177,8 +204,8 @@ public class JsonParser {
                         review.studied_question_ids = new ArrayList<>();
                     }
 
-                    if (jsonObject.has("review_type") || !jsonObject.isNull("review_type")) {
-                        review.review_type = jsonObject.getString("review_type");
+                    if (json.has("review_type") || !json.isNull("review_type")) {
+                        review.review_type = json.getString("review_type");
                     } else {
                         review.review_type = null;
                     }
@@ -210,182 +237,9 @@ public class JsonParser {
                         lesson.id = jsonObject.getInt("id");
                     }
 
-                    if (jsonObject.has("jlpt_level")) {
-                        lesson.jlpt_level = jsonObject.getInt("jlpt_level");
-                    }
+                    if (jsonObject.has("attributes")) {
+                        lesson.jlpt_level = jsonObject.getJSONObject("attributes").getInt("jlpt-level");
 
-                    if (jsonObject.has("created_at")) {
-                        lesson.created_at = jsonObject.getString("created_at");
-                    }
-
-                    if (jsonObject.has("updated_at")) {
-                        lesson.updated_at = jsonObject.getString("updated_at");
-                    }
-
-                    if (jsonObject.has("grammar_point_ids")) {
-                        JSONArray array = jsonObject.getJSONArray("grammar_point_ids");
-                        List<Integer> points = new ArrayList<>();
-                        if (array.length() > 0) {
-                            for (int i=0;i<array.length();i++) {
-                                points.add(array.getInt(i));
-                            }
-                        }
-
-                        lesson.grammar_point_ids = points;
-                    }
-
-                    if (jsonObject.has("grammar_points")) {
-
-                        List<GrammarPoint> grammarPoints = new ArrayList<>();
-                        JSONArray array = jsonObject.getJSONArray("grammar_points");
-                        if (array.length() > 0) {
-                            for (int i=0;i<array.length();i++) {
-                                GrammarPoint point = new GrammarPoint();
-                                JSONObject object = array.getJSONObject(i);
-
-                                if (object.has("id")) {
-                                    point.id = object.getInt("id");
-                                }
-
-                                if (object.has("title")) {
-                                    point.title = object.getString("title");
-                                }
-
-                                if (object.has("created_at")) {
-                                    point.created_at = object.getString("created_at");
-                                }
-
-                                if (object.has("updated_at")) {
-                                    point.updated_at = object.getString("updated_at");
-                                }
-
-                                if (object.has("alternate")) {
-                                    point.alternate = object.getString("alternate");
-                                }
-
-                                if (object.has("meaning")) {
-                                    point.meaning = object.getString("meaning");
-                                }
-
-                                if (object.has("caution")) {
-                                    point.caution = object.getString("caution");
-                                }
-
-                                if (object.has("structure")) {
-                                    point.structure = object.getString("structure");
-                                }
-
-                                if (object.has("formal")) {
-                                    point.formal = object.optBoolean("formal");
-                                }
-
-                                if (object.has("level")) {
-                                    point.level = object.getString("level");
-                                }
-
-                                if (object.has("lesson_id")) {
-                                    point.lesson_id = object.getString("lesson_id");
-                                }
-
-                                if (object.has("new_grammar")) {
-                                    point.new_grammar = object.optBoolean("new_grammar");
-                                }
-
-                                if (object.has("yomikata")) {
-                                    point.yomikata = object.getString("yomikata");
-                                }
-
-                                if (object.has("nuance")) {
-                                    point.nuance = object.getString("nuance");
-                                }
-
-                                if (object.has("example_sentences")) {
-                                    List<ExampleSentence> sentences = new ArrayList<>();
-
-                                    JSONArray arr = object.getJSONArray("example_sentences");
-                                    if (arr.length() > 0) {
-                                        for (int j=0;j<arr.length();j++) {
-                                            JSONObject obj = arr.getJSONObject(j);
-                                            ExampleSentence sentence = new ExampleSentence();
-                                            if (obj.has("id")) {
-                                                sentence.id = obj.getInt("id");
-                                            }
-                                            if (obj.has("grammar_point_id")) {
-                                                sentence.grammar_point_id = obj.getInt("grammar_point_id");
-                                            }
-                                            if (obj.has("structure")) {
-                                                sentence.structure = obj.getString("structure");
-                                            }
-                                            if (obj.has("japanese")) {
-                                                sentence.japanese = obj.getString("japanese");
-                                            }
-                                            if (obj.has("english")) {
-                                                sentence.english = obj.getString("english");
-                                            }
-                                            if (obj.has("alternate_japanese")) {
-                                                sentence.alternate_japanese = obj.getString("alternate_japanese");
-                                            }
-                                            if (obj.has("created_at")) {
-                                                sentence.created_at = obj.getString("created_at");
-                                            }
-                                            if (obj.has("updated_at")) {
-                                                sentence.updated_at = obj.getString("updated_at");
-                                            }
-                                            if (obj.has("audio_link")) {
-                                                sentence.audio_link = obj.getString("audio_link");
-                                            }
-                                            if (obj.has("nuance")) {
-                                                sentence.nuance = obj.optString("nuance");
-                                            }
-                                            sentences.add(sentence);
-                                        }
-                                    }
-
-                                    point.example_sentences = sentences;
-                                }
-
-                                if (object.has("supplemental_links")) {
-                                    JSONArray arrr = object.getJSONArray("supplemental_links");
-                                    List<SupplementalLink> links = new ArrayList<>();
-
-                                    if (arrr.length() > 0) {
-                                        for (int j=0;j<arrr.length();j++) {
-                                            SupplementalLink link = new SupplementalLink();
-                                            JSONObject o = arrr.getJSONObject(j);
-
-                                            if (o.has("id")) {
-                                                link.id = o.getInt("id");
-                                            }
-                                            if (o.has("grammar_point_id")) {
-                                                link.grammar_point_id = o.optInt("grammar_point_id");
-                                            }
-                                            if (o.has("site")) {
-                                                link.site = o.optString("site");
-                                            }
-                                            if (o.has("link")) {
-                                                link.link = o.optString("link");
-                                            }
-                                            if (o.has("description")) {
-                                                link.description = o.optString("description");
-                                            }
-                                            if (o.has("created_at")) {
-                                                link.created_at = o.optString("created_at");
-                                            }
-                                            if (o.has("updated_at")) {
-                                                link.updated_at = o.optString("updated_at");
-                                            }
-                                            links.add(link);
-                                        }
-                                    }
-                                    point.supplemental_links = links;
-                                }
-
-                                grammarPoints.add(point);
-
-                            }
-                        }
-
-                        lesson.grammar_points = grammarPoints;
                     }
 
                     lessons.add(lesson);
@@ -409,140 +263,17 @@ public class JsonParser {
                         point.id = object.getInt("id");
                     }
 
-                    if (object.has("title")) {
-                        point.title = object.getString("title");
-                    }
-
-                    if (object.has("created_at")) {
-                        point.created_at = object.getString("created_at");
-                    }
-
-                    if (object.has("updated_at")) {
-                        point.updated_at = object.getString("updated_at");
-                    }
-
-                    if (object.has("alternate")) {
-                        point.alternate = object.getString("alternate");
-                    }
-
-                    if (object.has("meaning")) {
-                        point.meaning = object.getString("meaning");
-                    }
-
-                    if (object.has("caution")) {
-                        point.caution = object.getString("caution");
-                    }
-
-                    if (object.has("structure")) {
-                        point.structure = object.getString("structure");
-                    }
-
-                    if (object.has("formal")) {
-                        point.formal = object.optBoolean("formal");
-                    }
-
-                    if (object.has("level")) {
-                        point.level = object.getString("level");
-                    }
-
-                    if (object.has("lesson_id")) {
-                        point.lesson_id = object.getString("lesson_id");
-                    }
-
-                    if (object.has("new_grammar")) {
-                        point.new_grammar = object.optBoolean("new_grammar");
-                    }
-
-                    if (object.has("yomikata")) {
-                        point.yomikata = object.getString("yomikata");
-                    }
-
-                    if (object.has("nuance")) {
-                        point.nuance = object.getString("nuance");
-                    }
-
-                    List<ExampleSentence> sentences = new ArrayList<>();
-                    if (object.has("example_sentences")) {
-                        JSONArray arr = object.getJSONArray("example_sentences");
-                        if (arr.length() > 0) {
-                            for (int j=0;j<arr.length();j++) {
-                                JSONObject obj = arr.getJSONObject(j);
-                                ExampleSentence sentence = new ExampleSentence();
-                                if (obj.has("id")) {
-                                    sentence.id = obj.getInt("id");
-                                }
-                                if (obj.has("grammar_point_id")) {
-                                    sentence.grammar_point_id = obj.getInt("grammar_point_id");
-                                }
-                                if (obj.has("structure")) {
-                                    sentence.structure = obj.getString("structure");
-                                }
-                                if (obj.has("japanese")) {
-                                    sentence.japanese = obj.getString("japanese");
-                                }
-                                if (obj.has("english")) {
-                                    sentence.english = obj.getString("english");
-                                }
-                                if (obj.has("alternate_japanese")) {
-                                    sentence.alternate_japanese = obj.getString("alternate_japanese");
-                                }
-                                if (obj.has("created_at")) {
-                                    sentence.created_at = obj.getString("created_at");
-                                }
-                                if (obj.has("updated_at")) {
-                                    sentence.updated_at = obj.getString("updated_at");
-                                }
-                                if (obj.has("audio_link")) {
-                                    sentence.audio_link = obj.getString("audio_link");
-                                }
-
-                                if (obj.has("nuance")) {
-                                    sentence.nuance = obj.optString("nuance");
-                                }
-                                sentences.add(sentence);
-                            }
-                        }
-
-                        point.example_sentences = sentences;
-
-                        List<SupplementalLink> links = new ArrayList<>();
-                        if (object.has("supplemental_links")) {
-                            JSONArray arrr = object.getJSONArray("supplemental_links");
-
-
-                            if (arrr.length() > 0) {
-                                for (int j=0;j<arrr.length();j++) {
-                                    SupplementalLink link = new SupplementalLink();
-                                    JSONObject o = arrr.getJSONObject(j);
-
-                                    if (o.has("id")) {
-                                        link.id = o.getInt("id");
-                                    }
-                                    if (o.has("grammar_point_id")) {
-                                        link.grammar_point_id = o.optInt("grammar_point_id");
-                                    }
-                                    if (o.has("site")) {
-                                        link.site = o.optString("site");
-                                    }
-                                    if (o.has("link")) {
-                                        link.link = o.optString("link");
-                                    }
-                                    if (o.has("description")) {
-                                        link.description = o.optString("description");
-                                    }
-                                    if (o.has("created_at")) {
-                                        link.created_at = o.optString("created_at");
-                                    }
-                                    if (o.has("updated_at")) {
-                                        link.updated_at = o.optString("updated_at");
-                                    }
-                                    links.add(link);
-                                }
-                            }
-
-                            point.supplemental_links = links;
-                        }
-
+                    if (object.has("attributes")) {
+                        point.title = object.getJSONObject("attributes").getString("title");
+                        point.meaning = object.getJSONObject("attributes").getString("meaning");
+                        point.caution = object.getJSONObject("attributes").getString("caution");
+                        point.structure = object.getJSONObject("attributes").getString("structure");
+                        point.level = object.getJSONObject("attributes").getString("level");
+                        point.lesson_id = object.getJSONObject("attributes").getInt("lesson-id");
+                        point.yomikata = object.getJSONObject("attributes").getString("yomikata");
+                        point.nuance = object.getJSONObject("attributes").getString("nuance");
+                        point.incomplete = object.getJSONObject("attributes").getBoolean("incomplete");
+                        point.grammar_order = object.getJSONObject("attributes").getInt("grammar-order");
                     }
 
                 } catch (JSONException e) {
@@ -553,5 +284,75 @@ public class JsonParser {
             }
         }
         return grammarPoints;
+    }
+
+    public List<ExampleSentence> parseExampleSentences(JSONArray jsonArray) {
+
+        List<ExampleSentence> exampleSentences = new ArrayList<>();
+        if (jsonArray.length() > 0) {
+            for (int i=0;i<jsonArray.length();i++) {
+                ExampleSentence sentence = new ExampleSentence();
+                JSONObject object = null;
+                try {
+                    object = jsonArray.getJSONObject(i);
+                    if (object.has("id")) {
+                        sentence.id = object.getInt("id");
+                    }
+
+                    if (object.has("type")) {
+                        sentence.type = object.getString("type");
+                    }
+
+                    if (object.has("attributes")) {
+                        sentence.grammar_point_id = object.getJSONObject("attributes").getInt("grammar-point-id");
+                        sentence.japanese = object.getJSONObject("attributes").getString("japanese");
+                        sentence.english = object.getJSONObject("attributes").getString("english");
+                        sentence.nuance = object.getJSONObject("attributes").getString("nuance");
+                        sentence.sentence_order = object.getJSONObject("attributes").getInt("sentence-order");
+                        sentence.audio_link = object.getJSONObject("attributes").getString("audio-link");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                exampleSentences.add(sentence);
+
+            }
+        }
+
+        return exampleSentences;
+
+    }
+
+    public List<SupplementalLink> parseSupplimentalLinks(JSONArray jsonArray) {
+        List<SupplementalLink> links = new ArrayList<>();
+        if (jsonArray.length() > 0) {
+            for (int i=0;i<jsonArray.length();i++) {
+                SupplementalLink link = new SupplementalLink();
+                JSONObject object = null;
+                try {
+                    object = jsonArray.getJSONObject(i);
+                    if (object.has("id")) {
+                        link.id = object.getInt("id");
+                    }
+                    if (object.has("type")) {
+                        link.type = object.getString("type");
+                    }
+
+                    if (object.has("attributes")) {
+                        link.grammar_point_id = object.getJSONObject("attributes").getInt("grammar-point-id");
+                        link.site = object.getJSONObject("attributes").getString("site");
+                        link.link = object.getJSONObject("attributes").getString("link");
+                        link.description = object.getJSONObject("attributes").getString("description");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                links.add(link);
+            }
+        }
+
+        return links;
     }
 }
