@@ -96,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     private void fetchData() {
-//        if (!hud.isShowing()) {
-//            hud.show();
-//        }
         // Attempt to fetch reviews
         fetchReviews(new SimpleCallbackListener() {
             @Override
@@ -115,9 +112,6 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                                 fetchSupplementalLinks(new SimpleCallbackListener() {
                                     @Override
                                     public void success() {
-//                                        if (hud.isShowing()) {
-//                                            hud.dismiss();
-//                                        }
                                     }
                                     @Override
                                     public void error(String errorMessage) {
