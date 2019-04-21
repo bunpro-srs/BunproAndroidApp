@@ -26,7 +26,7 @@ public class SettingController implements SettingContract.Controller {
         v.loadingProgress(true);
 
         ApiService apiService = new ApiService(mContext);
-        apiService.logout(new ApiService.CallbackListener() {
+        apiService.logout(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 
@@ -70,7 +70,7 @@ public class SettingController implements SettingContract.Controller {
 
         v.loadingProgress(true);
         ApiService apiService = new ApiService(mContext);
-        apiService.userEdit(hideEnglish, furigana, lightMode, bunnyMode, new ApiService.CallbackListener() {
+        apiService.userEdit(hideEnglish, furigana, lightMode, bunnyMode, new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
 

@@ -94,10 +94,15 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         mAdapter = new SearchWordAdapter(grammarPoints, mContext, new ItemClickListener() {
             @Override
             public void positionClicked(int position) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if (mainActivity.getExampleSentences().isEmpty() || mainActivity.getSupplimentalLinks().isEmpty()) {
+                    Toast.makeText(mContext, "Examples and links are not loaded yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Fragment fragment = WordDetailFragment.newInstance();
-                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
-                ((MainActivity)getActivity()).addFragment(fragment);
+                mainActivity.setGrammarPoint(grammarPoints.get(position));
+                mainActivity.addFragment(fragment);
             }
         });
 
