@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.activities.contract;
+package bunpro.jp.bunproapp.activities;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,17 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bunpro.jp.bunproapp.activities.contract.LoginContract;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.service.ApiService;
 
 public class LoginController implements LoginContract.Controller {
-
-    public interface SimpleCallbackListener {
-        void success();
-        void error(String errorMessage);
-    }
 
     private ApiService apiService;
     private Context mContext;

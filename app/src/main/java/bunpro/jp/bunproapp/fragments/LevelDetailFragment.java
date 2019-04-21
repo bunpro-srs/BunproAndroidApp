@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -86,11 +87,16 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
         mAdapter = new LevelStatusAdapter(this.reviews, this.grammarPoints, new ClickListener() {
             @Override
             public void positionClicked(int position) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if (mainActivity.getExampleSentences().isEmpty() || mainActivity.getSupplimentalLinks().isEmpty()) {
+                    Toast.makeText(mContext, "Examples and links are not loaded yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Fragment fragment = WordDetailFragment.newInstance();
                 Log.d("TAG", grammarPoints.get(position).toString());
-                ((MainActivity)getActivity()).setGrammarPoint(grammarPoints.get(position));
-                ((MainActivity)getActivity()).addFragment(fragment);
+                mainActivity.setGrammarPoint(grammarPoints.get(position));
+                mainActivity.addFragment(fragment);
             }
         });
 

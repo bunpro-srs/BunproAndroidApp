@@ -14,8 +14,8 @@ import com.wuadam.awesomewebview.AwesomeWebView;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.contract.LoginContract;
-import bunpro.jp.bunproapp.activities.contract.LoginController;
 import bunpro.jp.bunproapp.utils.Constants;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -57,11 +57,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
             // Attempt to login
-            mController.login(email, password, new LoginController.SimpleCallbackListener() {
+            mController.login(email, password, new SimpleCallbackListener() {
                 @Override
                 public void success() {
                     // Attempt to fetch user settings and configure the local ones
-                    mController.configureSettings(new LoginController.SimpleCallbackListener() {
+                    mController.configureSettings(new SimpleCallbackListener() {
                         @Override
                         public void success() {
                             gotoMain();
