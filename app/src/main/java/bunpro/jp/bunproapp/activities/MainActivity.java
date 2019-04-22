@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     }
 
     private void fetchData() {
+        MainActivity currentActivity = this;
         // Attempt to fetch reviews
         fetchReviews(new SimpleCallbackListener() {
             @Override
@@ -127,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         // Workaround for /user/progress v3 endpoint not working
                         if (n2GrammarPointsTotal.size() == 0) {
                             countProgress(reviews);
+                            Fragment currentFragment = fragNavController.getCurrentFrag();
+                            if (currentFragment instanceof StatusFragment) {
+                                ((StatusFragment)currentFragment).refreshStatus();
+                            }
                         }
                     }
                     @Override
@@ -134,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         Log.e("Data retrieval error", errorMessage);
                     }
                 });
+                // Try to update status fragment with review count
+                Fragment currentFragment = fragNavController.getCurrentFrag();
+                if (currentFragment instanceof StatusFragment) {
+                    ((StatusFragment)currentFragment).calculateReviewsNumber();
+                }
             }
             @Override
             public void error(String errorMessage) {
@@ -393,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Reviews)");
-                callback.error("Grammar points API reponse format changed !");
+                callback.error("Grammar points API response format changed !");
             }
 
             @Override
@@ -411,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             @Override
             public void success(JSONObject jsonObject) {
                 Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Grammar points)");
-                callback.error("Grammar points API reponse format changed !");
+                callback.error("Grammar points API response format changed !");
             }
 
             @Override
@@ -436,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             @Override
             public void success(JSONObject jsonObject) {
                 Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Example sentences)");
-                callback.error("Grammar points API reponse format changed !");
+                callback.error("Grammar points API response format changed !");
             }
 
             @Override
@@ -461,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             @Override
             public void success(JSONObject jsonObject) {
                 Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Supplemental Links)");
-                callback.error("Grammar points API reponse format changed !");
+                callback.error("Grammar points API response format changed !");
             }
 
             @Override

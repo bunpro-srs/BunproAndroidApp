@@ -201,6 +201,13 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         updateBadge();
     }
 
+    /**
+     * Refreshing status to allow app working before grammar points are loaded
+     */
+    public void refreshStatus() {
+        mController.getStatus(this);
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -278,7 +285,6 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         } else {
             Log.e("Null activity", "Getting a null activity when trying to update the status !");
         }
-        tvReviews.setText(String.format("%s Reviews", String.valueOf(reviews.size())));
         mController.getStatus(this);
         if (spinKitView.isShown()) {
             spinKitView.setVisibility(View.GONE);
@@ -315,6 +321,9 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void calculateReviewsNumber() {
+        if (this.reviews.isEmpty()) {
+            this.reviews = ((MainActivity)getActivity()).getReviews();
+        }
         int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
         for (Review review : this.reviews) {
             long remainingHours = review.getRemainingHoursBeforeReview();
