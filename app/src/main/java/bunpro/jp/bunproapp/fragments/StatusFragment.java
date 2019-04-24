@@ -125,6 +125,12 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         mAdapter = new StatusAdapter(mStatus, new ClickListener() {
             @Override
             public void positionClicked(int position) {
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if (mainActivity.getGrammarPoints().isEmpty() || mainActivity.getReviews().isEmpty()) {
+                    Toast.makeText(mContext, "Grammar points and reviews are not loaded yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Fragment fragment = StatusDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
 
@@ -133,11 +139,11 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
                     bundle.putString("level", "JLPT1");
                 } else {
                     bundle.putString("status", mStatus.get(position).getName());
-                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() + 1 - position));
+                    bundle.putString("level", "JLPT" + String.valueOf(mStatus.size() - position));
                 }
 
                 fragment.setArguments(bundle);
-                ((MainActivity)getActivity()).addFragment(fragment);
+                mainActivity.addFragment(fragment);
             }
         });
 
@@ -383,7 +389,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         @Override
         public int getItemCount() {
             if (mStatus.size() != 0) {
-                return mStatus.size() + 1;
+                return mStatus.size();
             } else {
                 return 0;
             }

@@ -1,5 +1,7 @@
 package bunpro.jp.bunproapp.activities.contract;
 
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
+
 public interface LoginContract {
     interface View {
         void loadingProgress(boolean stats);
@@ -8,6 +10,7 @@ public interface LoginContract {
     }
 
     interface Controller {
-        void login(LoginContract.View v, String email, String password);
+        void login(String email, String password, final SimpleCallbackListener callback);
+        void configureSettings(final SimpleCallbackListener callback);
     }
 }

@@ -1,7 +1,6 @@
 package bunpro.jp.bunproapp.service;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -19,24 +18,25 @@ import bunpro.jp.bunproapp.utils.UserData;
 
 public class ApiService {
 
-    public interface CallbackListener {
-
+    public interface ApiCallbackListener {
         void success(JSONObject jsonObject);
         void successAsJSONArray(JSONArray jsonArray);
         void error(ANError anError);
-
     }
 
     private Context mContext;
 
     public ApiService(Context context) {
-
         mContext = context;
-
     }
 
-    public void login(String email, String password, final CallbackListener listener) {
-
+    /**
+     * Attempt to login to the Bunpro API
+     * @param email Email of the user
+     * @param password Password of the user
+     * @param listener Listener to call once the login is done
+     */
+    public void login(String email, String password, final ApiCallbackListener listener) {
         AndroidNetworking.post(Constants.BASE_URL_v3 + "login")
                 .setContentType("application/x-www-form-urlencoded")
                 .setPriority(Priority.HIGH)
@@ -46,21 +46,20 @@ public class ApiService {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         listener.success(response);
-
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
                     }
                 });
-
     }
 
-    public void logout(final CallbackListener listener) {
-
+    /**
+     * Logout of the Bunpro API
+     * @param listener Listener to call once the logout is done
+     */
+    public void logout(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.delete(Constants.BASE_URL_v3 + "logout")
                 .setContentType("application/x-www-form-urlencoded")
@@ -72,17 +71,18 @@ public class ApiService {
                     public void onResponse(String response) {
                         listener.success(null);
                     }
-
                     @Override
                     public void onError(ANError anError) {
-
                         listener.error(anError);
                     }
                 });
-
     }
 
-    public void getUser(final CallbackListener listener) {
+    /**
+     * Fetch data about the logged user
+     * @param listener Listener to call once user data has been fetched
+     */
+    public void getUser(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v3 + "/user")
                 .setPriority(Priority.HIGH)
@@ -93,7 +93,6 @@ public class ApiService {
                     public void onResponse(JSONObject response) {
                         listener.success(response);
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
@@ -101,8 +100,11 @@ public class ApiService {
                 });
     }
 
-    public void getProgress(final CallbackListener listener) {
-
+    /**
+     * Fetch user progress about different JLPT levels
+     * @param listener Listener to call once progress has been fetched
+     */
+    public void getProgress(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v3 + "user/progress")
                 .setPriority(Priority.HIGH)
@@ -113,20 +115,19 @@ public class ApiService {
                     public void onResponse(JSONObject response) {
                         listener.success(response);
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
                     }
                 });
-
     }
 
-
-    public void getReviews(final CallbackListener listener) {
-
+    /**
+     * Fetch all user reviews, including those not ready to be reviewed yet
+     * @param listener Listener to call once reviews have been fetched
+     */
+    public void getReviews(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
-
         AndroidNetworking.get(Constants.BASE_URL_v3 + "reviews/all_reviews_total")
                 .setPriority(Priority.HIGH)
                 .addHeaders("Authorization", "Bearer " + token)
@@ -136,7 +137,6 @@ public class ApiService {
                     public void onResponse(JSONObject response) {
                         listener.success(response);
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
@@ -144,7 +144,11 @@ public class ApiService {
                 });
     }
 
-    public void getLessons(final CallbackListener listener) {
+    /**
+     * Fetch lessons
+     * @param listener Listener to call once lessons have been fetched
+     */
+    public void getLessons(final ApiCallbackListener listener) {
 
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v4 + "lessons")
@@ -164,8 +168,11 @@ public class ApiService {
                 });
     }
 
-    public void getGrammarPoints(final CallbackListener listener) {
-
+    /**
+     * Fetch all grammar points
+     * @param listener Listener to call when grammar points have been fetched
+     */
+    public void getGrammarPoints(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v4 + "grammar_points")
                 .setPriority(Priority.HIGH)
@@ -174,14 +181,12 @@ public class ApiService {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         try {
                             listener.successAsJSONArray(response.getJSONArray("data"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
@@ -189,8 +194,11 @@ public class ApiService {
                 });
     }
 
-
-    public void getExampleSentences(final CallbackListener listener) {
+    /**
+     * Fetch example sentences (very time consuming)
+     * @param listener Listener to call once sentences have been fetched
+     */
+    public void getExampleSentences(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v4 + "example_sentences")
                 .setPriority(Priority.HIGH)
@@ -205,7 +213,6 @@ public class ApiService {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
@@ -213,8 +220,11 @@ public class ApiService {
                 });
     }
 
-
-    public void getSupplimentalLinks(final CallbackListener listener) {
+    /**
+     * Fetch the external links related to grammar points
+     * @param listener Listener to call once links have been fetched
+     */
+    public void getSupplementalLinks(final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         AndroidNetworking.get(Constants.BASE_URL_v4 + "supplemental_links")
                 .setPriority(Priority.HIGH)
@@ -229,7 +239,6 @@ public class ApiService {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
@@ -237,9 +246,15 @@ public class ApiService {
                 });
     }
 
-
-    public void userEdit(String hideEnglish, String furigana, String lightMode, String bunnyMode, final CallbackListener listener) {
-
+    /**
+     * Edit user preferences
+     * @param hideEnglish Hide english option
+     * @param furigana Display furigana option
+     * @param lightMode Enabled light mode option
+     * @param bunnyMode Enabled bunny mode option
+     * @param listener Listener to call once preferences have been updated
+     */
+    public void userEdit(String hideEnglish, String furigana, String lightMode, String bunnyMode, final ApiCallbackListener listener) {
         String token = UserData.getInstance(mContext).getUserKey();
         String url = Constants.BASE_URL_v3 + "user/edit?" + "user[furigana]=\"" + furigana + "\"&user[hide_english]=\"" + hideEnglish + "\"&user[light_mode]=\"" + lightMode + "\"&user[bunny_mode]=\"" + bunnyMode + "\"";
         AndroidNetworking.post(url)
@@ -251,12 +266,10 @@ public class ApiService {
                     public void onResponse(String response) {
                         listener.success(null);
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         listener.error(anError);
                     }
                 });
     }
-
 }

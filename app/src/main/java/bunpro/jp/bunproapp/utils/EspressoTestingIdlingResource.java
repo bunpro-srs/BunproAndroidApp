@@ -1,23 +1,32 @@
 package bunpro.jp.bunproapp.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 
 public class EspressoTestingIdlingResource {
-    private static final String RESOURCE = "GLOBAL";
+    private static Map<String, CountingIdlingResource> countingIdlingResources =
+            new HashMap<String, CountingIdlingResource>();
 
-    private static CountingIdlingResource countingIdlingResource =
-            new CountingIdlingResource(RESOURCE);
-
-    public static void increment() {
-        countingIdlingResource.increment();
+    public static void increment(String key) {
+        if (!countingIdlingResources.containsKey(key)) {
+            countingIdlingResources.put(key, new CountingIdlingResource(key));
+        }
+        countingIdlingResources.get(key).increment();
     }
 
-    public static void decrement() {
-        countingIdlingResource.decrement();
+    public static void decrement(String key) {
+        if (countingIdlingResources.containsKey(key)) {
+            countingIdlingResources.get(key).decrement();
+        }
     }
 
-    public static IdlingResource getIdlingResource() {
-        return countingIdlingResource;
+    public static IdlingResource getIdlingResource(String key) {
+        if (!countingIdlingResources.containsKey(key)) {
+            countingIdlingResources.put(key, new CountingIdlingResource(key));
+        }
+        return countingIdlingResources.get(key);
     }
 }

@@ -33,15 +33,17 @@ import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements ActivityImpl, FragNavController.RootFragmentListener {
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
-    @BindView(R.id.container) FrameLayout container;
+    @BindView(R.id.main_container) FrameLayout container;
 
-    List<Status> jlptLevels;
+    List<Status> jlptLevels = new ArrayList<>();
 
     FragNavController.Builder builder;
     FragNavController fragNavController;
@@ -57,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private List<List<GrammarPoint>> arrangedGrammarPoints;
     private List<ExampleSentence> exampleSentences;
     private List<SupplementalLink> supplementalLinks;
+    // Temporary lists for /user/progress workaround
+    public List<Integer> n2GrammarPointsTotal = new ArrayList<>();
+    public List<Integer> n1GrammarPointsTotal = new ArrayList<>();
+    public List<Integer> n2GrammarPointsLearned = new ArrayList<>();
+    public List<Integer> n1GrammarPointsLearned = new ArrayList<>();
 
     private GrammarPoint selectedGrammarPoint;
     private ExampleSentence selectedSentence;
@@ -74,8 +81,10 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         grammarPoints = new ArrayList<>();
         reviews = new ArrayList<>();
         arrangedGrammarPoints = new ArrayList<>();
+        exampleSentences = new ArrayList<>();
+        supplementalLinks = new ArrayList<>();
 
-        builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container);
+        builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.main_container);
 
         hud = KProgressHUD.create(MainActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -83,8 +92,55 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
 
-        fetchReviews();
+        initializeUI();
+        fetchData();
+    }
 
+    private void fetchData() {
+        // Attempt to fetch reviews
+        fetchReviews(new SimpleCallbackListener() {
+            @Override
+            public void success() {
+                // Attempt to fetch grammar points
+                fetchGrammarPoints(new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        // Attempt to fetch example sentences
+                        fetchExampleSentences(new SimpleCallbackListener() {
+                            @Override
+                            public void success() {
+                                // Attempt to fetch supplemental links
+                                fetchSupplementalLinks(new SimpleCallbackListener() {
+                                    @Override
+                                    public void success() {
+                                    }
+                                    @Override
+                                    public void error(String errorMessage) {
+                                        Log.e("Data retrieval error", errorMessage);
+                                    }
+                                });
+                            }
+                            @Override
+                            public void error(String errorMessage) {
+                                Log.e("Data retrieval error", errorMessage);
+                            }
+                        });
+                        // Workaround for /user/progress v3 endpoint not working
+                        if (n2GrammarPointsTotal.size() == 0) {
+                            countProgress(reviews);
+                        }
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        Log.e("Data retrieval error", errorMessage);
+                    }
+                });
+            }
+            @Override
+            public void error(String errorMessage) {
+                Log.e("Data retrieval error", errorMessage);
+            }
+        });
     }
 
     private void initializeUI() {
@@ -102,12 +158,6 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         } catch (IllegalStateException e) {
             Log.e("IllegalStateException", "Initializing UI failed due to a button event called after a state saving.");
         }
-
-        /*  Initialization  */
-
-        jlptLevels = new ArrayList<>();
-
-        /*  end  */
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -127,22 +177,34 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                         return true;
                     }
                 });
+        EspressoTestingIdlingResource.decrement("login_and_loading");
     }
 
+    /**
+     * Allowing double back button to exit if it is status fragment. Else go to status
+     */
     @Override
     public void onBackPressed() {
-        if (exitToast == null || exitToast.getView() == null || exitToast.getView().getWindowToken() == null) {
-            exitToast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
-            exitToast.show();
+        Fragment currentFragment = fragNavController.getCurrentFrag();
+        if (currentFragment instanceof StatusFragment || currentFragment instanceof SearchFragment || currentFragment instanceof SettingFragment) {
+            if (exitToast == null || exitToast.getView() == null || exitToast.getView().getWindowToken() == null) {
+                exitToast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
+                exitToast.show();
+            } else {
+                exitToast.cancel();
+                super.onBackPressed();
+            }
         } else {
-            exitToast.cancel();
-            super.onBackPressed();
+            fragNavController.replaceFragment(StatusFragment.newInstance());
         }
     }
 
+    /**
+     * Bug happening on API > 11 causing a random crash when saving instance : https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa/10261438#10261438
+     * @param outState Bundle to pass on
+     */
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // Bug happening on API > 11 causing a random crash when saving instance : https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa/10261438#10261438
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("WORKAROUND_FOR_RANDOM_CRASH", "WORKAROUND_FOR_RANDOM_CRASH");
         super.onSaveInstanceState(outState);
         if (fragNavController != null) {
@@ -150,18 +212,20 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         }
     }
 
+    /**
+     * Replace main fragment with given fragment
+     * @param fragment New fragment
+     */
     @Override
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, fragment);
+        ft.replace(R.id.main_container, fragment);
         ft.commit();
     }
 
     @Override
     public void setjlptLevel(List<Status> levels) {
-
         jlptLevels = levels;
-
     }
 
     @Override
@@ -172,6 +236,47 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     @Override
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    /**
+     * Temporary workaround for the non working /user/progress v3 endpoint
+     */
+    public void countProgress(List<Review> reviews) {
+        n2GrammarPointsLearned = new ArrayList<>();
+        n1GrammarPointsLearned = new ArrayList<>();
+        n2GrammarPointsTotal = new ArrayList<>();
+        n1GrammarPointsTotal = new ArrayList<>();
+        List<GrammarPoint> n2GrammarPoints = new ArrayList<>(), n1GrammarPoints = new ArrayList<>();
+
+        for (GrammarPoint grammarPointExample : grammarPoints) {
+            if (grammarPointExample.level.equals("JLPT2")) {
+                if (!n2GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n2GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n2GrammarPoints.add(grammarPointExample);
+            } else if (grammarPointExample.level.equals("JLPT1")) {
+                if (!n1GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n1GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n1GrammarPoints.add(grammarPointExample);
+            }
+        }
+        for (Review review : reviews) {
+            for (GrammarPoint grammarConcernedByReview : n2GrammarPoints) {
+                if (review.grammar_point_id == grammarConcernedByReview.id) {
+                    if (review.times_correct > 0 && n2GrammarPointsLearned.contains(review.id)) {
+                        n2GrammarPointsLearned.add(review.id);
+                    }
+                }
+            }
+            for (GrammarPoint grammarConcernedByReview : n1GrammarPoints) {
+                if (review.grammar_point_id == grammarConcernedByReview.id) {
+                    if (review.times_correct > 0 && n1GrammarPointsLearned.contains(review.id)) {
+                        n1GrammarPointsLearned.add(review.id);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -277,13 +382,38 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         throw new IllegalStateException("Need to send an index that we know");
     }
 
-    private void fetchGrammarPoints() {
-
+    private void fetchReviews(SimpleCallbackListener callback) {
         ApiService apiService = new ApiService(this);
-        apiService.getGrammarPoints(new ApiService.CallbackListener() {
+        apiService.getReviews(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
+                List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonObject);
+                setReviews(reviews);
+                callback.success();
+            }
 
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Reviews)");
+                callback.error("Grammar points API reponse format changed !");
+            }
+
+            @Override
+            public void error(ANError anError) {
+                Log.d("Error", anError.getErrorDetail());
+                callback.error(anError.getErrorDetail());
+            }
+        });
+    }
+
+    private void fetchGrammarPoints(SimpleCallbackListener callback) {
+
+        ApiService apiService = new ApiService(this);
+        apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Grammar points)");
+                callback.error("Grammar points API reponse format changed !");
             }
 
             @Override
@@ -291,22 +421,24 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
                 List<GrammarPoint> grammarPoints = JsonParser.getInstance(MainActivity.this).parseGrammarPoints(jsonArray);
                 setGrammarPoints(grammarPoints);
-                fetchExampleSentences();
+                callback.success();
             }
 
             @Override
             public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
+                Log.e("Error", anError.getErrorDetail());
+                callback.error(anError.getErrorDetail());
             }
         });
     }
 
-    private void fetchExampleSentences() {
+    private void fetchExampleSentences(SimpleCallbackListener callback) {
         ApiService apiService = new ApiService(this);
-        apiService.getExampleSentences(new ApiService.CallbackListener() {
+        apiService.getExampleSentences(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-
+                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Example sentences)");
+                callback.error("Grammar points API reponse format changed !");
             }
 
             @Override
@@ -314,68 +446,39 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
                 List<ExampleSentence> exampleSentences = JsonParser.getInstance(MainActivity.this).parseExampleSentences(jsonArray);
                 setExampleSentences(exampleSentences);
-                fetchSupplimentalLinks();
+                callback.success();
             }
 
             @Override
             public void error(ANError anError) {
                 Log.d("Error", anError.getErrorDetail());
+                callback.error(anError.getErrorDetail());
             }
         });
     }
 
-    private void fetchSupplimentalLinks() {
+    private void fetchSupplementalLinks(SimpleCallbackListener callback) {
         ApiService apiService = new ApiService(MainActivity.this);
-        apiService.getSupplimentalLinks(new ApiService.CallbackListener() {
+        apiService.getSupplementalLinks(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-
+                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Supplemental Links)");
+                callback.error("Grammar points API reponse format changed !");
             }
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-                if (hud.isShowing()) {
-                    hud.dismiss();
-                }
-
                 List<SupplementalLink> supplementalLinks = JsonParser.getInstance(MainActivity.this).parseSupplimentalLinks(jsonArray);
                 setSupplimentalLinks(supplementalLinks);
-                initializeUI();
+                callback.success();
             }
 
             @Override
             public void error(ANError anError) {
                 Log.d("Error", anError.getErrorDetail());
+                callback.error(anError.getErrorDetail());
             }
         });
-    }
-
-    private void fetchReviews() {
-
-        if (!hud.isShowing()) {
-            hud.show();
-        }
-
-        ApiService apiService = new ApiService(this);
-        apiService.getReviews(new ApiService.CallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                List<Review> reviews = JsonParser.getInstance(MainActivity.this).parseReviews(jsonObject);
-                setReviews(reviews);
-                fetchGrammarPoints();
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-            }
-
-            @Override
-            public void error(ANError anError) {
-
-                Log.d("Error", anError.getErrorDetail());
-            }
-        });
-
     }
 
 }

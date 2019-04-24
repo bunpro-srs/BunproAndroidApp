@@ -26,7 +26,7 @@ public class BaseFragment extends Fragment {
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
 
-        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.commit();
     }
 
@@ -37,7 +37,7 @@ public class BaseFragment extends Fragment {
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
 
-        fragmentTransaction.add(R.id.container, fragment);
+        fragmentTransaction.add(R.id.main_container, fragment);
         fragmentTransaction.commit();
     }
 
