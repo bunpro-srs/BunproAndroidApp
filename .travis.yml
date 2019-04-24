@@ -1,0 +1,16 @@
+language: android
+
+env:
+  global:
+    - ANDROID_API=26
+    - ANDROID_BUILD_TOOLS=26.0.2
+    -
+android:
+  components:
+    - tools
+    - platform-tools
+    - android-$ANDROID_API
+    - build-tools-$ANDROID_BUILD_TOOLS
+    - sys-img-x86-android-26
+script:
+  - "./gradlew clean build --stacktrace"
