@@ -33,7 +33,7 @@ before_install:
 
 script:
 - "./gradlew build connectedCheck --stacktrace"
-- "./gradlew sonarqube -Dsonar.projectKey=bunpro-srs -Dsonar.organization=bunpro-srs -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$sonarlogin
+- "./gradlew sonarqube -Dsonar.projectKey=bunpro-srs -Dsonar.organization=bunpro-srs -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${sonarlogin}"
 
 after_failure: cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml
 
