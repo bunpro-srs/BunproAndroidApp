@@ -28,7 +28,7 @@ android:
   - sys-img-x86-android-26
 
 before_install:
-- yes | sdkmanager "plarforms;android-$ANDROID_API"
+- yes | sdkmanager "platforms;android-$ANDROID_API"
 
 script:
 - "./gradlew build connectedCheck --stacktrace"
