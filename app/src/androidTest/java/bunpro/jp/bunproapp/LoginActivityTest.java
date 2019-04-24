@@ -64,7 +64,7 @@ public class LoginActivityTest {
         onView(withId(R.id.main_container)).check(doesNotExist());
     }
 
-    @Test
+    /*@Test
     public void testRightUserCombination() {
         // Getting username and password from environment variable
         String username = EnvVarLoader.getEnvironmentVariable("test_username");
@@ -76,5 +76,5 @@ public class LoginActivityTest {
         // Checking that main activity is displayed
         onView(withId(R.id.login_layout)).check(doesNotExist());
         onView(withId(R.id.main_container)).check(matches(isDisplayed()));
-    }
+    }*/
 }
