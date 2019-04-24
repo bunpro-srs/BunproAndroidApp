@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.fragments.contract;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -77,7 +78,7 @@ public class StatusController implements StatusContract.Controller {
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-
+                Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User progress)");
             }
 
             @Override

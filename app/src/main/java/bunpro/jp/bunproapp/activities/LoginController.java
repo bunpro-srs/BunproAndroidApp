@@ -61,7 +61,7 @@ public class LoginController implements LoginContract.Controller {
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Login)");
-                callback.error("Login API reponse format changed !");
+                callback.error("Login API response format changed !");
             }
 
             @Override
@@ -126,7 +126,7 @@ public class LoginController implements LoginContract.Controller {
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (User settings)");
-                callback.error("User settings API reponse format changed !");
+                callback.error("User settings API response format changed !");
             }
 
             @Override
