@@ -14,12 +14,12 @@ import android.graphics.Canvas
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import se.fekete.furiganatextview.R
 import java.util.*
 
 
-class FuriganaTextView : TextView {
+class FuriganaTextView : AppCompatTextView {
 
     // Paints
     private var m_paint_f = TextPaint()
