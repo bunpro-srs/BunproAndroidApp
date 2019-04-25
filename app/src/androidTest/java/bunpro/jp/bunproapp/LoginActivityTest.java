@@ -55,18 +55,4 @@ public class LoginActivityTest {
         onView(withId(R.id.login_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.main_container)).check(doesNotExist());
     }
-
-    /*@Test
-    public void testRightUserCombination() {
-        // Getting username and password from environment variable
-        String username = EnvVarLoader.getEnvironmentVariable("test_username");
-        String password = EnvVarLoader.getEnvironmentVariable("test_password");
-        // Entering user/password and try login
-        onView(withId(R.id.etEmail)).perform(typeText(username != null ? username : "username"));
-        onView(withId(R.id.etPassword)).perform(typeText(password != null ? password : "password"));
-        onView(withText(R.string.login)).perform(ViewActions.click());
-        // Checking that main activity is displayed
-        onView(withId(R.id.login_layout)).check(doesNotExist());
-        onView(withId(R.id.main_container)).check(matches(isDisplayed()));
-    }*/
 }
