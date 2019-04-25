@@ -207,7 +207,7 @@ public class FuriganaView extends androidx.appcompat.widget.AppCompatTextView {
                         while (widthTemp > width) {
                             widthTemp = 0;
                             pairTexts = new Vector<>();
-                            splitPairText = splitPairText.split(widthTemp, width, pairTexts);
+                            splitPairText = (splitPairText != null) ? splitPairText.split(widthTemp, width, pairTexts) : null;
                             line = new Line();
                             line.mPairTexts = pairTexts;
                             mLines.add(line);

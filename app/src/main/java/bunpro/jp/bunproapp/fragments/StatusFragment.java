@@ -175,9 +175,9 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
                     spinKitView.setVisibility(View.VISIBLE);
                 }
                 mController.getReviews(StatusFragment.this);
-                handler.postDelayed(this, 1000 * 60 * 5);
+                handler.postDelayed(this, (long)(1000 * 60 * 5));
             }
-        }, 1000 * 60 * 5);
+        }, (long)(1000 * 60 * 5));
 
     }
 
