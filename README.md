@@ -2,6 +2,13 @@
 [![Sonarcloud status](https://sonarcloud.io/api/project_badges/measure?project=bunpro-srs&metric=alert_status)](https://sonarcloud.io/dashboard?id=bunpro-srs)
 # Bunpro Android App
 
-## Testing
+This is the Android application for the [Bunpro](https://bunpro.jp/) japanese grammar learning service.
 
-There are some UI testing that will be designed to work within a CI environment. They require the environment variables "*test_username*" and "*test_password*" to be set to enable login.
+## Contributing
+
+The project use the [Github issues](https://github.com/bunpro-srs/BunproAndroidApp/issues) to track down the bugs and log upcoming features.
+Feel free to report the bugs you discover; we are also open to pull requests.
+
+## License
+
+This app is released under the MIT License. See LICENSE for details.
