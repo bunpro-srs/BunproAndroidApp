@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
@@ -23,16 +24,14 @@ import bunpro.jp.bunproapp.service.JsonParser;
 
 public class StatusPresenter implements StatusContract.Presenter {
     private StatusContract.View statusView;
-    private StatusModel statusModel;
 
     public StatusPresenter(StatusContract.View statusView)
     {
         this.statusView = statusView;
-        this.statusModel = new StatusModel();
     }
 
     public List<Status> getStatus() {
-        return statusModel.getStatus();
+        return Status.getStatusList();
     }
 
     public void fetchStatus() {
@@ -62,10 +61,9 @@ public class StatusPresenter implements StatusContract.Presenter {
 
                     Status s = new Status(key, sk, tk);
                     // Dirty fix condition for missing N1/wrong N2 values
-                    if (!s.name.equals("N2") && !s.name.equals("N1")) {
+                    if (!s.getName().equals("N2") && !s.getName().equals("N1")) {
                         status.add(s);
                     }
-
                 }
 
                 // TODO: Do not access context within presenter
@@ -73,9 +71,8 @@ public class StatusPresenter implements StatusContract.Presenter {
                 // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
                 status.add(new Status("N2", activity.n2GrammarPointsLearned.size(), activity.n2GrammarPointsTotal.size()));
                 status.add(new Status("N1", activity.n1GrammarPointsLearned.size(), activity.n1GrammarPointsTotal.size()));
-                activity.setjlptLevel(status);
-
-                //v.updateView(status);
+                Status.setStatusList(status);
+                statusView.refresh();
             }
 
             @Override
@@ -102,7 +99,7 @@ public class StatusPresenter implements StatusContract.Presenter {
             apiService.getReviews(new ApiService.ApiCallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
-                    statusModel.setReviews(JsonParser.getInstance(statusView.getContext()).parseReviews(jsonObject));
+                    Review.setReviewList(JsonParser.getInstance(statusView.getContext()).parseReviews(jsonObject));
                     updateReviewsInfo();
                     fetchStatus();
                 }
@@ -121,20 +118,45 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     @Override
+    public void fetchGrammarPoints() {
+
+        final List<GrammarPoint> points = GrammarPoint.getGrammarPointList();
+        if (points.size() == 0) {
+            ApiService apiService = new ApiService(statusView.getContext());
+            apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
+                @Override
+                public void success(JSONObject jsonObject) {
+                    Log.e("API Format changed", "JSONObject obtained instead of an JSONArray ! (Grammar points)");
+                }
+
+                @Override
+                public void successAsJSONArray(JSONArray jsonArray) {
+                    GrammarPoint.setGrammarPointList(JsonParser.getInstance(statusView.getContext()).parseGrammarPoints(jsonArray));
+                }
+
+                @Override
+                public void error(ANError anError) {
+                    statusView.showError(anError.getErrorDetail());
+                }
+            });
+        }
+    }
+
+    @Override
     public void updateReviewsInfo() {
         // Updating reviews
-        statusView.updateReviews(statusModel.getReviews());
+        statusView.updateReviews(Review.getReviewList());
         // Updating last review time
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat spf= new SimpleDateFormat("hh:mm aaa");
         String dateStr = spf.format(currentTime);
         statusView.updateReviewTime(dateStr);
         // Fetching review count
-        if (statusModel.getReviews().isEmpty()) {
-            statusModel.setReviews(((MainActivity)statusView.getContext()).getReviews());
+        if (Review.getReviewList().isEmpty()) {
+            Review.setReviewList(((MainActivity)statusView.getContext()).getReviews());
         }
         int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
-        for (Review review : statusModel.getReviews()) {
+        for (Review review : Review.getReviewList()) {
             long remainingHours = review.getRemainingHoursBeforeReview();
             if (remainingHours <= 0) {
                 pendingReviewCount++;
@@ -146,6 +168,6 @@ public class StatusPresenter implements StatusContract.Presenter {
         }
         statusView.updateReviewNumbers(pendingReviewCount, withinAnHourReviewCount, withinADayReviewCount);
         // Updating badge
-        statusView.updateBadge(statusModel.getReviews().size());
+        statusView.updateBadge(Review.getReviewList().size());
     }
 }

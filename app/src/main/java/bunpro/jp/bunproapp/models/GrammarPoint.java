@@ -1,8 +1,11 @@
 package bunpro.jp.bunproapp.models;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class GrammarPoint {
+    private static List<GrammarPoint> grammarPointList = new ArrayList<>();
 
     public int id;
     public String title;
@@ -60,4 +63,10 @@ public class GrammarPoint {
         }
     };
 
+    public static List<GrammarPoint> getGrammarPointList() {
+        return grammarPointList;
+    }
+    public static void setGrammarPointList(List<GrammarPoint> grammarPointList) {
+        GrammarPoint.grammarPointList = grammarPointList;
+    }
 }

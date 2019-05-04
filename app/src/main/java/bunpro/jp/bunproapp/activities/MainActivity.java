@@ -24,7 +24,7 @@ import java.util.List;
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.fragments.SearchFragment;
-import bunpro.jp.bunproapp.fragments.SettingFragment;
+import bunpro.jp.bunproapp.ui.settings.SettingFragment;
 import bunpro.jp.bunproapp.ui.status.StatusFragment;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Lesson;
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
         final List<Fragment> fragments = new ArrayList<>();
         fragments.add(new StatusFragment());
         fragments.add(SearchFragment.newInstance());
-        fragments.add(SettingFragment.newInstance());
+        fragments.add(new SettingFragment());
         builder.rootFragments(fragments);
 
         // Workaround for random crash ; see https://github.com/hulab/debugkit/issues/3
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                                 fragNavController.replaceFragment(SearchFragment.newInstance());
                                 break;
                             case R.id.action_settings:
-                                fragNavController.replaceFragment(SettingFragment.newInstance());
+                                fragNavController.replaceFragment(new SettingFragment());
                                 break;
                         }
                         return true;
@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
             case INDEX_SEARCH:
                 return SearchFragment.newInstance();
             case INDEX_SETTING:
-                return SettingFragment.newInstance();
+                return new SettingFragment();
         }
         throw new IllegalStateException("Need to send an index that we know");
     }

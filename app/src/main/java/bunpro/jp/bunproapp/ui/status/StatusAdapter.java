@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
@@ -23,11 +24,11 @@ import bunpro.jp.bunproapp.fragments.StatusDetailFragment;
 import bunpro.jp.bunproapp.models.Status;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusViewHolder> {
-    private StatusContract.Presenter statusPresenter;
+    private List<Status> status;
     private ClickListener clickListener;
 
-    public StatusAdapter(Context context, StatusContract.Presenter statusPresenter) {
-        this.statusPresenter = statusPresenter;
+    public StatusAdapter(Context context, List<Status> status) {
+        this.status = status;
         this.clickListener = new ClickListener() {
             @Override
             public void positionClicked(int position) {
@@ -40,12 +41,12 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
                 Fragment fragment = StatusDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
 
-                if (position == statusPresenter.getStatus().size()) {
+                if (position == status.size()) {
                     bundle.putString("status", "N1");
                     bundle.putString("level", "JLPT1");
                 } else {
-                    bundle.putString("status", statusPresenter.getStatus().get(position).getName());
-                    bundle.putString("level", "JLPT" + String.valueOf(statusPresenter.getStatus().size() - position));
+                    bundle.putString("status", status.get(position).getName());
+                    bundle.putString("level", "JLPT" + String.valueOf(status.size() - position));
                 }
 
                 fragment.setArguments(bundle);
@@ -62,24 +63,24 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
 
     @Override
     public void onBindViewHolder(@NonNull StatusViewHolder viewHolder, int position) {
-        if (position == statusPresenter.getStatus().size()) {
+        if (position == status.size()) {
             viewHolder.tvName.setText("N1");
             viewHolder.progressBar.setMax(0);
             viewHolder.progressBar.setProgress(0);
             viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(0), String.valueOf(0)));
         } else {
-            Status status = statusPresenter.getStatus().get(position);
-            viewHolder.tvName.setText(status.getName());
-            viewHolder.progressBar.setMax(status.getTotal());
-            viewHolder.progressBar.setProgress(status.getStatus());
-            viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(status.getStatus()), String.valueOf(status.getTotal())));
+            Status s = status.get(position);
+            viewHolder.tvName.setText(s.getName());
+            viewHolder.progressBar.setMax(s.getTotal());
+            viewHolder.progressBar.setProgress(s.getStatus());
+            viewHolder.tvStatus.setText(String.format("%s/%s", String.valueOf(s.getStatus()), String.valueOf(s.getTotal())));
         }
     }
 
     @Override
     public int getItemCount() {
-        if (statusPresenter.getStatus().size() != 0) {
-            return statusPresenter.getStatus().size();
+        if (status.size() != 0) {
+            return status.size();
         } else {
             return 0;
         }

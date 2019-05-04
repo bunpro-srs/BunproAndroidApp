@@ -18,12 +18,14 @@ public interface StatusContract {
         void updateReviewTime(String dateUpdated);
         void updateReviewNumbers(int currentReviews, int hourReviews, int dayReviews);
         void updateBadge(int count);
+        void refresh();
     }
 
     interface Presenter {
         List<Status> getStatus();
         void fetchStatus();
         void fetchReviews();
+        void fetchGrammarPoints();
         void updateReviewsInfo();
     }
 }

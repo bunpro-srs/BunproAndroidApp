@@ -2,11 +2,13 @@ package bunpro.jp.bunproapp.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 public class Review {
+    private static List<Review> reviewList = new ArrayList<>();
 
     public int id;
     public int user_id;
@@ -54,4 +56,11 @@ public class Review {
         }
     };
 
+    public static List<Review> getReviewList() {
+        return reviewList;
+    }
+    public static void setReviewList(List<Review> reviewList) {
+        Review.reviewList.clear();
+        Review.reviewList.addAll(reviewList);
+    }
 }

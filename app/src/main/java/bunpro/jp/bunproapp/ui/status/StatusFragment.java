@@ -31,6 +31,7 @@ import java.util.Map;
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
 import bunpro.jp.bunproapp.models.Review;
+import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.UserData;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -89,7 +90,7 @@ public class StatusFragment extends Fragment implements StatusContract.View, Vie
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
-        statusAdapter = new StatusAdapter(context, statusPresenter);
+        statusAdapter = new StatusAdapter(context, Status.getStatusList());
         rvView.setAdapter(statusAdapter);
 
         llReview = view.findViewById(R.id.llReview);
@@ -123,6 +124,15 @@ public class StatusFragment extends Fragment implements StatusContract.View, Vie
                 handler.postDelayed(this, (long)(1000 * 60 * 5));
             }
         }, (long)(1000 * 60 * 5));
+
+        statusPresenter.fetchReviews();
+        statusPresenter.fetchStatus();
+        statusPresenter.fetchGrammarPoints();
+    }
+
+    @Override
+    public void refresh() {
+        statusAdapter.notifyDataSetChanged();
     }
 
     @Override
