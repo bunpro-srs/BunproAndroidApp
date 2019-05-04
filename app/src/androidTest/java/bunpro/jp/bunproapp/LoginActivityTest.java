@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import bunpro.jp.bunproapp.activities.LoginActivity;
+import bunpro.jp.bunproapp.utils.EnvVarLoader;
 import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -56,17 +57,17 @@ public class LoginActivityTest {
         onView(withId(R.id.main_container)).check(doesNotExist());
     }
 
-    /*@Test
+    @Test
     public void testRightUserCombination() {
         // Getting username and password from environment variable
-        String username = EnvVarLoader.getEnvironmentVariable("test_username");
-        String password = EnvVarLoader.getEnvironmentVariable("test_password");
+        String username = EnvVarLoader.getEnvVar("test_username");
+        String password = EnvVarLoader.getEnvVar("test_password");
         // Entering user/password and try login
-        onView(withId(R.id.etEmail)).perform(typeText(username != null ? username : "username"));
-        onView(withId(R.id.etPassword)).perform(typeText(password != null ? password : "password"));
+        onView(withId(R.id.etEmail)).perform(typeText(username.isEmpty() ? username : "username"));
+        onView(withId(R.id.etPassword)).perform(typeText(password.isEmpty() ? password : "password"));
         onView(withText(R.string.login)).perform(ViewActions.click());
         // Checking that main activity is displayed
         onView(withId(R.id.login_layout)).check(doesNotExist());
         onView(withId(R.id.main_container)).check(matches(isDisplayed()));
-    }*/
+    }
 }
