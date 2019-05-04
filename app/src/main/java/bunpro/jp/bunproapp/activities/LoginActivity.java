@@ -15,6 +15,7 @@ import com.wuadam.awesomewebview.AwesomeWebView;
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.contract.LoginContract;
 import bunpro.jp.bunproapp.utils.Constants;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
                         @Override
                         public void error(String errorMessage) {
+                            EspressoTestingIdlingResource.decrement("login_and_loading");
                             showError(errorMessage);
                         }
                     });
@@ -76,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
                 @Override
                 public void error(String errorMessage) {
+                    EspressoTestingIdlingResource.decrement("login_and_loading");
                     showError(errorMessage);
                 }
             });
