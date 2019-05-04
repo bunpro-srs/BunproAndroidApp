@@ -26,7 +26,6 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.wuadam.awesomewebview.AwesomeWebView;
 
 import java.lang.ref.WeakReference;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -149,8 +148,8 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
 
         rvView.setAdapter(mAdapter);
 
-        llReview = view.findViewById(R.id.llReview);
-        llReview.setOnClickListener(this);
+            llReview = view.findViewById(R.id.llReview);
+            llReview.setOnClickListener(this);
 
         tvReviews = view.findViewById(R.id.tvReviews);
 

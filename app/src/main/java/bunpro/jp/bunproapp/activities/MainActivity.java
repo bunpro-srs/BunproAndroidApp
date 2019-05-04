@@ -25,7 +25,7 @@ import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.fragments.SearchFragment;
 import bunpro.jp.bunproapp.fragments.SettingFragment;
-import bunpro.jp.bunproapp.fragments.StatusFragment;
+import bunpro.jp.bunproapp.ui.status.StatusFragment;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                             countProgress(reviews);
                             Fragment currentFragment = fragNavController.getCurrentFrag();
                             if (currentFragment instanceof StatusFragment) {
-                                ((StatusFragment)currentFragment).refreshStatus();
+//                                ((StatusFragment)currentFragment).refreshStatus();
                             }
                         }
                     }
@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                 });
                 // Try to update status fragment with review count
                 Fragment currentFragment = fragNavController.getCurrentFrag();
-                if (currentFragment instanceof StatusFragment) {
-                    ((StatusFragment)currentFragment).calculateReviewsNumber();
-                }
+//                if (currentFragment instanceof StatusFragment) {
+//                    ((StatusFragment)currentFragment).calculateReviewsNumber();
+//                }
             }
             @Override
             public void error(String errorMessage) {
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
     private void initializeUI() {
 
         final List<Fragment> fragments = new ArrayList<>();
-        fragments.add(StatusFragment.newInstance());
+        fragments.add(new StatusFragment());
         fragments.add(SearchFragment.newInstance());
         fragments.add(SettingFragment.newInstance());
         builder.rootFragments(fragments);
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_status:
-                                fragNavController.replaceFragment(StatusFragment.newInstance());
+                                fragNavController.replaceFragment(new StatusFragment());
                                 break;
                             case R.id.action_search:
                                 fragNavController.replaceFragment(SearchFragment.newInstance());
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                 super.onBackPressed();
             }
         } else {
-            fragNavController.replaceFragment(StatusFragment.newInstance());
+            fragNavController.replaceFragment(new StatusFragment());
         }
     }
 
@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
 
         switch (index) {
             case INDEX_STATUS:
-                return StatusFragment.newInstance();
+                return new StatusFragment();
             case INDEX_SEARCH:
                 return SearchFragment.newInstance();
             case INDEX_SETTING:
