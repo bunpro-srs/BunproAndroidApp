@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import bunpro.jp.bunproapp.activities.contract.LoginContract;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.service.ApiService;
@@ -27,6 +28,8 @@ public class LoginController implements LoginContract.Controller {
 
     @Override
     public void login(String email, String password, final SimpleCallbackListener callback) {
+
+        EspressoTestingIdlingResource.increment("login_and_loading");
         apiService = new ApiService(mContext);
         apiService.login(email, password, new ApiService.ApiCallbackListener() {
             @Override

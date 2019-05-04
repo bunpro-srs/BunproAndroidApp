@@ -60,11 +60,11 @@ public class LoginActivityTest {
     @Test
     public void testRightUserCombination() {
         // Getting username and password from environment variable
-        String username = EnvVarLoader.getEnvVar("test_username");
-        String password = EnvVarLoader.getEnvVar("test_password");
+        String username = EnvVarLoader.getEnvVar("test_bunpro_login");
+        String password = EnvVarLoader.getEnvVar("test_bunpro_password");
         // Entering user/password and try login
-        onView(withId(R.id.etEmail)).perform(typeText(username.isEmpty() ? username : "username"));
-        onView(withId(R.id.etPassword)).perform(typeText(password.isEmpty() ? password : "password"));
+        onView(withId(R.id.etEmail)).perform(typeText(!username.isEmpty() ? username : "username"));
+        onView(withId(R.id.etPassword)).perform(typeText(!password.isEmpty() ? password : "password"));
         onView(withText(R.string.login)).perform(ViewActions.click());
         // Checking that main activity is displayed
         onView(withId(R.id.login_layout)).check(doesNotExist());
