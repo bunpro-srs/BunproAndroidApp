@@ -29,7 +29,7 @@ import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SettingEvent;
 
-public class SettingFragment extends BaseFragment implements View.OnClickListener, SettingContract.View {
+public class SettingFragmentDeprecated extends BaseFragment implements View.OnClickListener, SettingContract.View {
 
     RelativeLayout about;
     RelativeLayout bunnyMode;
@@ -48,12 +48,12 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     private Context mContext;
     private SettingContract.Controller mController;
 
-    public SettingFragment() {
+    public SettingFragmentDeprecated() {
 
     }
 
-    public static SettingFragment newInstance() {
-        return new SettingFragment();
+    public static SettingFragmentDeprecated newInstance() {
+        return new SettingFragmentDeprecated();
     }
 
     @Override
@@ -360,7 +360,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onClick(View view) {
 
-                mController.logout(SettingFragment.this);
+                mController.logout(SettingFragmentDeprecated.this);
                 dialog.dismiss();
             }
         });

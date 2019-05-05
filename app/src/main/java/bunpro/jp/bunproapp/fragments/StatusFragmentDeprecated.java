@@ -46,7 +46,7 @@ import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
-public class StatusFragment extends BaseFragment implements View.OnClickListener, StatusContract.View {
+public class StatusFragmentDeprecated extends BaseFragment implements View.OnClickListener, StatusContract.View {
 
     private Context mContext;
     TextView tvName;
@@ -71,13 +71,13 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
     TextView tvReviewTimeTextView, tvUpdate1Hour, tvUpdate24Hours;
     SpinKitView spinKitView;
 
-    public StatusFragment() {
+    public StatusFragmentDeprecated() {
 
     }
 
 
-    public static StatusFragment newInstance() {
-        return new StatusFragment();
+    public static StatusFragmentDeprecated newInstance() {
+        return new StatusFragmentDeprecated();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
         slContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mController.getStatus(StatusFragment.this);
+                mController.getStatus(StatusFragmentDeprecated.this);
             }
         });
 
@@ -173,7 +173,7 @@ public class StatusFragment extends BaseFragment implements View.OnClickListener
                 if (!spinKitView.isShown()) {
                     spinKitView.setVisibility(View.VISIBLE);
                 }
-                mController.getReviews(StatusFragment.this);
+                mController.getReviews(StatusFragmentDeprecated.this);
                 handler.postDelayed(this, (long)(1000 * 60 * 5));
             }
         }, (long)(1000 * 60 * 5));

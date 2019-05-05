@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                             countProgress(reviews);
                             Fragment currentFragment = fragNavController.getCurrentFrag();
                             if (currentFragment instanceof StatusFragment) {
-//                                ((StatusFragment)currentFragment).refreshStatus();
+//                                ((StatusFragmentDeprecated)currentFragment).refreshStatus();
                             }
                         }
                     }
@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity implements ActivityImpl, Fra
                 });
                 // Try to update status fragment with review count
                 Fragment currentFragment = fragNavController.getCurrentFrag();
-//                if (currentFragment instanceof StatusFragment) {
-//                    ((StatusFragment)currentFragment).calculateReviewsNumber();
+//                if (currentFragment instanceof StatusFragmentDeprecated) {
+//                    ((StatusFragmentDeprecated)currentFragment).calculateReviewsNumber();
 //                }
             }
             @Override
