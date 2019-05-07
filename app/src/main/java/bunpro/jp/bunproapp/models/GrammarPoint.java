@@ -67,6 +67,7 @@ public class GrammarPoint {
         return grammarPointList;
     }
     public static void setGrammarPointList(List<GrammarPoint> grammarPointList) {
-        GrammarPoint.grammarPointList = grammarPointList;
+        GrammarPoint.grammarPointList.clear();
+        GrammarPoint.grammarPointList.addAll(grammarPointList);
     }
 }

@@ -1,7 +1,6 @@
 package bunpro.jp.bunproapp.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +29,7 @@ import bunpro.jp.bunproapp.activities.MainActivity;
 import bunpro.jp.bunproapp.fragments.contract.SearchContract;
 import bunpro.jp.bunproapp.fragments.contract.SearchController;
 import bunpro.jp.bunproapp.models.GrammarPoint;
+import bunpro.jp.bunproapp.ui.word.WordDetailFragment;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderDecoration;
 import info.hoang8f.android.segmented.SegmentedGroup;

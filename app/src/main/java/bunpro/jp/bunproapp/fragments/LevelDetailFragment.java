@@ -30,6 +30,7 @@ import bunpro.jp.bunproapp.fragments.contract.LevelDetailContract;
 import bunpro.jp.bunproapp.fragments.contract.LevelDetailController;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
+import bunpro.jp.bunproapp.ui.word.WordDetailFragment;
 
 public class LevelDetailFragment extends BaseFragment implements View.OnClickListener, LevelDetailContract.View {
 

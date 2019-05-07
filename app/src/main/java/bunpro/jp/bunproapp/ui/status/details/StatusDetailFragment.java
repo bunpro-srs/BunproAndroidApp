@@ -36,13 +36,14 @@ import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
 
 public class StatusDetailFragment extends Fragment implements View.OnClickListener, StatusDetailContract.View {
-
     private Context mContext;
+
     TextView tvName;
     Button btnBack;
 
     RecyclerView rvView;
     StatusDetailAdapter mAdapter;
+
     List<Lesson> lessons;
     List<GrammarPoint> grammarPoints;
     List<Review> reviews;
@@ -51,14 +52,6 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
     StatusDetailContract.Controller mController;
 
     public StatusDetailFragment() {
-        lessons = new ArrayList<>();
-        grammarPoints = new ArrayList<>();
-        reviews = new ArrayList<>();
-        pointsByLesson = new ArrayList<>();
-    }
-
-    public static StatusDetailFragment newInstance() {
-        return new StatusDetailFragment();
     }
 
     @Override
@@ -159,92 +152,5 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
         }
 
         ((MainActivity)getActivity()).setArrangedGrammarPoints(this.pointsByLesson);
-    }
-
-
-    private class StatusDetailAdapter extends RecyclerView.Adapter<StatusDetailViewHolder> {
-
-        ClickListener listener;
-        List<List<GrammarPoint>> pointsByLesson;
-
-        StatusDetailAdapter(List<List<GrammarPoint>> pointsByLesson, ClickListener listener) {
-            this.listener = listener;
-            this.pointsByLesson = pointsByLesson;
-        }
-
-        @NonNull
-        @Override
-        public StatusDetailViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            return new StatusDetailViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_status, viewGroup, false), listener);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull StatusDetailViewHolder viewHolder, int position) {
-            viewHolder.tvName.setText(String.format("Lesson %s", String.valueOf(position+1)));
-            List<GrammarPoint> points = pointsByLesson.get(position);
-
-            viewHolder.tvStatus.setText(String.valueOf(String.valueOf(checkReview(points)) + " / " + String.valueOf(points.size())));
-            viewHolder.progressBar.setProgress(checkReview(points));
-            viewHolder.progressBar.setMax(points.size());
-        }
-
-        @Override
-        public int getItemCount() {
-            return this.pointsByLesson.size();
-        }
-
-        void updateData(List<List<GrammarPoint>> pointsByLesson) {
-            this.pointsByLesson = pointsByLesson;
-        }
-
-        private int checkReview(List<GrammarPoint> points) {
-            int count = 0;
-            if (reviews.size() > 0) {
-                for (GrammarPoint point : points) {
-                    for (Review review : reviews) {
-                        if (point.id == review.grammar_point_id) {
-                            count++;
-                            break;
-                        }
-                    }
-                }
-            }
-            return count;
-        }
-    }
-
-    private class StatusDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        LinearLayout llContainer;
-        WeakReference<ClickListener> ref;
-        TextView tvName, tvStatus;
-
-        RoundCornerProgressBar progressBar;
-
-        StatusDetailViewHolder(@NonNull View itemView, ClickListener listener) {
-            super(itemView);
-
-            ref = new WeakReference<>(listener);
-
-            llContainer = itemView.findViewById(R.id.llContainer);
-            llContainer.setOnClickListener(this);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvStatus = itemView.findViewById(R.id.tvStatus);
-
-            progressBar = itemView.findViewById(R.id.progressBar);
-
-        }
-
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-            if (id == R.id.llContainer) {
-                ref.get().positionClicked(getAdapterPosition());
-            }
-        }
-    }
-
-    private interface ClickListener {
-        void positionClicked(int position);
     }
 }

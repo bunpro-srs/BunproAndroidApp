@@ -20,7 +20,7 @@ import java.util.List;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.fragments.StatusDetailFragment;
+import bunpro.jp.bunproapp.ui.status.details.StatusDetailFragment;
 import bunpro.jp.bunproapp.models.Status;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusViewHolder> {
@@ -38,7 +38,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
                     return;
                 }
 
-                Fragment fragment = StatusDetailFragment.newInstance();
+                Fragment fragment = new StatusDetailFragment();
                 Bundle bundle = new Bundle();
 
                 if (position == status.size()) {
