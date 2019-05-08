@@ -34,7 +34,7 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
         return review;
     }
 
-    public List<ExampleSentence> getExampleSentences(GrammarPoint point) {
+    public List<ExampleSentence> fetchExampleSentences(GrammarPoint point) {
         List<ExampleSentence> exampleSentences = ExampleSentence.getExampleSentenceList();
         List<ExampleSentence> pointExampleSentences = new ArrayList<>();
         if (exampleSentences.size() > 0) {
@@ -47,7 +47,7 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
         return pointExampleSentences;
     }
 
-    private List<SupplementalLink> getSupplementalLinks(GrammarPoint point) {
+    public List<SupplementalLink> fetchSupplementalLinks(GrammarPoint point) {
         List<SupplementalLink> supplementalLinks = SupplementalLink.getSupplementalLinkList();
         List<SupplementalLink> pointSupplementalLinks = new ArrayList<>();
         if (supplementalLinks.size() > 0) {

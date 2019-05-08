@@ -1,9 +1,6 @@
 package bunpro.jp.bunproapp.ui.word;
 
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,35 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.Collections;
+
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
 import bunpro.jp.bunproapp.fragments.BaseFragment;
 import bunpro.jp.bunproapp.models.ExampleSentence;
-import bunpro.jp.bunproapp.utils.AppData;
-import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SettingEvent;
-import bunpro.jp.bunproapp.utils.TextUtils;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.SupplementalLink;
-import info.hoang8f.android.segmented.SegmentedGroup;
-import se.fekete.furiganatextview.furiganaview.FuriganaTextView;
 
 
 public class WordDetailFragment extends BaseFragment implements View.OnClickListener, WordDetailContract.View {
@@ -140,8 +125,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         review = wordDetailPresenter.getReview(selectedPoint);
 
         if (selectedPoint != null) {
-            ExampleSentence.setExampleSentenceList(wordDetailPresenter.getExampleSentences(selectedPoint));
-            SupplementalLink.setSupplementalLinkList(wordDetailPresenter.getSupplementalLinks(selectedPoint));
+            ExampleSentence.setExampleSentenceList(wordDetailPresenter.fetchExampleSentences(selectedPoint));
+            SupplementalLink.setSupplementalLinkList(wordDetailPresenter.fetchSupplementalLinks(selectedPoint));
 
             mAdapter = new StickAdapter(context, 0, review, selectedPoint, ExampleSentence.getExampleSentenceList(), SupplementalLink.getSupplementalLinkList(), new StickAdapter.ItemClickListener() {
                 @Override

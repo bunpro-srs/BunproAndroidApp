@@ -1,13 +1,10 @@
-package bunpro.jp.bunproapp.ui.status.details;
+package bunpro.jp.bunproapp.ui.level;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,41 +14,25 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.fragments.BaseFragment;
-import bunpro.jp.bunproapp.fragments.LevelDetailFragment;
-import bunpro.jp.bunproapp.fragments.contract.StatusDetailContract;
-import bunpro.jp.bunproapp.fragments.contract.StatusDetailController;
+import bunpro.jp.bunproapp.ui.level.detail.LevelDetailFragment;
 import bunpro.jp.bunproapp.models.GrammarPoint;
-import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.Review;
 
-public class StatusDetailFragment extends Fragment implements View.OnClickListener, StatusDetailContract.View {
-    private Context mContext;
+public class LevelFragment extends Fragment implements View.OnClickListener, LevelContract.View {
+    private LevelContract.Presenter levelPresenter;
 
-    TextView tvName;
-    Button btnBack;
+    private TextView tvName;
+    private Button btnBack;
 
-    RecyclerView rvView;
-    StatusDetailAdapter mAdapter;
+    private RecyclerView rvView;
+    private LevelAdapter mAdapter;
 
-    List<Lesson> lessons;
-    List<GrammarPoint> grammarPoints;
-    List<Review> reviews;
-    List<List<GrammarPoint>> pointsByLesson;
-
-    StatusDetailContract.Controller mController;
-
-    public StatusDetailFragment() {
+    public LevelFragment() {
     }
 
     @Override
@@ -63,10 +44,9 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_status_detail, container, false);
-        mContext = getActivity();
 
-        grammarPoints = ((MainActivity)getActivity()).getGrammarPoints();
-        reviews = ((MainActivity)getActivity()).getReviews();
+        levelPresenter = new LevelPresenter(this);
+
         return rootView;
     }
 
@@ -83,10 +63,9 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new StatusDetailAdapter(pointsByLesson, new ClickListener() {
+        mAdapter = new LevelAdapter(GrammarPoint.getArrangedGrammarPointList(), Review.getReviewList(), new LevelAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
-                Log.d("TAG", pointsByLesson.get(position).toString());
                 Fragment fragment = LevelDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putInt("lesson", position + 1);
@@ -97,19 +76,14 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
         });
 
         rvView.setAdapter(mAdapter);
-        initialize();
-
-    }
-
-    private void initialize() {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             String status = bundle.getString("status");
             String levelStr = bundle.getString("level");
-            mController = new StatusDetailController(mContext, levelStr, grammarPoints, reviews);
             tvName.setText(status);
-            mController.getLessons(this);
+            levelPresenter.sortGrammarPoints(levelStr);
+            updateLessons(GrammarPoint.getPointsByLessonMap());
         }
     }
 
@@ -118,39 +92,16 @@ public class StatusDetailFragment extends Fragment implements View.OnClickListen
 
         int id = view.getId();
         if (id == R.id.btnBack) {
-            popFragment();
+            ((MainActivity)getActivity()).popFragment();
         }
     }
 
     @Override
     public void updateLessons(Map<String, List<GrammarPoint>> pointsByLesson) {
-
         if (!pointsByLesson.isEmpty()) {
-            arrangeGrammarPoints(pointsByLesson);
-            mAdapter.updateData(this.pointsByLesson);
+            levelPresenter.arrangeGrammarPoints(pointsByLesson);
+            mAdapter.updateData(GrammarPoint.getArrangedGrammarPointList());
             mAdapter.notifyDataSetChanged();
-
         }
-    }
-
-    private void arrangeGrammarPoints(Map<String, List<GrammarPoint>> pointsByLesson) {
-
-        List<String> mapKeys = new ArrayList<>(pointsByLesson.keySet());
-        List<Integer> mapKeys_integer = new ArrayList<>();
-        for (String key : mapKeys) {
-            mapKeys_integer.add(Integer.parseInt(key));
-        }
-        Collections.sort(mapKeys_integer);
-        mapKeys = new ArrayList<>();
-        for (int k : mapKeys_integer) {
-            mapKeys.add(String.valueOf(k));
-        }
-
-        this.pointsByLesson = new ArrayList<>();
-        for (String key : mapKeys) {
-            this.pointsByLesson.add(pointsByLesson.get(key));
-        }
-
-        ((MainActivity)getActivity()).setArrangedGrammarPoints(this.pointsByLesson);
     }
 }

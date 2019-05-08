@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.ui.status.details;
+package bunpro.jp.bunproapp.ui.level;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,24 +18,26 @@ import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 
-class StatusDetailAdapter extends RecyclerView.Adapter<StatusDetailFragment.StatusDetailViewHolder> {
+class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
 
-    StatusDetailFragment.ClickListener listener;
-    List<List<GrammarPoint>> pointsByLesson;
+    private ClickListener listener;
+    private List<List<GrammarPoint>> pointsByLesson;
+    private List<Review> reviews;
 
-    StatusDetailAdapter(List<List<GrammarPoint>> pointsByLesson, StatusDetailFragment.ClickListener listener) {
+    LevelAdapter(List<List<GrammarPoint>> pointsByLesson, List<Review> reviews, ClickListener listener) {
         this.listener = listener;
         this.pointsByLesson = pointsByLesson;
+        this.reviews = reviews;
     }
 
     @NonNull
     @Override
-    public StatusDetailFragment.StatusDetailViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new StatusDetailFragment.StatusDetailViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_status, viewGroup, false), listener);
+    public LevelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new LevelViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_status, viewGroup, false), listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StatusDetailFragment.StatusDetailViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull LevelViewHolder viewHolder, int position) {
         viewHolder.tvName.setText(String.format("Lesson %s", String.valueOf(position+1)));
         List<GrammarPoint> points = pointsByLesson.get(position);
 
@@ -68,15 +70,15 @@ class StatusDetailAdapter extends RecyclerView.Adapter<StatusDetailFragment.Stat
         return count;
     }
 
-    private class StatusDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class LevelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         LinearLayout llContainer;
-        WeakReference<StatusDetailFragment.ClickListener> ref;
+        WeakReference<ClickListener> ref;
         TextView tvName, tvStatus;
 
         RoundCornerProgressBar progressBar;
 
-        StatusDetailViewHolder(@NonNull View itemView, StatusDetailFragment.ClickListener listener) {
+        LevelViewHolder(@NonNull View itemView, ClickListener listener) {
             super(itemView);
 
             ref = new WeakReference<>(listener);
@@ -100,7 +102,7 @@ class StatusDetailAdapter extends RecyclerView.Adapter<StatusDetailFragment.Stat
     }
 
 
-    private interface ClickListener {
+    public interface ClickListener {
         void positionClicked(int position);
     }
 }

@@ -2,10 +2,14 @@ package bunpro.jp.bunproapp.models;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GrammarPoint {
     private static List<GrammarPoint> grammarPointList = new ArrayList<>();
+    private static List<List<GrammarPoint>> arrangedGrammarPointList = new ArrayList<>();
+    private static Map<String, List<GrammarPoint>> pointsByLesson = new HashMap<>();
 
     public int id;
     public String title;
@@ -69,5 +73,21 @@ public class GrammarPoint {
     public static void setGrammarPointList(List<GrammarPoint> grammarPointList) {
         GrammarPoint.grammarPointList.clear();
         GrammarPoint.grammarPointList.addAll(grammarPointList);
+    }
+
+    public static List<List<GrammarPoint>> getArrangedGrammarPointList() {
+        return arrangedGrammarPointList;
+    }
+    public static void setArrangedGrammarPointList(List<List<GrammarPoint>> arrangedGrammarPointList) {
+        GrammarPoint.arrangedGrammarPointList.clear();
+        GrammarPoint.arrangedGrammarPointList.addAll(arrangedGrammarPointList);
+    }
+
+    public static Map<String, List<GrammarPoint>> getPointsByLessonMap() {
+        return pointsByLesson;
+    }
+    public static void setPointsByLessonMap(Map<String, List<GrammarPoint>> pointsByLesson) {
+        GrammarPoint.pointsByLesson.clear();
+        GrammarPoint.pointsByLesson.putAll(pointsByLesson);
     }
 }

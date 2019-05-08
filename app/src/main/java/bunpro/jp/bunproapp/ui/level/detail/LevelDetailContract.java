@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.fragments.contract;
+package bunpro.jp.bunproapp.ui.level.detail;
 
 import java.util.List;
 

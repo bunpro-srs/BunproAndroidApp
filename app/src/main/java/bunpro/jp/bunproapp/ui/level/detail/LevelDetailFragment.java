@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.fragments;
+package bunpro.jp.bunproapp.ui.level.detail;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,13 +26,12 @@ import java.util.List;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.fragments.contract.LevelDetailContract;
-import bunpro.jp.bunproapp.fragments.contract.LevelDetailController;
+import bunpro.jp.bunproapp.fragments.BaseFragment;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.ui.word.WordDetailFragment;
 
-public class LevelDetailFragment extends BaseFragment implements View.OnClickListener, LevelDetailContract.View {
+public class LevelDetailFragment extends Fragment implements View.OnClickListener, LevelDetailContract.View {
 
     private Context mContext;
     TextView tvName;
@@ -64,7 +63,7 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_level_detail, container, false);
         mContext = getActivity();
-        mController = new LevelDetailController(mContext);
+        mController = new LevelDetailPresenter(mContext);
 
         reviews = ((MainActivity)getActivity()).getReviews();
 
@@ -123,7 +122,7 @@ public class LevelDetailFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btnBack) {
-            popFragment();
+            ((MainActivity)getActivity()).popFragment();
         }
     }
 
