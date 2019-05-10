@@ -34,6 +34,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/settings_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

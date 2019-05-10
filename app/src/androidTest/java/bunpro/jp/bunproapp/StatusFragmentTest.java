@@ -71,4 +71,28 @@ public class StatusFragmentTest {
         onView(withId(R.id.tvReviews)).perform(ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
+
+    @Test
+    public void testStatusTab() {
+        onView(withId(R.id.action_status)).perform(ViewActions.click());
+        onView(withId(R.id.search_fragment)).check(doesNotExist());
+        onView(withId(R.id.settings_fragment)).check(doesNotExist());
+        onView(withId(R.id.status_fragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSearchTab() {
+        onView(withId(R.id.action_search)).perform(ViewActions.click());
+        onView(withId(R.id.status_fragment)).check(doesNotExist());
+        onView(withId(R.id.settings_fragment)).check(doesNotExist());
+        onView(withId(R.id.search_fragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSettingsTab() {
+        onView(withId(R.id.action_settings)).perform(ViewActions.click());
+        onView(withId(R.id.status_fragment)).check(doesNotExist());
+        onView(withId(R.id.search_fragment)).check(doesNotExist());
+        onView(withId(R.id.settings_fragment)).check(matches(isDisplayed()));
+    }
 }

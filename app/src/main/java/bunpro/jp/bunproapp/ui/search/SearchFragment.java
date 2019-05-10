@@ -47,7 +47,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     private StickyHeaderDecoration decor;
     SearchWordAdapter mAdapter;
 
-    SearchContract.Presenter mPresenter;
     List<GrammarPoint> grammarPoints;
     int filter;
 
@@ -122,7 +121,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
                 sfLayout.setRefreshing(true);
 
-                mPresenter.getAllWords(SearchFragment.this, filter);
+                searchPresenter.getAllWords(SearchFragment.this, filter);
             }
         });
 
@@ -134,7 +133,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         sfLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.getAllWords(SearchFragment.this, filter);
+                searchPresenter.getAllWords(SearchFragment.this, filter);
             }
         });
 
