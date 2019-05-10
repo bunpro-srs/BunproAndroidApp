@@ -60,8 +60,8 @@ public class LoginActivityTest {
     @Test
     public void testRightUserCombination() {
         // Getting username and password from environment variable
-        String username = EnvVarLoader.getEnvVar("test_bunpro_login");
-        String password = EnvVarLoader.getEnvVar("test_bunpro_password");
+        String username = BuildConfig.test_bunpro_login;
+        String password = BuildConfig.test_bunpro_password;
         // Entering user/password and try login
         onView(withId(R.id.etEmail)).perform(typeText(!username.isEmpty() ? username : "username"));
         onView(withId(R.id.etPassword)).perform(typeText(!password.isEmpty() ? password : "password"));

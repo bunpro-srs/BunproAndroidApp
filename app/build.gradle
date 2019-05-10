@@ -36,6 +36,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField "String", "test_bunpro_login", System.getenv().containsKey("test_bunpro_login") ? "\"" + System.getenv().get("test_bunpro_login") + "\"" : "\"\"";
+            buildConfigField "String", "test_bunpro_password", System.getenv().containsKey("test_bunpro_password") ? "\"" + System.getenv().get("test_bunpro_password") + "\"" : "\"\"";
+        }
+
     }
 
     compileOptions {
