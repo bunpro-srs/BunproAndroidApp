@@ -24,9 +24,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.fragments.BaseFragment;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.ExampleSentence;
+import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.SettingEvent;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
@@ -113,7 +113,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     private void initialize() {
 
-        selectedPoint = ((MainActivity)getActivity()).getGrammarPoint();
+        selectedPoint = GrammarPoint.getCurrentGrammarPoint();
         if (!isReviewed(selectedPoint)) {
             btnReset.setText("Add to Reviews");
             btnReset.setTag(1003);
@@ -154,7 +154,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     private boolean isReviewed(GrammarPoint point) {
         boolean status = false;
-        List<Review> reviews = ((MainActivity)getActivity()).getReviews();
+        List<Review> reviews = Review.getReviewList();
         if (reviews.size() > 0) {
 
             for (int k=0;k<reviews.size();k++) {
@@ -235,7 +235,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlCopyJapanese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 clipTextToBoard(selectedPoint.title);
                 dialog.dismiss();
             }
@@ -258,6 +257,5 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
                 dialog.dismiss();
             }
         });
-
     }
 }

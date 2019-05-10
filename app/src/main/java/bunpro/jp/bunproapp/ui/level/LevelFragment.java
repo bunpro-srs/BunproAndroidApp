@@ -18,12 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
+import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.ui.level.detail.LevelDetailFragment;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 
-public class LevelFragment extends Fragment implements View.OnClickListener, LevelContract.View {
+public class LevelFragment extends BaseFragment implements View.OnClickListener, LevelContract.View {
     private LevelContract.Presenter levelPresenter;
 
     private TextView tvName;
@@ -71,7 +72,7 @@ public class LevelFragment extends Fragment implements View.OnClickListener, Lev
                 bundle.putInt("lesson", position + 1);
 
                 fragment.setArguments(bundle);
-                ((MainActivity)getActivity()).addFragment(fragment);
+                ((HomeActivity)getActivity()).addFragment(fragment);
             }
         });
 
@@ -92,7 +93,7 @@ public class LevelFragment extends Fragment implements View.OnClickListener, Lev
 
         int id = view.getId();
         if (id == R.id.btnBack) {
-            ((MainActivity)getActivity()).popFragment();
+            ((HomeActivity)getActivity()).popFragment();
         }
     }
 

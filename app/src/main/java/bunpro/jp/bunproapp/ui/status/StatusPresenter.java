@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
@@ -67,12 +67,13 @@ public class StatusPresenter implements StatusContract.Presenter {
                 }
 
                 // TODO: Do not access context within presenter
-                MainActivity activity = (MainActivity) statusView.getContext();
+                HomeActivity activity = (HomeActivity) statusView.getContext();
                 // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
-                status.add(new Status("N2", activity.n2GrammarPointsLearned.size(), activity.n2GrammarPointsTotal.size()));
-                status.add(new Status("N1", activity.n1GrammarPointsLearned.size(), activity.n1GrammarPointsTotal.size()));
+                status.add(new Status("N2", GrammarPoint.getN2GrammarPointsLearned().size(), GrammarPoint.getN2GrammarPointsTotal().size()));
+                status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
                 Status.setStatusList(status);
                 statusView.refresh();
+                statusView.setLoadingProgress(false);
             }
 
             @Override
@@ -91,7 +92,7 @@ public class StatusPresenter implements StatusContract.Presenter {
 
     @Override
     public void fetchReviews() {
-        List<Review> rs = ((MainActivity)statusView.getContext()).getReviews();
+        List<Review> rs = Review.getReviewList();
         if (rs.size() != 0) {
             updateReviewsInfo();
         } else {
@@ -151,10 +152,6 @@ public class StatusPresenter implements StatusContract.Presenter {
         SimpleDateFormat spf= new SimpleDateFormat("hh:mm aaa");
         String dateStr = spf.format(currentTime);
         statusView.updateReviewTime(dateStr);
-        // Fetching review count
-        if (Review.getReviewList().isEmpty()) {
-            Review.setReviewList(((MainActivity)statusView.getContext()).getReviews());
-        }
         int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
         for (Review review : Review.getReviewList()) {
             long remainingHours = review.getRemainingHoursBeforeReview();

@@ -1,11 +1,14 @@
-package bunpro.jp.bunproapp.fragments;
+package bunpro.jp.bunproapp.ui.example;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,31 +24,26 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.fragments.contract.ExampleContract;
-import bunpro.jp.bunproapp.fragments.contract.ExampleController;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.ExampleSentence;
+import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SettingEvent;
 import bunpro.jp.bunproapp.utils.TextUtils;
-import bunpro.jp.bunproapp.models.GrammarPoint;
 
 public class ExampleFragment extends BaseFragment implements View.OnClickListener, ExampleContract.View {
-
+    ExampleContract.Presenter mPresenter;
     private Context mContext;
 
     LinearLayout llEnglish, llJapanese, llKanjiReadings;
     TextView tvEnglish, tvJapanese;
     Button btnBack;
 
-    ExampleContract.Controller mController;
-    GrammarPoint selectedPoint;
     ExampleSentence selectedSentence;
 
     RecyclerView rvWords;
@@ -70,8 +68,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_example, container, false);
         mContext = getActivity();
-        mController = new ExampleController(mContext);
-        selectedPoint = null;
+        mPresenter = new ExamplePresenter(mContext);
         return rootView;
     }
 
@@ -99,7 +96,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
         rvWords.setItemAnimator(new DefaultItemAnimator());
 
         kanjis = new ArrayList<>();
-        mAdapter = new KanjiWordAdapter(kanjis, new ClickListener() {
+        mAdapter = new KanjiWordAdapter(kanjis, new KanjiWordAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
 
@@ -115,7 +112,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
     private void initialize() {
 
-        selectedSentence = ((MainActivity)getActivity()).getExampleSentence();
+        selectedSentence = ExampleSentence.getCurrentExampleSentence();
         if (selectedSentence != null) {
             String english = TextUtils.stripHtml(selectedSentence.english);
             english = TextUtils.removeSub(english);
@@ -166,7 +163,7 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
 
 
         if (id == R.id.btnBack) {
-            popFragment();
+            ((HomeActivity)getActivity()).popFragment();
         }
     }
 
@@ -287,72 +284,9 @@ public class ExampleFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    protected void clipTextToBoard(String text) {
-        super.clipTextToBoard(text);
-    }
-
-    class KanjiWordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        List<String> kanjis;
-        ClickListener listener;
-
-        KanjiWordAdapter(List<String> kanjis, ClickListener listener) {
-            this.kanjis = kanjis;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-            return new WordViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kanji_word, viewGroup, false), listener);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
-            String word = kanjis.get(i);
-            ((WordViewHolder)viewHolder).tvWord.setText(word);
-        }
-
-        @Override
-        public int getItemCount() {
-            return kanjis.size();
-        }
-
-        void update(List<String> kanjis) {
-            this.kanjis = kanjis;
-        }
-    }
-
-    class WordViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
-
-        LinearLayout llContainer;
-        TextView tvWord;
-        WeakReference<ClickListener> ref;
-
-
-        WordViewHolder(@NonNull View itemView, ClickListener listener) {
-            super(itemView);
-
-            ref = new WeakReference<>(listener);
-            llContainer = itemView.findViewById(R.id.llContainer);
-            llContainer.setOnClickListener(this);
-            tvWord = itemView.findViewById(R.id.tvWord);
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            int id = view.getId();
-            if (id == R.id.llContainer) {
-                ref.get().positionClicked(getAdapterPosition());
-            }
-
-        }
-    }
-
-    interface ClickListener {
-        void positionClicked(int position);
+    public void clipTextToBoard(String text) {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Bunpro", text);
+        clipboard.setPrimaryClip(clip);
     }
 }

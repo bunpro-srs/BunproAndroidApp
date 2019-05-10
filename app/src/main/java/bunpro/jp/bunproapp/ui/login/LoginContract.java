@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.activities.contract;
+package bunpro.jp.bunproapp.ui.login;
 
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
@@ -9,7 +9,7 @@ public interface LoginContract {
         void gotoMain();
     }
 
-    interface Controller {
+    interface Presenter {
         void login(String email, String password, final SimpleCallbackListener callback);
         void configureSettings(final SimpleCallbackListener callback);
     }

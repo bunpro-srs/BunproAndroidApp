@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.fragments;
+package bunpro.jp.bunproapp.ui;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 
 public class BaseFragment extends Fragment {
 
@@ -42,7 +42,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected void popFragment() {
-        ((MainActivity)getActivity()).popFragment();
+        ((HomeActivity)getActivity()).popFragment();
 //        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0){
 //            boolean done = getActivity().getSupportFragmentManager().popBackStackImmediate();
 //        }

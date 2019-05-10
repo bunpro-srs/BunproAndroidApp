@@ -10,7 +10,7 @@ public interface LevelDetailContract {
         void updateGrammarPoints(List<GrammarPoint> pointList);
     }
 
-    interface Controller {
-        void getGrammarPoints(int position, LevelDetailContract.View v);
+    interface Presenter {
+        void pickGrammarPoint(int position);
     }
 }

@@ -19,7 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.models.GrammarPoint;
+import bunpro.jp.bunproapp.models.Review;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.ui.level.LevelFragment;
 import bunpro.jp.bunproapp.models.Status;
 
@@ -32,8 +34,8 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
         this.clickListener = new ClickListener() {
             @Override
             public void positionClicked(int position) {
-                MainActivity mainActivity = (MainActivity)context;
-                if (mainActivity.getGrammarPoints().isEmpty() || mainActivity.getReviews().isEmpty()) {
+                HomeActivity homeActivity = (HomeActivity)context;
+                if (GrammarPoint.getGrammarPointList().isEmpty() || Review.getReviewList().isEmpty()) {
                     Toast.makeText(context, "Grammar points and reviews are not loaded yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -50,7 +52,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusView
                 }
 
                 fragment.setArguments(bundle);
-                mainActivity.addFragment(fragment);
+                homeActivity.addFragment(fragment);
             }
         };
     }

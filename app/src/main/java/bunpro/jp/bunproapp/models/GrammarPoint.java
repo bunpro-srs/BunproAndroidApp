@@ -8,8 +8,14 @@ import java.util.Map;
 
 public class GrammarPoint {
     private static List<GrammarPoint> grammarPointList = new ArrayList<>();
+    private static GrammarPoint currentGrammarPoint;
     private static List<List<GrammarPoint>> arrangedGrammarPointList = new ArrayList<>();
     private static Map<String, List<GrammarPoint>> pointsByLesson = new HashMap<>();
+    /* Temporary workaround for non working API endpoint */
+    private static List<Integer> n2GrammarPointsLearned = new ArrayList<>();
+    private static List<Integer> n1GrammarPointsLearned = new ArrayList<>();
+    private static List<Integer> n2GrammarPointsTotal = new ArrayList<>();
+    private static List<Integer> n1GrammarPointsTotal = new ArrayList<>();
 
     public int id;
     public String title;
@@ -75,6 +81,13 @@ public class GrammarPoint {
         GrammarPoint.grammarPointList.addAll(grammarPointList);
     }
 
+    public static GrammarPoint getCurrentGrammarPoint() {
+        return currentGrammarPoint;
+    }
+    public static void setCurrentGrammarPoint(GrammarPoint currentGrammarPoint) {
+        GrammarPoint.currentGrammarPoint = currentGrammarPoint;
+    }
+
     public static List<List<GrammarPoint>> getArrangedGrammarPointList() {
         return arrangedGrammarPointList;
     }
@@ -89,5 +102,33 @@ public class GrammarPoint {
     public static void setPointsByLessonMap(Map<String, List<GrammarPoint>> pointsByLesson) {
         GrammarPoint.pointsByLesson.clear();
         GrammarPoint.pointsByLesson.putAll(pointsByLesson);
+    }
+
+    /* Temporary workaround for non working API endpoint */
+    public static List<Integer> getN2GrammarPointsLearned() {
+        return n2GrammarPointsLearned;
+    }
+    public static void setN2GrammarPointsLearned(List<Integer> n2GrammarPointsLearned) {
+        GrammarPoint.n2GrammarPointsLearned = n2GrammarPointsLearned;
+    }
+    public static List<Integer> getN1GrammarPointsLearned() {
+        return n1GrammarPointsLearned;
+    }
+    public static void setN1GrammarPointsLearned(List<Integer> n1GrammarPointsLearned) {
+        GrammarPoint.n1GrammarPointsLearned = n1GrammarPointsLearned;
+    }
+    public static List<Integer> getN2GrammarPointsTotal() {
+        return n2GrammarPointsTotal;
+    }
+    public static void setN2GrammarPointsTotal(List<Integer> n2GrammarPointsTotal) {
+        GrammarPoint.n2GrammarPointsTotal = n2GrammarPointsTotal;
+    }
+
+    public static List<Integer> getN1GrammarPointsTotal() {
+        return n1GrammarPointsTotal;
+    }
+
+    public static void setN1GrammarPointsTotal(List<Integer> n1GrammarPointsTotal) {
+        GrammarPoint.n1GrammarPointsTotal = n1GrammarPointsTotal;
     }
 }

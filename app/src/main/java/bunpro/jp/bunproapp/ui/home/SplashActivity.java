@@ -1,9 +1,10 @@
-package bunpro.jp.bunproapp.activities;
+package bunpro.jp.bunproapp.ui.home;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import bunpro.jp.bunproapp.ui.login.LoginActivity;
 import bunpro.jp.bunproapp.utils.UserData;
 
 public class SplashActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
-            Intent mainIntent = new Intent(this, MainActivity.class);
+            Intent mainIntent = new Intent(this, HomeActivity.class);
             startActivity(mainIntent);
         }
 

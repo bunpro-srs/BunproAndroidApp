@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,14 +28,15 @@ import java.util.List;
 import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
+import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.UserData;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
-public class StatusFragment extends Fragment implements StatusContract.View, View.OnClickListener {
+public class StatusFragment extends BaseFragment implements StatusContract.View, View.OnClickListener {
     private StatusContract.Presenter statusPresenter;
     private Context context;
     // TODO: Remove accessor
@@ -187,9 +187,9 @@ public class StatusFragment extends Fragment implements StatusContract.View, Vie
 
     @Override
     public void updateReviews(List<Review> reviews) {
-        MainActivity mainActivity = ((MainActivity)context);
-        if (mainActivity != null) {
-            mainActivity.setReviews(reviews);
+        HomeActivity homeActivity = ((HomeActivity)context);
+        if (homeActivity != null) {
+            Review.setReviewList(reviews);
         } else {
             Log.e("Null activity", "Getting a null activity when trying to update the status !");
         }

@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.activities;
+package bunpro.jp.bunproapp.ui.login;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,19 +9,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import bunpro.jp.bunproapp.activities.contract.LoginContract;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import bunpro.jp.bunproapp.utils.UserData;
 import bunpro.jp.bunproapp.service.ApiService;
 
-public class LoginController implements LoginContract.Controller {
+public class LoginPresenter implements LoginContract.Presenter {
 
     private ApiService apiService;
     private Context mContext;
 
-    public LoginController(Context context) {
+    public LoginPresenter(Context context) {
         mContext = context;
     }
 

@@ -22,8 +22,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.LoginActivity;
-import bunpro.jp.bunproapp.fragments.BaseFragment;
+import bunpro.jp.bunproapp.ui.login.LoginActivity;
+import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.AppData;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SettingEvent;

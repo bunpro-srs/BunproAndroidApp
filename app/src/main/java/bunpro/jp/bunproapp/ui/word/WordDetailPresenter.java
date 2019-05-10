@@ -1,11 +1,9 @@
 package bunpro.jp.bunproapp.ui.word;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import bunpro.jp.bunproapp.activities.MainActivity;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
@@ -22,7 +20,7 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
     @Override
     public Review getReview(GrammarPoint point) {
         Review review = null;
-        List<Review> reviews = ((MainActivity) wordDetailView.getContext()).getReviews();
+        List<Review> reviews = Review.getReviewList();
         if (reviews.size() > 0) {
             for (Review r : reviews) {
                 if (r.grammar_point_id == point.id) {

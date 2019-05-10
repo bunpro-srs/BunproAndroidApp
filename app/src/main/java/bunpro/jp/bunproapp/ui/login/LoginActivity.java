@@ -1,4 +1,4 @@
-package bunpro.jp.bunproapp.activities;
+package bunpro.jp.bunproapp.ui.login;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.wuadam.awesomewebview.AwesomeWebView;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.activities.contract.LoginContract;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.utils.Constants;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 import butterknife.BindView;
@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @BindView(R.id.spin_kit) SpinKitView progressBar;
 
-    LoginContract.Controller mController;
+    LoginContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         ButterKnife.bind(this);
         loadingProgress(false);
 
-        mController = new LoginController(this);
+        mPresenter = new LoginPresenter(this);
 
     }
 
@@ -57,11 +57,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(email)) {
             // Attempt to login
-            mController.login(email, password, new SimpleCallbackListener() {
+            mPresenter.login(email, password, new SimpleCallbackListener() {
                 @Override
                 public void success() {
                     // Attempt to fetch user settings and configure the local ones
-                    mController.configureSettings(new SimpleCallbackListener() {
+                    mPresenter.configureSettings(new SimpleCallbackListener() {
                         @Override
                         public void success() {
                             gotoMain();
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void gotoMain() {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
     }

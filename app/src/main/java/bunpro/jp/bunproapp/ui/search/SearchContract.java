@@ -1,4 +1,6 @@
-package bunpro.jp.bunproapp.fragments.contract;
+package bunpro.jp.bunproapp.ui.search;
+
+import android.content.Context;
 
 import java.util.List;
 
@@ -7,11 +9,12 @@ import bunpro.jp.bunproapp.models.GrammarPoint;
 public interface SearchContract {
 
     interface View {
+        Context getContext();
         void showError(String msg);
         void updateView(List<GrammarPoint> points);
     }
 
-    interface Controller {
+    interface Presenter {
         void getAllWords(SearchContract.View v, int filter);
     }
 }

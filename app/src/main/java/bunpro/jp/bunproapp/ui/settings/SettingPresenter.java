@@ -8,21 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import bunpro.jp.bunproapp.activities.MainActivity;
-import bunpro.jp.bunproapp.models.GrammarPoint;
-import bunpro.jp.bunproapp.models.Review;
-import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
-import bunpro.jp.bunproapp.service.JsonParser;
-import bunpro.jp.bunproapp.ui.status.StatusContract;
-import bunpro.jp.bunproapp.ui.status.StatusModel;
 import bunpro.jp.bunproapp.utils.UserData;
 
 public class SettingPresenter implements SettingContract.Presenter {
