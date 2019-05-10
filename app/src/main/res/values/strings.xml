@@ -49,4 +49,6 @@
     <string name="never">Never</string>
     <string name="wanikani">WaniKani</string>
     <string name="settings_update">Updated user settings</string>
+    <string name="cram">Cram</string>
+    <string name="study">Study</string>
 </resources>

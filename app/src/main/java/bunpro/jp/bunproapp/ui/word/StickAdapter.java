@@ -298,7 +298,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ivIndicator.setOnClickListener(this);
             ivIndicator.setTag(true);
 
-            container = itemView.findViewById(R.id.main_container);
+            container = itemView.findViewById(R.id.word_main_container);
             llReadingContainer = itemView.findViewById(R.id.llReadingContainer);
             llReadingContainer.setOnClickListener(this);
 
