@@ -1,10 +1,13 @@
 package bunpro.jp.bunproapp.models;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import io.realm.RealmObject;
 
 public class SupplementalLink extends RealmObject {
+    private static List<SupplementalLink> supplementalLinkList = new ArrayList<>();
 
     public int id;
     public String type;
@@ -24,4 +27,11 @@ public class SupplementalLink extends RealmObject {
         }
     };
 
+    public static List<SupplementalLink> getSupplementalLinkList() {
+        return supplementalLinkList;
+    }
+    public static void setSupplementalLinkList(List<SupplementalLink> supplementalLinkList) {
+        SupplementalLink.supplementalLinkList.clear();
+        SupplementalLink.supplementalLinkList.addAll(supplementalLinkList);
+    }
 }

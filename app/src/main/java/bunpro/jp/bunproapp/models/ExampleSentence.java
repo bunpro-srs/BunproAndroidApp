@@ -1,8 +1,12 @@
 package bunpro.jp.bunproapp.models;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class ExampleSentence {
+    private static List<ExampleSentence> exampleSentenceList = new ArrayList<>();
+    private static ExampleSentence currentExampleSentence;
 
     public int id;
     public int grammar_point_id;
@@ -30,4 +34,19 @@ public class ExampleSentence {
             }
         }
     };
+
+    public static List<ExampleSentence> getExampleSentenceList() {
+        return exampleSentenceList;
+    }
+    public static void setExampleSentenceList(List<ExampleSentence> exampleSentenceList) {
+        ExampleSentence.exampleSentenceList.clear();
+        ExampleSentence.exampleSentenceList.addAll(exampleSentenceList);
+    }
+
+    public static ExampleSentence getCurrentExampleSentence() {
+        return currentExampleSentence;
+    }
+    public static void setCurrentExampleSentence(ExampleSentence currentExampleSentence) {
+        ExampleSentence.currentExampleSentence = currentExampleSentence;
+    }
 }

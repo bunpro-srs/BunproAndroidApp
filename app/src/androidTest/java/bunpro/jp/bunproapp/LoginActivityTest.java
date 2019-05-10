@@ -11,8 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import bunpro.jp.bunproapp.activities.LoginActivity;
-import bunpro.jp.bunproapp.utils.EnvVarLoader;
+import bunpro.jp.bunproapp.ui.login.LoginActivity;
 import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 
 import static androidx.test.espresso.Espresso.onView;
