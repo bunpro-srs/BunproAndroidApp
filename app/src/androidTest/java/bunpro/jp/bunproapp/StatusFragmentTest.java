@@ -16,6 +16,7 @@ import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -49,26 +50,26 @@ public class StatusFragmentTest {
 
     @Test
     public void testSectionsVisibility() {
-        onView(withId(R.id.cram)).check(matches(isDisplayed()));
-        onView(withId(R.id.study)).check(matches(isDisplayed()));
-        onView(withId(R.id.llReview)).check(matches(isDisplayed()));
+        onView(withId(R.id.cram)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.study)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.llReview)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
     public void testCramLink() {
-        onView(withText(R.string.cram)).perform(ViewActions.click());
+        onView(withText(R.string.cram)).perform(scrollTo(), ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testStudyLink() {
-        onView(withText(R.string.study)).perform(ViewActions.click());
+        onView(withText(R.string.study)).perform(scrollTo(), ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testReviewLink() {
-        onView(withId(R.id.tvReviews)).perform(ViewActions.click());
+        onView(withId(R.id.tvReviews)).perform(scrollTo(), ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
