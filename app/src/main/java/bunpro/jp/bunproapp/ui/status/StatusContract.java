@@ -14,7 +14,6 @@ public interface StatusContract {
         void setLoadingProgress(boolean loading);
         void showError(String msg);
         void updateUsername(String username);
-        void updateReviews(List<Review> reviews);
         void updateReviewTime(String dateUpdated);
         void updateReviewNumbers(int currentReviews, int hourReviews, int dayReviews);
         void updateBadge(int count);

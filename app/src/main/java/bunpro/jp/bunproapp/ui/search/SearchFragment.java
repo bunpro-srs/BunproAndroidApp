@@ -47,7 +47,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
     private StickyHeaderDecoration decor;
     SearchWordAdapter mAdapter;
 
-    List<GrammarPoint> grammarPoints;
     int filter;
 
     public SearchFragment() {
@@ -81,9 +80,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         LayoutManager layoutManager = new LinearLayoutManager(context);
         rvWords.setLayoutManager(layoutManager);
 
-        grammarPoints = new ArrayList<>();
-
-        mAdapter = new SearchWordAdapter(grammarPoints, context, new SearchWordAdapter.ItemClickListener() {
+        mAdapter = new SearchWordAdapter(GrammarPoint.getGrammarPointList(), context, new SearchWordAdapter.ItemClickListener() {
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
@@ -93,7 +90,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
                 }
 
                 Fragment fragment = WordDetailFragment.newInstance();
-                GrammarPoint.setCurrentGrammarPoint(grammarPoints.get(position));
+                GrammarPoint.setCurrentGrammarPoint(GrammarPoint.getGrammarPointList().get(position));
                 homeActivity.addFragment(fragment);
             }
         });
@@ -157,15 +154,12 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
     @Override
     public void updateView(List<GrammarPoint> points) {
-
         if (sfLayout.isRefreshing()) {
             sfLayout.setRefreshing(false);
         }
 
-        grammarPoints = points;
-        mAdapter.update(grammarPoints);
+        mAdapter.update(points);
         mAdapter.notifyDataSetChanged();
-
     }
 
 }

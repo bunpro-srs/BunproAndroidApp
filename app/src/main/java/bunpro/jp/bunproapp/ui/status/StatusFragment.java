@@ -186,19 +186,6 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
     }
 
     @Override
-    public void updateReviews(List<Review> reviews) {
-        HomeActivity homeActivity = ((HomeActivity)context);
-        if (homeActivity != null) {
-            Review.setReviewList(reviews);
-        } else {
-            Log.e("Null activity", "Getting a null activity when trying to update the status !");
-        }
-        if (spinKitView.isShown()) {
-            spinKitView.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
     public void updateReviewTime(String dateUpdated) {
         tvReviewTimeTextView.setText(String.format("Updated: Today, %s", dateUpdated));
     }
@@ -208,6 +195,9 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         tvReviews.setText(String.format("%s Reviews", String.valueOf(currentReviews)));
         tvUpdate1Hour.setText(String.format("+%s", String.valueOf(hourReviews)));
         tvUpdate24Hours.setText(String.format("+%s", String.valueOf(dayReviews)));
+        if (spinKitView.isShown()) {
+            spinKitView.setVisibility(View.GONE);
+        }
     }
 
     @Override

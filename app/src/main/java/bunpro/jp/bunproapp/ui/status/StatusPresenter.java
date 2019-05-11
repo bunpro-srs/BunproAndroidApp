@@ -145,8 +145,6 @@ public class StatusPresenter implements StatusContract.Presenter {
 
     @Override
     public void updateReviewsInfo() {
-        // Updating reviews
-        statusView.updateReviews(Review.getReviewList());
         // Updating last review time
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat spf= new SimpleDateFormat("hh:mm aaa");
