@@ -114,7 +114,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
                 sfLayout.setRefreshing(true);
 
-                searchPresenter.getAllWords(SearchFragment.this, filter);
+                searchPresenter.getAllWords(filter);
             }
         });
 
@@ -126,7 +126,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         sfLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                searchPresenter.getAllWords(SearchFragment.this, filter);
+                searchPresenter.getAllWords(filter);
             }
         });
 

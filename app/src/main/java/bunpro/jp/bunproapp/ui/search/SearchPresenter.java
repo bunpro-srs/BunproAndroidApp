@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.ui.search;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -28,30 +29,31 @@ public class SearchPresenter implements SearchContract.Presenter {
 
 
     @Override
-    public void getAllWords(final SearchContract.View v, final int filter) {
+    public void getAllWords(final int filter) {
         List<GrammarPoint> grammarPoints = GrammarPoint.getGrammarPointList();
         if (grammarPoints.size() == 0) {
             ApiService apiService = new ApiService(searchView.getContext());
             apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
                 @Override
                 public void success(JSONObject jsonObject) {
-
+                    Log.e("API Format changed", "JSONObject obtained instead of an JSONArray ! (Search grammar points)");
                 }
 
                 @Override
                 public void successAsJSONArray(JSONArray jsonArray) {
                     searchGrammarPoints = JsonParser.getInstance(searchView.getContext()).parseGrammarPoints(jsonArray);
-                    v.updateView(filtering(filter));
+                    searchView.updateView(filtering(filter));
                 }
 
                 @Override
                 public void error(ANError anError) {
-                    v.showError(anError.getErrorDetail());
+                    searchView.showError(anError.getErrorDetail());
                 }
             });
 
         } else {
-            v.updateView(filtering(filter));
+            searchGrammarPoints = GrammarPoint.getGrammarPointList();
+            searchView.updateView(filtering(filter));
         }
     }
 

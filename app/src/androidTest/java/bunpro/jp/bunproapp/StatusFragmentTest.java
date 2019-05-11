@@ -1,10 +1,21 @@
 package bunpro.jp.bunproapp;
 
+import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
+
+import androidx.core.widget.NestedScrollView;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ScrollToAction;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,9 +30,13 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anyOf;
 
 @RunWith(AndroidJUnit4.class)
 public class StatusFragmentTest {
@@ -50,26 +65,26 @@ public class StatusFragmentTest {
 
     @Test
     public void testSectionsVisibility() {
-        onView(withId(R.id.cram)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.study)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.llReview)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.cram)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.study)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.llReview)).perform(customScrollTo).check(matches(isDisplayed()));
     }
 
     @Test
     public void testCramLink() {
-        onView(withText(R.string.cram)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.cram)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testStudyLink() {
-        onView(withText(R.string.study)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.study)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testReviewLink() {
-        onView(withId(R.id.tvReviews)).perform(scrollTo(), ViewActions.click());
+        onView(withId(R.id.tvReviews)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.status_fragment)).check(doesNotExist());
     }
 
@@ -96,4 +111,23 @@ public class StatusFragmentTest {
         onView(withId(R.id.search_fragment)).check(doesNotExist());
         onView(withId(R.id.settings_fragment)).check(matches(isDisplayed()));
     }
+
+    private ViewAction customScrollTo = new ViewAction() {
+        @Override
+        public Matcher<View> getConstraints() {
+            return CoreMatchers.allOf(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE), isDescendantOfA(anyOf(
+                    isAssignableFrom(ScrollView.class),
+                    isAssignableFrom(HorizontalScrollView.class),
+                    isAssignableFrom(NestedScrollView.class)))
+            );
+        }
+        @Override
+        public String getDescription() {
+            return null;
+        }
+        @Override
+        public void perform(UiController uiController, View view) {
+            new ScrollToAction().perform(uiController, view);
+        }
+    };
 }

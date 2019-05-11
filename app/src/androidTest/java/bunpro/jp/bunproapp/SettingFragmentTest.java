@@ -1,15 +1,21 @@
 package bunpro.jp.bunproapp;
 
 import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ScrollToAction;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -30,8 +36,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -70,20 +78,20 @@ public class SettingFragmentTest {
 
     @Test
     public void testSectionsVisibility() {
-        onView(withId(R.id.rlFurigana)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlHideEnglish)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlBunnyMode)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlSubscription)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlCommunity)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlAbout)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlContact)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlPrivacy)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.rlTerms)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.rlFurigana)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlHideEnglish)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlBunnyMode)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlSubscription)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlCommunity)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlAbout)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlContact)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlPrivacy)).perform(customScrollTo).check(matches(isDisplayed()));
+        onView(withId(R.id.rlTerms)).perform(customScrollTo).check(matches(isDisplayed()));
     }
 
     @Test
     public void testToggleFurigana() {
-        onView(withId(R.id.rlFurigana)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.rlFurigana)).perform(customScrollTo).check(matches(isDisplayed()));
         String furiganaText = getTextFromMatcher(withId(R.id.tvFurigana));
         // Hitting cancel
         onView(withId(R.id.rlFurigana)).perform(ViewActions.click());
@@ -109,7 +117,7 @@ public class SettingFragmentTest {
 
     @Test
     public void testHideEnglish() {
-        onView(withId(R.id.rlHideEnglish)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.rlHideEnglish)).perform(customScrollTo).check(matches(isDisplayed()));
         String hideEnglishText = getTextFromMatcher(withId(R.id.tvHideEnglish));
         // Hitting cancel
         onView(withId(R.id.rlHideEnglish)).perform(ViewActions.click());
@@ -131,7 +139,7 @@ public class SettingFragmentTest {
 
     @Test
     public void testBunnyMode() {
-        onView(withId(R.id.rlBunnyMode)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.rlBunnyMode)).perform(customScrollTo).check(matches(isDisplayed()));
         String bunnyModeText = getTextFromMatcher(withId(R.id.tvBunnyMode));
         // Hitting cancel
         onView(withId(R.id.rlBunnyMode)).perform(ViewActions.click());
@@ -153,37 +161,37 @@ public class SettingFragmentTest {
 
     @Test
     public void testCommunityLink() {
-        onView(withText(R.string.community)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.community)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testAboutLink() {
-        onView(withText(R.string.about)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.about)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testContactLink() {
-        onView(withText(R.string.contact)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.contact)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testPrivacyLink() {
-        onView(withText(R.string.privacy)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.privacy)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testTermsLink() {
-        onView(withText(R.string.terms_and_conditions)).perform(scrollTo(), ViewActions.click());
+        onView(withText(R.string.terms_and_conditions)).perform(customScrollTo, ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
     }
 
     @Test
     public void testLogout() {
-        onView(withId(R.id.rlLogout)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.rlLogout)).perform(customScrollTo).check(matches(isDisplayed()));
         // Hitting cancel
         onView(withText(R.string.logout)).perform(ViewActions.click());
         onView(withId(R.id.logout_layout)).check(matches(isDisplayed()));
@@ -217,4 +225,23 @@ public class SettingFragmentTest {
         });
         return stringHolder[0];
     }
+
+    private ViewAction customScrollTo = new ViewAction() {
+        @Override
+        public Matcher<View> getConstraints() {
+            return CoreMatchers.allOf(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE), isDescendantOfA(anyOf(
+                    isAssignableFrom(ScrollView.class),
+                    isAssignableFrom(HorizontalScrollView.class),
+                    isAssignableFrom(NestedScrollView.class)))
+            );
+        }
+        @Override
+        public String getDescription() {
+            return null;
+        }
+        @Override
+        public void perform(UiController uiController, View view) {
+            new ScrollToAction().perform(uiController, view);
+        }
+    };
 }

@@ -15,6 +15,6 @@ public interface SearchContract {
     }
 
     interface Presenter {
-        void getAllWords(SearchContract.View v, int filter);
+        void getAllWords(int filter);
     }
 }
