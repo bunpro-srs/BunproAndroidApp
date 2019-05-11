@@ -7,11 +7,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 import bunpro.jp.bunproapp.ui.login.LoginActivity;
 import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
