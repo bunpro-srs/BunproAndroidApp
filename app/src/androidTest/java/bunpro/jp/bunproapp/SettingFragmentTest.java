@@ -3,21 +3,25 @@ package bunpro.jp.bunproapp;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.web.webdriver.Locator;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.runner.RunWith;
 
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
+import bunpro.jp.bunproapp.ui.login.LoginPresenter;
 import bunpro.jp.bunproapp.ui.settings.SettingFragment;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -27,21 +31,40 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
-import static androidx.test.espresso.web.sugar.Web.onWebView;
-import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
-import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.allOf;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(AndroidJUnit4.class)
 public class SettingFragmentTest {
     @Rule
     public ActivityTestRule<HomeActivity> activityRule = new ActivityTestRule<>(HomeActivity.class);
 
     @Before
-    public void setup() {
+    public void login() {
+        IdlingRegistry.getInstance().register(EspressoTestingIdlingResource.getIdlingResource("login_and_loading"));
+        IdlingRegistry.getInstance().register(EspressoTestingIdlingResource.getIdlingResource("logout"));
+        // Getting username and password from environment variable
+        String username = BuildConfig.test_bunpro_login;
+        String password = BuildConfig.test_bunpro_password;
+        // Executing login
+        LoginPresenter loginPresenter = new LoginPresenter(activityRule.getActivity());
+        loginPresenter.login(username, password, new SimpleCallbackListener() {
+            @Override
+            public void success() {
+                EspressoTestingIdlingResource.decrement("login_and_loading");
+            }
+            @Override
+            public void error(String errorMessage) {
+                EspressoTestingIdlingResource.decrement("login_and_loading");
+            }
+        });
+        // Going to setting fragment
         activityRule.getActivity().replaceFragment(new SettingFragment());
+    }
+
+    @After
+    public void unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoTestingIdlingResource.getIdlingResource("login_and_loading"));
+        IdlingRegistry.getInstance().unregister(EspressoTestingIdlingResource.getIdlingResource("logout"));
     }
 
     @Test
@@ -131,45 +154,34 @@ public class SettingFragmentTest {
     public void testCommunityLink() {
         onView(withText(R.string.community)).perform(ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "category-list")).check(webMatches(getText(), containsString("Bunpro")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "category-list")).check(webMatches(getText(), containsString("Japanese")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "category-list")).check(webMatches(getText(), containsString("Grammar Points")));
     }
 
     @Test
     public void testAboutLink() {
         onView(withText(R.string.about)).perform(ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
-        onWebView().withElement(findElement(Locator.ID, "topic-title")).check(webMatches(getText(), containsString("About Bunpro")));
     }
 
     @Test
     public void testContactLink() {
         onView(withText(R.string.contact)).perform(ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "contact")).check(webMatches(getText(), containsString("Contact")));
     }
 
     @Test
     public void testPrivacyLink() {
         onView(withText(R.string.privacy)).perform(ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "privacy")).check(webMatches(getText(), containsString("Disclaimer")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "privacy")).check(webMatches(getText(), containsString("Email")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "privacy")).check(webMatches(getText(), containsString("Security")));
     }
 
     @Test
     public void testTermsLink() {
         onView(withText(R.string.terms_and_conditions)).perform(ViewActions.click());
         onView(withId(R.id.settings_fragment)).check(doesNotExist());
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "terms")).check(webMatches(getText(), containsString("Terms")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "terms")).check(webMatches(getText(), containsString("Disclaimer")));
-        onWebView().withElement(findElement(Locator.CLASS_NAME, "terms")).check(webMatches(getText(), containsString("Limitations")));
     }
 
     @Test
-    public void zTestLogout() {
+    public void testLogout() {
         onView(withId(R.id.rlLogout)).check(matches(isDisplayed()));
         // Hitting cancel
         onView(withText(R.string.logout)).perform(ViewActions.click());

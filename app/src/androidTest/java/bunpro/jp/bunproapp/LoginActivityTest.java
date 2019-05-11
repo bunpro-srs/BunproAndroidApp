@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import bunpro.jp.bunproapp.ui.login.LoginActivity;
 import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
@@ -21,6 +22,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+@RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
     @Rule
     public ActivityTestRule activityRule = new ActivityTestRule<>(LoginActivity.class);

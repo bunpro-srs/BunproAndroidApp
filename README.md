@@ -4,6 +4,12 @@
 
 This is the Android application for the [Bunpro](https://bunpro.jp/) japanese grammar learning service.
 
+## Testing
+
+To launch the instrumentation tests, you can type in your shell the following command to test everything:
+"test_bunpro_login=*LOGIN* test_bunpro_password=*PASSWORD* ./gradlew connectedAndroidTest"
+Or you can test only a specific class: "test_bunpro_login=*LOGIN* test_bunpro_password=*PASSWORD* ./gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=bunpro.jp.bunproapp.LoginActivityTest"
+
 ## Contributing
 
 The project use the [Github issues](https://github.com/bunpro-srs/BunproAndroidApp/issues) to track down the bugs and log upcoming features.

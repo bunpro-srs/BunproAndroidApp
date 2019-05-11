@@ -22,6 +22,7 @@ public class SettingPresenter implements SettingContract.Presenter {
 
     @Override
     public void logout() {
+        EspressoTestingIdlingResource.increment("logout");
         settingsView.setLoadingProgress(true);
 
         ApiService apiService = new ApiService(settingsView.getContext());
@@ -31,12 +32,14 @@ public class SettingPresenter implements SettingContract.Presenter {
                 settingsView.setLoadingProgress(false);
                 UserData.getInstance(settingsView.getContext()).removeUser();
                 settingsView.goToLogin();
+                EspressoTestingIdlingResource.decrement("logout");
             }
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 settingsView.setLoadingProgress(false);
                 Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User reviews)");
+                EspressoTestingIdlingResource.decrement("logout");
             }
 
             @Override
@@ -58,7 +61,7 @@ public class SettingPresenter implements SettingContract.Presenter {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                EspressoTestingIdlingResource.decrement("logout");
             }
         });
     }
