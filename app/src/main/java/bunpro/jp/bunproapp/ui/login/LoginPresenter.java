@@ -42,7 +42,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                         callback.success();
                         return;
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("JSONException", "Login result could not be parsed.");
                         errorMessage = "Unable to parse JSON Bunpro API token !";
                     }
                 } else {
@@ -54,7 +54,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                             errorMessage = obj.getString("detail");
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("JSONException", "Login error result could not be parsed.");
                     }
                 }
                 callback.error(errorMessage);
@@ -120,7 +120,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                     }
                     callback.success();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("JSONException", "Setting update response could not be parsed.");
                     callback.error("Unable to parse user settings JSON response !");
                 }
             }

@@ -176,7 +176,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             mediaPlayer.setDataSource(context, uri);
                             mediaPlayer.prepare();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Log.e("IOException", "Error while setting mediaplayer.");
                         }
                         if (tag) {
 

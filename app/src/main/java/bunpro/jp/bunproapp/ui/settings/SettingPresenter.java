@@ -59,7 +59,7 @@ public class SettingPresenter implements SettingContract.Presenter {
                         settingsView.showError(errorBody);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("JSONException", "Logout error response could not be parsed.");
                 }
                 EspressoTestingIdlingResource.decrement("logout");
             }
@@ -100,7 +100,7 @@ public class SettingPresenter implements SettingContract.Presenter {
                         settingsView.showError(errorBody);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("JSONException", "Setting update error response could not be parsed.");
                 }
             }
         });

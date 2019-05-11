@@ -56,7 +56,7 @@ public class StatusPresenter implements StatusContract.Presenter {
                         sk = jsonArray.getInt(0);
                         tk = jsonArray.getInt(1);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("JSONException", "Progress status response could not be parsed.");
                     }
 
                     Status s = new Status(key, sk, tk);

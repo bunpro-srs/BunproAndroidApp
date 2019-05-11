@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -184,7 +185,7 @@ public class ApiService {
                         try {
                             listener.successAsJSONArray(response.getJSONArray("data"));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("JSONException", "All grammar points could not be parsed.");
                         }
                     }
                     @Override
@@ -210,7 +211,7 @@ public class ApiService {
                         try {
                             listener.successAsJSONArray(response.getJSONArray("data"));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("JSONException", "All example sentences could not be parsed.");
                         }
                     }
                     @Override
@@ -236,7 +237,7 @@ public class ApiService {
                         try {
                             listener.successAsJSONArray(response.getJSONArray("data"));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("JSONException", "All supplemental links could not be parsed.");
                         }
                     }
                     @Override
