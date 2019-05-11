@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bunpro.jp.bunproapp.service.ApiService;
+import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.UserData;
 
 public class SettingPresenter implements SettingContract.Presenter {
@@ -64,7 +65,6 @@ public class SettingPresenter implements SettingContract.Presenter {
 
     @Override
     public void submitSettings(String hideEnglish, String furigana, String lightMode, String bunnyMode) {
-
         settingsView.setLoadingProgress(true);
         ApiService apiService = new ApiService(settingsView.getContext());
         apiService.userEdit(hideEnglish, furigana, lightMode, bunnyMode, new ApiService.ApiCallbackListener() {
@@ -78,7 +78,7 @@ public class SettingPresenter implements SettingContract.Presenter {
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-
+                Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Setting update)");
             }
 
             @Override

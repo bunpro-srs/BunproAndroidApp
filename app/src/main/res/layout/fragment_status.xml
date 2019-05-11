@@ -62,6 +62,7 @@
                         android:layout_marginTop="40dp"
                         android:background="@drawable/box_shadow">
                         <TextView
+                            android:id="@+id/tvCram"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/cram"
@@ -81,6 +82,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/box_shadow">
                         <TextView
+                            android:id="@+id/tvStudy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/study"

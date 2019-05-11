@@ -18,7 +18,7 @@ public class EspressoTestingIdlingResource {
     }
 
     public static void decrement(String key) {
-        if (countingIdlingResources.containsKey(key)) {
+        if (countingIdlingResources.containsKey(key) && !countingIdlingResources.get(key).isIdleNow()) {
             countingIdlingResources.get(key).decrement();
         }
     }

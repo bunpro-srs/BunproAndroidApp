@@ -1,18 +1,14 @@
 package bunpro.jp.bunproapp;
 
-import androidx.fragment.app.Fragment;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.web.webdriver.Locator;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
-import bunpro.jp.bunproapp.ui.status.StatusFragment;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -26,18 +22,14 @@ import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
 import static org.hamcrest.CoreMatchers.containsString;
 
-@RunWith(AndroidJUnit4.class)
 public class StatusFragmentTest {
-    private Fragment statusFragment;
-
     @Rule
     public ActivityTestRule<HomeActivity> activityRule = new ActivityTestRule<>(HomeActivity.class);
 
     @Before
     public void setup() {
-        Fragment fragment = new Fragment();
-        statusFragment = new StatusFragment();
-        activityRule.getActivity().getSupportFragmentManager().beginTransaction().add(R.id.main_container, fragment).commit();
+//      No need to setup the fragment because it is the default one
+//        activityRule.getActivity().getSupportFragmentManager().beginTransaction().add(R.id.main_container, new StatusFragment()).commit();
     }
 
     @Test

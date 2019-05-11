@@ -58,14 +58,14 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_status, container, false);
-
-        context = getActivity();
         statusPresenter = new StatusPresenter(this);
 
         return rootView;

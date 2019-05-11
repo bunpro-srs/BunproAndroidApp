@@ -54,10 +54,6 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
     }
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

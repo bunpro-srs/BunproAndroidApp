@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
         final List<Fragment> fragments = new ArrayList<>();
         fragments.add(new StatusFragment());
-        fragments.add(SearchFragment.newInstance());
+        fragments.add(new SearchFragment());
         fragments.add(new SettingFragment());
         builder.rootFragments(fragments);
 
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                                 fragNavController.replaceFragment(new StatusFragment());
                                 break;
                             case R.id.action_search:
-                                fragNavController.replaceFragment(SearchFragment.newInstance());
+                                fragNavController.replaceFragment(new SearchFragment());
                                 break;
                             case R.id.action_settings:
                                 fragNavController.replaceFragment(new SettingFragment());
@@ -171,7 +171,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
             case INDEX_STATUS:
                 return new StatusFragment();
             case INDEX_SEARCH:
-                return SearchFragment.newInstance();
+                return new SearchFragment();
             case INDEX_SETTING:
                 return new SettingFragment();
         }
