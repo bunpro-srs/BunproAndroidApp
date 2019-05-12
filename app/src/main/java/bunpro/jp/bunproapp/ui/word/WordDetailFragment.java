@@ -24,7 +24,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.SettingEvent;
@@ -71,6 +70,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         type = 0;
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        wordDetailPresenter.stop();
     }
 
     @Override
@@ -125,10 +130,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         review = wordDetailPresenter.getReview(selectedPoint);
 
         if (selectedPoint != null) {
-            ExampleSentence.setExampleSentenceList(wordDetailPresenter.fetchExampleSentences(selectedPoint));
-            SupplementalLink.setSupplementalLinkList(wordDetailPresenter.fetchSupplementalLinks(selectedPoint));
-
-            mAdapter = new StickAdapter(context, 0, review, selectedPoint, ExampleSentence.getExampleSentenceList(), SupplementalLink.getSupplementalLinkList(), new StickAdapter.ItemClickListener() {
+            mAdapter = new StickAdapter(context, 0, review, selectedPoint, wordDetailPresenter.fetchExampleSentences(selectedPoint), wordDetailPresenter.fetchGrammarPointSupplementalLinks(selectedPoint), new StickAdapter.ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {
                     if (position == 0) {
@@ -154,7 +156,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     private boolean isReviewed(GrammarPoint point) {
         boolean status = false;
-        List<Review> reviews = Review.getReviewList();
+        List<Review> reviews = wordDetailPresenter.getReviews();
         if (reviews.size() > 0) {
 
             for (int k=0;k<reviews.size();k++) {

@@ -16,6 +16,7 @@ import bunpro.jp.bunproapp.models.Lesson;
 import bunpro.jp.bunproapp.models.History;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.SupplementalLink;
+import io.realm.RealmList;
 
 public class JsonParser {
 
@@ -170,10 +171,11 @@ public class JsonParser {
                                 histories.add(history);
                             }
 
-                            review.history = histories;
+                            review.history = new RealmList<>();
+                            review.history.addAll(histories);
                         }
                     } else {
-                        review.history = new ArrayList<>();
+                        review.history = new RealmList<>();
                     }
 
                     if (json.has("missed_question_ids") || !json.isNull("missed_question_ids")) {
@@ -185,9 +187,10 @@ public class JsonParser {
                                 misses.add(array.getInt(i));
                             }
                         }
-                        review.missed_question_ids = misses;
+                        review.missed_question_ids = new RealmList<>();
+                        review.missed_question_ids.addAll(misses);
                     } else {
-                        review.missed_question_ids = new ArrayList<>();
+                        review.missed_question_ids = new RealmList<>();
                     }
 
                     if (json.has("studied_question_ids") || !json.isNull("studied_question_ids")) {
@@ -199,9 +202,10 @@ public class JsonParser {
                                 questions.add(array.getInt(i));
                             }
                         }
-                        review.studied_question_ids = questions;
+                        review.studied_question_ids = new RealmList<>();
+                        review.studied_question_ids.addAll(questions);
                     } else {
-                        review.studied_question_ids = new ArrayList<>();
+                        review.studied_question_ids = new RealmList<>();
                     }
 
                     if (json.has("review_type") || !json.isNull("review_type")) {

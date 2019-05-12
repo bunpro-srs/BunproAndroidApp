@@ -6,14 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.models.GrammarPoint;
+import bunpro.jp.bunproapp.models.Review;
 
 
 public class LevelPresenter implements LevelContract.Presenter {
     private LevelContract.View levelView;
+    private ReviewInteractor reviewInteractor;
 
     public LevelPresenter(LevelContract.View levelView) {
         this.levelView = levelView;
+        reviewInteractor = new ReviewInteractor(this.levelView.getContext());
+    }
+
+    public void stop() {
+        reviewInteractor.close();
     }
 
     public void sortGrammarPoints(String levelStr) {
@@ -68,5 +76,9 @@ public class LevelPresenter implements LevelContract.Presenter {
         }
 
         GrammarPoint.setArrangedGrammarPointList(sortedGrammarPoints);
+    }
+
+    public List<Review> getReviews() {
+        return reviewInteractor.loadReviews().findAll();
     }
 }

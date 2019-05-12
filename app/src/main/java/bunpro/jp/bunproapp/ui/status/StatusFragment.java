@@ -24,12 +24,9 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.wuadam.awesomewebview.AwesomeWebView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.ui.home.HomeActivity;
-import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.Constants;
@@ -62,6 +59,12 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         context = getActivity();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        statusPresenter.stop();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,7 +93,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
-        statusAdapter = new StatusAdapter(context, Status.getStatusList());
+        statusAdapter = new StatusAdapter(context, Status.getStatusList(), statusPresenter);
         rvView.setAdapter(statusAdapter);
 
         llReview = view.findViewById(R.id.llReview);
@@ -120,12 +123,12 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
                 if (!spinKitView.isShown()) {
                     spinKitView.setVisibility(View.VISIBLE);
                 }
-                statusPresenter.fetchReviews();
+                statusPresenter.updateReviews();
                 handler.postDelayed(this, (long)(1000 * 60 * 5));
             }
         }, (long)(1000 * 60 * 5));
 
-        statusPresenter.fetchReviews();
+        statusPresenter.updateReviews();
         statusPresenter.fetchStatus();
         statusPresenter.fetchGrammarPoints();
     }

@@ -1,10 +1,10 @@
 package bunpro.jp.bunproapp.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class History {
-
+public class History extends RealmObject {
+    @PrimaryKey
     public int id;
     public String time;
     public boolean status;
@@ -14,5 +14,4 @@ public class History {
     public History() {
 
     }
-
 }

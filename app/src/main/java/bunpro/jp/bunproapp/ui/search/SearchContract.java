@@ -16,5 +16,7 @@ public interface SearchContract {
 
     interface Presenter {
         void getAllWords(int filter);
+        void stop();
+        boolean checkSentenceAndLinksExistence();
     }
 }

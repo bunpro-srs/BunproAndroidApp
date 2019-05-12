@@ -23,5 +23,6 @@ public interface HomeContract {
 
     interface Presenter {
         void fetchData();
+        void stop();
     }
 }

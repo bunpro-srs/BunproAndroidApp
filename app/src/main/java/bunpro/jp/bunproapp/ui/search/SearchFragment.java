@@ -58,6 +58,12 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        searchPresenter.stop();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,7 +90,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
-                if (ExampleSentence.getExampleSentenceList().isEmpty() || SupplementalLink.getSupplementalLinkList().isEmpty()) {
+                if (!searchPresenter.checkSentenceAndLinksExistence()) {
                     Toast.makeText(context, "Examples and links are not loaded yet", Toast.LENGTH_SHORT).show();
                     return;
                 }

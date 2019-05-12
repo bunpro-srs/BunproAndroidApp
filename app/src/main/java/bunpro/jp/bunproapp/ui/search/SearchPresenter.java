@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
+import bunpro.jp.bunproapp.interactors.ReviewInteractor;
+import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
+import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
@@ -20,13 +24,24 @@ import bunpro.jp.bunproapp.service.JsonParser;
 
 public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View searchView;
+    private SupplementalLinkInteractor supplementalLinkInteractor;
+    private ExampleSentenceInteractor exampleSentenceInteractor;
+    private ReviewInteractor reviewInteractor;
     private List<GrammarPoint> searchGrammarPoints;
 
     public SearchPresenter(SearchContract.View searchView) {
         this.searchView = searchView;
+        supplementalLinkInteractor = new SupplementalLinkInteractor(this.searchView.getContext());
+        exampleSentenceInteractor = new ExampleSentenceInteractor(this.searchView.getContext());
+        reviewInteractor = new ReviewInteractor(this.searchView.getContext());
         searchGrammarPoints = new ArrayList<>();
     }
 
+    public void stop() {
+        supplementalLinkInteractor.close();
+        exampleSentenceInteractor.close();
+        reviewInteractor.close();
+    }
 
     @Override
     public void getAllWords(final int filter) {
@@ -61,7 +76,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         Collections.sort(searchGrammarPoints, GrammarPoint.levelComparator);
 
         List<GrammarPoint> relevantPoints = new ArrayList<>();
-        List<Review> reviewsOriginal = Review.getReviewList();
+        List<Review> reviewsOriginal = reviewInteractor.loadReviews().findAll();
         List<Review> reviewsCopy = new ArrayList<>(reviewsOriginal);
 
         if (filter == 0) {
@@ -93,5 +108,9 @@ public class SearchPresenter implements SearchContract.Presenter {
             }
         }
         return relevantPoints;
+    }
+
+    public boolean checkSentenceAndLinksExistence() {
+        return !exampleSentenceInteractor.loadExampleSentences().findAll().isEmpty() && !supplementalLinkInteractor.loadSupplementalLinks().findAll().isEmpty();
     }
 }

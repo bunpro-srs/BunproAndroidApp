@@ -121,7 +121,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ViewHolder) viewHolder).rlContainer.setVisibility(View.VISIBLE);
                 ((ViewHolder) viewHolder).llReadingContainer.setVisibility(View.GONE);
                 final ExampleSentence sentence = exampleSentences.get(position - 2);
-                ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english));
+                ((ViewHolder) viewHolder).tvEnglish.setText(TextUtils.stripHtml(sentence.english != null ? sentence.english : ""));
                 int furigana = AppData.getInstance(context).getFurigana();
                 if (furigana == Constants.SETTING_FURIGANA_ALWAYS) {
 

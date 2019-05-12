@@ -15,19 +15,28 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
+import io.realm.RealmQuery;
 
 public class StatusPresenter implements StatusContract.Presenter {
     private StatusContract.View statusView;
+    private ReviewInteractor reviewInteractor;
 
     public StatusPresenter(StatusContract.View statusView)
     {
         this.statusView = statusView;
+        reviewInteractor = new ReviewInteractor(statusView.getContext());
+    }
+
+    public void stop() {
+        reviewInteractor.close();
     }
 
     public List<Status> getStatus() {
@@ -91,28 +100,20 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     @Override
-    public void fetchReviews() {
-        List<Review> rs = Review.getReviewList();
+    public void updateReviews() {
+        List<Review> rs = reviewInteractor.loadReviews().findAll();
         if (rs.size() != 0) {
             updateReviewsInfo();
         } else {
-            ApiService apiService = new ApiService(statusView.getContext());
-            apiService.getReviews(new ApiService.ApiCallbackListener() {
+            reviewInteractor.fetchReviews(new SimpleCallbackListener() {
                 @Override
-                public void success(JSONObject jsonObject) {
-                    Review.setReviewList(JsonParser.getInstance(statusView.getContext()).parseReviews(jsonObject));
+                public void success() {
                     updateReviewsInfo();
                     fetchStatus();
                 }
-
                 @Override
-                public void successAsJSONArray(JSONArray jsonArray) {
-                    Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User reviews)");
-                }
-
-                @Override
-                public void error(ANError anError) {
-                    statusView.showError(anError.getErrorDetail());
+                public void error(String errorMessage) {
+                    statusView.showError(errorMessage);
                 }
             });
         }
@@ -151,7 +152,7 @@ public class StatusPresenter implements StatusContract.Presenter {
         String dateStr = spf.format(currentTime);
         statusView.updateReviewTime(dateStr);
         int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
-        for (Review review : Review.getReviewList()) {
+        for (Review review : reviewInteractor.loadReviews().findAll()) {
             long remainingHours = review.getRemainingHoursBeforeReview();
             if (remainingHours <= 0) {
                 pendingReviewCount++;
@@ -163,6 +164,10 @@ public class StatusPresenter implements StatusContract.Presenter {
         }
         statusView.updateReviewNumbers(pendingReviewCount, withinAnHourReviewCount, withinADayReviewCount);
         // Updating badge
-        statusView.updateBadge(Review.getReviewList().size());
+        statusView.updateBadge(reviewInteractor.loadReviews().findAll().size());
+    }
+
+    public boolean checkGrammarPointsAndReviewsExistence() {
+        return !GrammarPoint.getGrammarPointList().isEmpty() && !reviewInteractor.loadReviews().findAll().isEmpty();
     }
 }

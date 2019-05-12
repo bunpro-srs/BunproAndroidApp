@@ -17,6 +17,8 @@ public interface WordDetailContract {
     interface Presenter {
         Review getReview(GrammarPoint point);
         List<ExampleSentence> fetchExampleSentences(GrammarPoint point);
-        List<SupplementalLink> fetchSupplementalLinks(GrammarPoint point);
+        List<SupplementalLink> fetchGrammarPointSupplementalLinks(GrammarPoint point);
+        List<Review> getReviews();
+        void stop();
     }
 }

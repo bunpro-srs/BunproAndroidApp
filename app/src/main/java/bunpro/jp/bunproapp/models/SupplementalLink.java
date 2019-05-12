@@ -5,10 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class SupplementalLink extends RealmObject {
-    private static List<SupplementalLink> supplementalLinkList = new ArrayList<>();
-
+    @PrimaryKey
     public int id;
     public String type;
     public int grammar_point_id;
@@ -26,12 +26,4 @@ public class SupplementalLink extends RealmObject {
             }
         }
     };
-
-    public static List<SupplementalLink> getSupplementalLinkList() {
-        return supplementalLinkList;
-    }
-    public static void setSupplementalLinkList(List<SupplementalLink> supplementalLinkList) {
-        SupplementalLink.supplementalLinkList.clear();
-        SupplementalLink.supplementalLinkList.addAll(supplementalLinkList);
-    }
 }

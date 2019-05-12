@@ -1,10 +1,8 @@
 package bunpro.jp.bunproapp.models;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class Lesson {
-
     public int id;
     public int jlpt_level;
 

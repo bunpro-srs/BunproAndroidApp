@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ExampleSentence {
-    private static List<ExampleSentence> exampleSentenceList = new ArrayList<>();
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class ExampleSentence extends RealmObject {
     private static ExampleSentence currentExampleSentence;
 
+    @PrimaryKey
     public int id;
     public int grammar_point_id;
     public String structure;
@@ -34,14 +37,6 @@ public class ExampleSentence {
             }
         }
     };
-
-    public static List<ExampleSentence> getExampleSentenceList() {
-        return exampleSentenceList;
-    }
-    public static void setExampleSentenceList(List<ExampleSentence> exampleSentenceList) {
-        ExampleSentence.exampleSentenceList.clear();
-        ExampleSentence.exampleSentenceList.addAll(exampleSentenceList);
-    }
 
     public static ExampleSentence getCurrentExampleSentence() {
         return currentExampleSentence;

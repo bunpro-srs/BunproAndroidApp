@@ -41,6 +41,12 @@ public class LevelFragment extends BaseFragment implements View.OnClickListener,
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        levelPresenter.stop();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +70,7 @@ public class LevelFragment extends BaseFragment implements View.OnClickListener,
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new LevelAdapter(GrammarPoint.getArrangedGrammarPointList(), Review.getReviewList(), new LevelAdapter.ClickListener() {
+        mAdapter = new LevelAdapter(GrammarPoint.getArrangedGrammarPointList(), levelPresenter.getReviews(), new LevelAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
                 Fragment fragment = LevelDetailFragment.newInstance();

@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
+import bunpro.jp.bunproapp.interactors.ReviewInteractor;
+import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
@@ -20,14 +23,26 @@ import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
 public class HomePresenter implements HomeContract.Presenter {
     private HomeContract.View homeView;
+    private SupplementalLinkInteractor supplementalLinkInteractor;
+    private ExampleSentenceInteractor exampleSentenceInteractor;
+    private ReviewInteractor reviewInteractor;
 
     public HomePresenter(HomeContract.View homeView) {
         this.homeView = homeView;
+        this.supplementalLinkInteractor = new SupplementalLinkInteractor(this.homeView.getContext());
+        this.exampleSentenceInteractor = new ExampleSentenceInteractor(this.homeView.getContext());
+        this.reviewInteractor = new ReviewInteractor(this.homeView.getContext());
+    }
+
+    public void stop() {
+        this.supplementalLinkInteractor.close();
+        this.exampleSentenceInteractor.close();
+        this.reviewInteractor.close();
     }
 
     public void fetchData() {
         // Attempt to fetch reviews
-        fetchReviews(new SimpleCallbackListener() {
+        reviewInteractor.fetchReviews(new SimpleCallbackListener() {
             @Override
             public void success() {
                 // Attempt to fetch grammar points
@@ -35,11 +50,11 @@ public class HomePresenter implements HomeContract.Presenter {
                     @Override
                     public void success() {
                         // Attempt to fetch example sentences
-                        fetchExampleSentences(new SimpleCallbackListener() {
+                        exampleSentenceInteractor.fetchExampleSentences(new SimpleCallbackListener() {
                             @Override
                             public void success() {
                                 // Attempt to fetch supplemental links
-                                fetchSupplementalLinks(new SimpleCallbackListener() {
+                                supplementalLinkInteractor.fetchSupplementalLinks(new SimpleCallbackListener() {
                                     @Override
                                     public void success() {
                                     }
@@ -56,7 +71,7 @@ public class HomePresenter implements HomeContract.Presenter {
                         });
                         // Workaround for /user/progress v3 endpoint not working
                         if (GrammarPoint.getN2GrammarPointsTotal().size() == 0) {
-                            countProgress(Review.getReviewList());
+                            countProgress(reviewInteractor.loadReviews().findAll());
 //                            Fragment currentFragment = fragNavController.getCurrentFrag();
 //                            if (currentFragment instanceof StatusFragment) {
 ////                                ((StatusFragmentDeprecated)currentFragment).refreshStatus();
@@ -77,30 +92,6 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void error(String errorMessage) {
                 Log.e("Data retrieval error", errorMessage);
-            }
-        });
-    }
-
-    private void fetchReviews(SimpleCallbackListener callback) {
-        ApiService apiService = new ApiService(homeView.getContext());
-        apiService.getReviews(new ApiService.ApiCallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                List<Review> reviews = JsonParser.getInstance(homeView.getContext()).parseReviews(jsonObject);
-                Review.setReviewList(reviews);
-                callback.success();
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-                Log.w("API Format changed", "JSONArray obtained instead of an JSONObject ! (Reviews)");
-                callback.error("Grammar points API response format changed !");
-            }
-
-            @Override
-            public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
             }
         });
     }
@@ -126,55 +117,6 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void error(ANError anError) {
                 Log.e("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
-            }
-        });
-    }
-
-    private void fetchExampleSentences(SimpleCallbackListener callback) {
-        ApiService apiService = new ApiService(homeView.getContext());
-        apiService.getExampleSentences(new ApiService.ApiCallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Example sentences)");
-                callback.error("Grammar points API response format changed !");
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-
-                List<ExampleSentence> exampleSentences = JsonParser.getInstance(homeView.getContext()).parseExampleSentences(jsonArray);
-                ExampleSentence.setExampleSentenceList(exampleSentences);
-                callback.success();
-            }
-
-            @Override
-            public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
-            }
-        });
-    }
-
-    private void fetchSupplementalLinks(SimpleCallbackListener callback) {
-        ApiService apiService = new ApiService(homeView.getContext());
-        apiService.getSupplementalLinks(new ApiService.ApiCallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Supplemental Links)");
-                callback.error("Grammar points API response format changed !");
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-                List<SupplementalLink> supplementalLinks = JsonParser.getInstance(homeView.getContext()).parseSupplimentalLinks(jsonArray);
-                SupplementalLink.setSupplementalLinkList(supplementalLinks);
-                callback.success();
-            }
-
-            @Override
-            public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
                 callback.error(anError.getErrorDetail());
             }
         });

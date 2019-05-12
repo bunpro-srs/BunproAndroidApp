@@ -23,8 +23,10 @@ public interface StatusContract {
     interface Presenter {
         List<Status> getStatus();
         void fetchStatus();
-        void fetchReviews();
+        void updateReviews();
         void fetchGrammarPoints();
         void updateReviewsInfo();
+        boolean checkGrammarPointsAndReviewsExistence();
+        void stop();
     }
 }

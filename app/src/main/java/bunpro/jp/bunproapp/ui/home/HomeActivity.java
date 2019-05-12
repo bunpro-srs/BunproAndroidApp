@@ -81,6 +81,12 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         homePresenter.fetchData();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.homePresenter.stop();
+    }
+
     private void initializeUI() {
 
         final List<Fragment> fragments = new ArrayList<>();

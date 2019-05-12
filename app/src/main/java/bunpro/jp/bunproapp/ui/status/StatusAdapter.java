@@ -26,16 +26,18 @@ import bunpro.jp.bunproapp.ui.level.LevelFragment;
 import bunpro.jp.bunproapp.models.Status;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.StatusViewHolder> {
+    private StatusContract.Presenter statusPresenter;
     private List<Status> status;
     private ClickListener clickListener;
 
-    public StatusAdapter(Context context, List<Status> status) {
+    public StatusAdapter(Context context, List<Status> status, StatusContract.Presenter statusPresenter) {
+        this.statusPresenter = statusPresenter;
         this.status = status;
         this.clickListener = new ClickListener() {
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)context;
-                if (GrammarPoint.getGrammarPointList().isEmpty() || Review.getReviewList().isEmpty()) {
+                if (!statusPresenter.checkGrammarPointsAndReviewsExistence()) {
                     Toast.makeText(context, "Grammar points and reviews are not loaded yet", Toast.LENGTH_SHORT).show();
                     return;
                 }

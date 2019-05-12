@@ -7,9 +7,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class Review {
-    private static List<Review> reviewList = new ArrayList<>();
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Review extends RealmObject {
+    @PrimaryKey
     public int id;
     public int user_id;
     public int study_question_id;
@@ -24,9 +27,9 @@ public class Review {
     public boolean was_correct;
     public boolean self_study;
     public int review_misses;
-    public List<History> history;
-    public List<Integer> missed_question_ids;
-    public List<Integer> studied_question_ids;
+    public RealmList<History> history;
+    public RealmList<Integer> missed_question_ids;
+    public RealmList<Integer> studied_question_ids;
     public String review_type;
 
     public Review() {
@@ -55,12 +58,4 @@ public class Review {
             }
         }
     };
-
-    public static List<Review> getReviewList() {
-        return reviewList;
-    }
-    public static void setReviewList(List<Review> reviewList) {
-        Review.reviewList.clear();
-        Review.reviewList.addAll(reviewList);
-    }
 }

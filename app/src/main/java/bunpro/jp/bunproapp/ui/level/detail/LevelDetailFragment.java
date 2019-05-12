@@ -49,6 +49,12 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        levelDetailPresenter.stop();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,11 +79,11 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new LevelDetailAdapter(Review.getReviewList(), GrammarPoint.getGrammarPointList(), new LevelDetailAdapter.ClickListener() {
+        mAdapter = new LevelDetailAdapter(levelDetailPresenter.getReviews(), GrammarPoint.getGrammarPointList(), new LevelDetailAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
-                if (ExampleSentence.getExampleSentenceList().isEmpty() || SupplementalLink.getSupplementalLinkList().isEmpty()) {
+                if (!levelDetailPresenter.checkSentenceAndLinksExistence()) {
                     Toast.makeText(context, "Examples and links are not loaded yet", Toast.LENGTH_SHORT).show();
                     return;
                 }
