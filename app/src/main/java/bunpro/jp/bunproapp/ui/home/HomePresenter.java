@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
+import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
 import bunpro.jp.bunproapp.models.ExampleSentence;
@@ -26,18 +27,21 @@ public class HomePresenter implements HomeContract.Presenter {
     private SupplementalLinkInteractor supplementalLinkInteractor;
     private ExampleSentenceInteractor exampleSentenceInteractor;
     private ReviewInteractor reviewInteractor;
+    private GrammarPointInteractor grammarPointInteractor;
 
     public HomePresenter(HomeContract.View homeView) {
         this.homeView = homeView;
         this.supplementalLinkInteractor = new SupplementalLinkInteractor(this.homeView.getContext());
         this.exampleSentenceInteractor = new ExampleSentenceInteractor(this.homeView.getContext());
         this.reviewInteractor = new ReviewInteractor(this.homeView.getContext());
+        this.grammarPointInteractor = new GrammarPointInteractor(this.homeView.getContext());
     }
 
     public void stop() {
         this.supplementalLinkInteractor.close();
         this.exampleSentenceInteractor.close();
         this.reviewInteractor.close();
+        this.grammarPointInteractor.close();
     }
 
     public void fetchData() {
@@ -46,7 +50,7 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void success() {
                 // Attempt to fetch grammar points
-                fetchGrammarPoints(new SimpleCallbackListener() {
+                grammarPointInteractor.fetchGrammarPoints(new SimpleCallbackListener() {
                     @Override
                     public void success() {
                         // Attempt to fetch example sentences
@@ -96,32 +100,6 @@ public class HomePresenter implements HomeContract.Presenter {
         });
     }
 
-    private void fetchGrammarPoints(SimpleCallbackListener callback) {
-
-        ApiService apiService = new ApiService(homeView.getContext());
-        apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                Log.w("API Format changed", "JSONObject obtained instead of an JSONArray ! (Grammar points)");
-                callback.error("Grammar points API response format changed !");
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-
-                List<GrammarPoint> grammarPoints = JsonParser.getInstance(homeView.getContext()).parseGrammarPoints(jsonArray);
-                GrammarPoint.setGrammarPointList(grammarPoints);
-                callback.success();
-            }
-
-            @Override
-            public void error(ANError anError) {
-                Log.e("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
-            }
-        });
-    }
-
     /**
      * Temporary workaround for the non working /user/progress v3 endpoint
      */
@@ -133,7 +111,7 @@ public class HomePresenter implements HomeContract.Presenter {
         List<GrammarPoint> n2GrammarPoints = new ArrayList<>();
         List<GrammarPoint> n1GrammarPoints = new ArrayList<>();
 
-        for (GrammarPoint grammarPointExample : GrammarPoint.getGrammarPointList()) {
+        for (GrammarPoint grammarPointExample : grammarPointInteractor.loadGrammarPoints().findAll()) {
             if (grammarPointExample.level.equals("JLPT2")) {
                 if (!n2GrammarPointsTotal.contains(grammarPointExample.id)) {
                     n2GrammarPointsTotal.add(grammarPointExample.id);

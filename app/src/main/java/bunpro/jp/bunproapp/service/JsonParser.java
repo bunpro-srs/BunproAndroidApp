@@ -273,11 +273,11 @@ public class JsonParser {
                         point.caution = object.getJSONObject("attributes").getString("caution");
                         point.structure = object.getJSONObject("attributes").getString("structure");
                         point.level = object.getJSONObject("attributes").getString("level");
-                        point.lesson_id = object.getJSONObject("attributes").getInt("lesson-id");
+                        point.lesson_id = object.getJSONObject("attributes").isNull("lesson-id") ? -1 : object.getJSONObject("attributes").getInt("lesson-id");
                         point.yomikata = object.getJSONObject("attributes").getString("yomikata");
                         point.nuance = object.getJSONObject("attributes").getString("nuance");
                         point.incomplete = object.getJSONObject("attributes").getBoolean("incomplete");
-                        point.grammar_order = object.getJSONObject("attributes").getInt("grammar-order");
+                        point.grammar_order = object.getJSONObject("attributes").isNull("grammar-order") ? -1 : object.getJSONObject("attributes").getInt("grammar-order");
                     }
 
                 } catch (JSONException e) {

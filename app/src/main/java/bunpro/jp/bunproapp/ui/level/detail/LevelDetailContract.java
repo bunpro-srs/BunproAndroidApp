@@ -11,13 +11,12 @@ public interface LevelDetailContract {
 
     interface View {
         Context getContext();
-        void updateGrammarPoints(List<GrammarPoint> pointList);
     }
 
     interface Presenter {
-        void pickGrammarPoint(int position);
         void stop();
         boolean checkSentenceAndLinksExistence();
         List<Review> getReviews();
+        List<GrammarPoint> getLessonGrammarPoints(int lessonId);
     }
 }

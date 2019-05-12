@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.ui.level.detail;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,10 @@ class LevelDetailAdapter extends RecyclerView.Adapter<LevelDetailAdapter.LevelDe
     @Override
     public int getItemCount() {
         return grammarPoints.size();
+    }
+
+    public int getGrammarPointId(int position) {
+        return grammarPoints.get(position).id;
     }
 
     void updateGrammarPoints(List<GrammarPoint> grammarPoints) {

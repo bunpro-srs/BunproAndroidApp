@@ -18,12 +18,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.models.ExampleSentence;
-import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.ui.BaseFragment;
@@ -45,7 +42,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
     RecyclerView rvWords;
     private StickyHeaderDecoration decor;
-    SearchWordAdapter mAdapter;
+    SearchAdapter searchAdapter;
 
     int filter;
 
@@ -86,7 +83,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         LayoutManager layoutManager = new LinearLayoutManager(context);
         rvWords.setLayoutManager(layoutManager);
 
-        mAdapter = new SearchWordAdapter(GrammarPoint.getGrammarPointList(), context, new SearchWordAdapter.ItemClickListener() {
+        searchAdapter = new SearchAdapter(searchPresenter.getGrammarPoints(), context, new SearchAdapter.ItemClickListener() {
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
@@ -96,15 +93,17 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
                 }
 
                 Fragment fragment = WordDetailFragment.newInstance();
-                GrammarPoint.setCurrentGrammarPoint(GrammarPoint.getGrammarPointList().get(position));
+                Bundle bundle = new Bundle();
+                bundle.putInt("currentGrammarPointId", searchAdapter.getGrammarPointId(position));
+                fragment.setArguments(bundle);
                 homeActivity.addFragment(fragment);
             }
         });
 
-        decor = new StickyHeaderDecoration(mAdapter);
+        decor = new StickyHeaderDecoration(searchAdapter);
         rvWords.addItemDecoration(decor, 0);
 
-        rvWords.setAdapter(mAdapter);
+        rvWords.setAdapter(searchAdapter);
 
         filterGroup = view.findViewById(R.id.segmented);
         filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -164,8 +163,8 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
             sfLayout.setRefreshing(false);
         }
 
-        mAdapter.update(points);
-        mAdapter.notifyDataSetChanged();
+        searchAdapter.update(points);
+        searchAdapter.notifyDataSetChanged();
     }
 
 }

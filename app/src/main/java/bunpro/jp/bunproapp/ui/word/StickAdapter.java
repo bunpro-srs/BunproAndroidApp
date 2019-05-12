@@ -96,7 +96,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 ((DescriptionHolder) viewHolder).tvTitle.setText(point.title);
                 ((DescriptionHolder) viewHolder).tvMeaning.setText(point.meaning);
-                String structure = TextUtils.stripHtml(point.structure);
+                String structure = TextUtils.stripHtml(point.structure != null ? point.structure : "");
                 structure = structure.replaceAll(",", "\n");
                 ((DescriptionHolder) viewHolder).tvStructure.setText(structure);
 

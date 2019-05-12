@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
@@ -28,15 +29,18 @@ import io.realm.RealmQuery;
 public class StatusPresenter implements StatusContract.Presenter {
     private StatusContract.View statusView;
     private ReviewInteractor reviewInteractor;
+    private GrammarPointInteractor grammarPointInteractor;
 
     public StatusPresenter(StatusContract.View statusView)
     {
         this.statusView = statusView;
         reviewInteractor = new ReviewInteractor(statusView.getContext());
+        grammarPointInteractor = new GrammarPointInteractor(statusView.getContext());
     }
 
     public void stop() {
         reviewInteractor.close();
+        grammarPointInteractor.close();
     }
 
     public List<Status> getStatus() {
@@ -75,8 +79,6 @@ public class StatusPresenter implements StatusContract.Presenter {
                     }
                 }
 
-                // TODO: Do not access context within presenter
-                HomeActivity activity = (HomeActivity) statusView.getContext();
                 // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
                 status.add(new Status("N2", GrammarPoint.getN2GrammarPointsLearned().size(), GrammarPoint.getN2GrammarPointsTotal().size()));
                 status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
@@ -120,25 +122,16 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     @Override
-    public void fetchGrammarPoints() {
-
-        final List<GrammarPoint> points = GrammarPoint.getGrammarPointList();
+    public void updateGrammarPoints() {
+        final List<GrammarPoint> points = grammarPointInteractor.loadGrammarPoints().findAll();
         if (points.size() == 0) {
-            ApiService apiService = new ApiService(statusView.getContext());
-            apiService.getGrammarPoints(new ApiService.ApiCallbackListener() {
+            grammarPointInteractor.fetchGrammarPoints(new SimpleCallbackListener() {
                 @Override
-                public void success(JSONObject jsonObject) {
-                    Log.e("API Format changed", "JSONObject obtained instead of an JSONArray ! (Grammar points)");
+                public void success() {
                 }
-
                 @Override
-                public void successAsJSONArray(JSONArray jsonArray) {
-                    GrammarPoint.setGrammarPointList(JsonParser.getInstance(statusView.getContext()).parseGrammarPoints(jsonArray));
-                }
-
-                @Override
-                public void error(ANError anError) {
-                    statusView.showError(anError.getErrorDetail());
+                public void error(String errorMessage) {
+                    statusView.showError(errorMessage);
                 }
             });
         }
@@ -168,6 +161,6 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     public boolean checkGrammarPointsAndReviewsExistence() {
-        return !GrammarPoint.getGrammarPointList().isEmpty() && !reviewInteractor.loadReviews().findAll().isEmpty();
+        return !grammarPointInteractor.loadGrammarPoints().findAll().isEmpty() && !reviewInteractor.loadReviews().findAll().isEmpty();
     }
 }

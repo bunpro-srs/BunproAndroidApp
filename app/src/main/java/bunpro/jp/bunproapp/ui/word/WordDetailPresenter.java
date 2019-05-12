@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
+import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
@@ -17,6 +18,7 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
     private SupplementalLinkInteractor supplementalLinkInteractor;
     private ExampleSentenceInteractor exampleSentenceInteractor;
     private ReviewInteractor reviewInteractor;
+    private GrammarPointInteractor grammarPointInteractor;
 
     public WordDetailPresenter(WordDetailContract.View wordDetailView)
     {
@@ -24,12 +26,14 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
         supplementalLinkInteractor = new SupplementalLinkInteractor(this.wordDetailView.getContext());
         exampleSentenceInteractor = new ExampleSentenceInteractor(this.wordDetailView.getContext());
         reviewInteractor = new ReviewInteractor(this.wordDetailView.getContext());
+        grammarPointInteractor = new GrammarPointInteractor(this.wordDetailView.getContext());
     }
 
     public void stop() {
         supplementalLinkInteractor.close();
         exampleSentenceInteractor.close();
         reviewInteractor.close();
+        grammarPointInteractor.close();
     }
 
     @Override
@@ -75,5 +79,9 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
 
     public List<Review> getReviews() {
         return reviewInteractor.loadReviews().findAll();
+    }
+
+    public GrammarPoint getGrammarPoint(int id) {
+        return grammarPointInteractor.loadGrammarPoint(id);
     }
 }

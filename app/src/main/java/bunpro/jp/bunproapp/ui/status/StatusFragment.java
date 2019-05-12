@@ -130,7 +130,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
 
         statusPresenter.updateReviews();
         statusPresenter.fetchStatus();
-        statusPresenter.fetchGrammarPoints();
+        statusPresenter.updateGrammarPoints();
     }
 
     @Override

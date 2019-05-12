@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.GrammarPoint;
@@ -21,10 +23,10 @@ import bunpro.jp.bunproapp.models.Review;
 class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
 
     private ClickListener listener;
-    private List<List<GrammarPoint>> pointsByLesson;
+    private Map<Integer, List<GrammarPoint>> pointsByLesson;
     private List<Review> reviews;
 
-    LevelAdapter(List<List<GrammarPoint>> pointsByLesson, List<Review> reviews, ClickListener listener) {
+    LevelAdapter(Map<Integer, List<GrammarPoint>> pointsByLesson, List<Review> reviews, ClickListener listener) {
         this.listener = listener;
         this.pointsByLesson = pointsByLesson;
         this.reviews = reviews;
@@ -39,7 +41,8 @@ class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull LevelViewHolder viewHolder, int position) {
         viewHolder.tvName.setText(String.format("Lesson %s", String.valueOf(position+1)));
-        List<GrammarPoint> points = pointsByLesson.get(position);
+        List<List<GrammarPoint>> levelPoints = new ArrayList<>(pointsByLesson.values());
+        List<GrammarPoint> points = levelPoints.get(position);
 
         viewHolder.tvStatus.setText(String.valueOf(String.valueOf(checkReview(points)) + " / " + String.valueOf(points.size())));
         viewHolder.progressBar.setProgress(checkReview(points));
@@ -51,7 +54,12 @@ class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
         return this.pointsByLesson.size();
     }
 
-    void updateData(List<List<GrammarPoint>> pointsByLesson) {
+    public int getLessonId(int position) {
+        List<Integer> lessonKeys = new ArrayList<>(pointsByLesson.keySet());
+        return lessonKeys.get(position);
+    }
+
+    void updateData(Map<Integer, List<GrammarPoint>> pointsByLesson) {
         this.pointsByLesson = pointsByLesson;
     }
 
@@ -100,7 +108,6 @@ class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
             }
         }
     }
-
 
     public interface ClickListener {
         void positionClicked(int position);

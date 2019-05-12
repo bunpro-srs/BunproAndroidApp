@@ -12,13 +12,13 @@ public interface LevelContract {
 
     interface View {
         Context getContext();
-        void updateLessons(Map<String, List<GrammarPoint>> pointsByLesson);
+        void updateLessons();
     }
 
     interface Presenter {
-        void sortGrammarPoints(String levelStr);
-        void arrangeGrammarPoints(Map<String, List<GrammarPoint>> pointsByLesson);
         List<Review> getReviews();
+        List<GrammarPoint> getLevelGrammarPoints(String level);
+        Map<Integer, List<GrammarPoint>> getLevelGrammarPointsByLessons(String level);
         void stop();
     }
 }

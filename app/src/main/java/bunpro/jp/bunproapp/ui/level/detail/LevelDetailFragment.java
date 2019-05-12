@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.models.ExampleSentence;
-import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
@@ -34,9 +33,7 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
     private Button btnBack;
 
     private RecyclerView rvView;
-    private LevelDetailAdapter mAdapter;
-    private List<Review> reviews;
-    private List<GrammarPoint> grammarPoints;
+    private LevelDetailAdapter levelDetailAdapter;
 
     private LevelDetailContract.Presenter levelDetailPresenter;
 
@@ -79,7 +76,12 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new LevelDetailAdapter(levelDetailPresenter.getReviews(), GrammarPoint.getGrammarPointList(), new LevelDetailAdapter.ClickListener() {
+        Bundle bundle = getArguments();
+        int lesson = bundle != null ? bundle.getInt("lesson") : -1;
+        if (bundle != null) {
+            tvName.setText(String.format("Lesson %s", String.valueOf(lesson)));
+        }
+        levelDetailAdapter = new LevelDetailAdapter(levelDetailPresenter.getReviews(), levelDetailPresenter.getLessonGrammarPoints(lesson), new LevelDetailAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
                 HomeActivity homeActivity = (HomeActivity)getActivity();
@@ -89,19 +91,15 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
                 }
 
                 Fragment fragment = WordDetailFragment.newInstance();
-                GrammarPoint.setCurrentGrammarPoint(grammarPoints.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putInt("currentGrammarPointId", (int) levelDetailAdapter.getGrammarPointId(position));
+                fragment.setArguments(bundle);
                 homeActivity.addFragment(fragment);
             }
         });
 
-        rvView.setAdapter(mAdapter);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            int lesson = bundle.getInt("lesson");
-            tvName.setText(String.format("Lesson %s", String.valueOf(lesson)));
-            levelDetailPresenter.pickGrammarPoint(lesson -1);
-        }
+        rvView.setAdapter(levelDetailAdapter);
+        levelDetailAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -110,15 +108,5 @@ public class LevelDetailFragment extends Fragment implements View.OnClickListene
         if (id == R.id.btnBack) {
             ((HomeActivity)getActivity()).popFragment();
         }
-    }
-
-    @Override
-    public void updateGrammarPoints(List<GrammarPoint> pointList) {
-
-        this.grammarPoints = pointList;
-        Collections.sort(this.grammarPoints, GrammarPoint.IdComparator);
-        mAdapter.updateGrammarPoints(pointList);
-        mAdapter.notifyDataSetChanged();
-
     }
 }

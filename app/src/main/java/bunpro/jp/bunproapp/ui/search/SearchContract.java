@@ -18,5 +18,6 @@ public interface SearchContract {
         void getAllWords(int filter);
         void stop();
         boolean checkSentenceAndLinksExistence();
+        List<GrammarPoint> getGrammarPoints();
     }
 }

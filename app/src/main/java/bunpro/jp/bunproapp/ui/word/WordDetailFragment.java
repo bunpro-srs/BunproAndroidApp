@@ -96,7 +96,6 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rvWords.setItemAnimator(new DefaultItemAnimator());
 
         initialize();
-
     }
 
     @Override
@@ -117,19 +116,19 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     private void initialize() {
-
-        selectedPoint = GrammarPoint.getCurrentGrammarPoint();
-        if (!isReviewed(selectedPoint)) {
-            btnReset.setText("Add to Reviews");
-            btnReset.setTag(1003);
-        } else {
-            btnReset.setText("Reset/Remove");
-            btnReset.setTag(1004);
-        }
-
-        review = wordDetailPresenter.getReview(selectedPoint);
+        selectedPoint = wordDetailPresenter.getGrammarPoint(getArguments() != null ? getArguments().getInt("currentGrammarPointId") : -1);
 
         if (selectedPoint != null) {
+            if (!isReviewed(selectedPoint)) {
+                btnReset.setText("Add to Reviews");
+                btnReset.setTag(1003);
+            } else {
+                btnReset.setText("Reset/Remove");
+                btnReset.setTag(1004);
+            }
+
+            review = wordDetailPresenter.getReview(selectedPoint);
+
             mAdapter = new StickAdapter(context, 0, review, selectedPoint, wordDetailPresenter.fetchExampleSentences(selectedPoint), wordDetailPresenter.fetchGrammarPointSupplementalLinks(selectedPoint), new StickAdapter.ItemClickListener() {
                 @Override
                 public void positionClicked(int position) {

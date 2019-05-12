@@ -19,6 +19,7 @@ public interface WordDetailContract {
         List<ExampleSentence> fetchExampleSentences(GrammarPoint point);
         List<SupplementalLink> fetchGrammarPointSupplementalLinks(GrammarPoint point);
         List<Review> getReviews();
+        GrammarPoint getGrammarPoint(int id);
         void stop();
     }
 }

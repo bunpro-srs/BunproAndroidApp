@@ -6,17 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GrammarPoint {
-    private static List<GrammarPoint> grammarPointList = new ArrayList<>();
-    private static GrammarPoint currentGrammarPoint;
-    private static List<List<GrammarPoint>> arrangedGrammarPointList = new ArrayList<>();
-    private static Map<String, List<GrammarPoint>> pointsByLesson = new HashMap<>();
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class GrammarPoint extends RealmObject {
     /* Temporary workaround for non working API endpoint */
     private static List<Integer> n2GrammarPointsLearned = new ArrayList<>();
     private static List<Integer> n1GrammarPointsLearned = new ArrayList<>();
     private static List<Integer> n2GrammarPointsTotal = new ArrayList<>();
     private static List<Integer> n1GrammarPointsTotal = new ArrayList<>();
 
+    @PrimaryKey
     public int id;
     public String title;
     public String meaning;
@@ -72,37 +72,6 @@ public class GrammarPoint {
             }
         }
     };
-
-    public static List<GrammarPoint> getGrammarPointList() {
-        return grammarPointList;
-    }
-    public static void setGrammarPointList(List<GrammarPoint> grammarPointList) {
-        GrammarPoint.grammarPointList.clear();
-        GrammarPoint.grammarPointList.addAll(grammarPointList);
-    }
-
-    public static GrammarPoint getCurrentGrammarPoint() {
-        return currentGrammarPoint;
-    }
-    public static void setCurrentGrammarPoint(GrammarPoint currentGrammarPoint) {
-        GrammarPoint.currentGrammarPoint = currentGrammarPoint;
-    }
-
-    public static List<List<GrammarPoint>> getArrangedGrammarPointList() {
-        return arrangedGrammarPointList;
-    }
-    public static void setArrangedGrammarPointList(List<List<GrammarPoint>> arrangedGrammarPointList) {
-        GrammarPoint.arrangedGrammarPointList.clear();
-        GrammarPoint.arrangedGrammarPointList.addAll(arrangedGrammarPointList);
-    }
-
-    public static Map<String, List<GrammarPoint>> getPointsByLessonMap() {
-        return pointsByLesson;
-    }
-    public static void setPointsByLessonMap(Map<String, List<GrammarPoint>> pointsByLesson) {
-        GrammarPoint.pointsByLesson.clear();
-        GrammarPoint.pointsByLesson.putAll(pointsByLesson);
-    }
 
     /* Temporary workaround for non working API endpoint */
     public static List<Integer> getN2GrammarPointsLearned() {

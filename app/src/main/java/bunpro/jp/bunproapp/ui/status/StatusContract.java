@@ -24,7 +24,7 @@ public interface StatusContract {
         List<Status> getStatus();
         void fetchStatus();
         void updateReviews();
-        void fetchGrammarPoints();
+        void updateGrammarPoints();
         void updateReviewsInfo();
         boolean checkGrammarPointsAndReviewsExistence();
         void stop();

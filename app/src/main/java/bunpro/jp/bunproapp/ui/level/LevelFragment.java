@@ -14,15 +14,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-import java.util.Map;
-
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.ui.level.detail.LevelDetailFragment;
-import bunpro.jp.bunproapp.models.GrammarPoint;
-import bunpro.jp.bunproapp.models.Review;
 
 public class LevelFragment extends BaseFragment implements View.OnClickListener, LevelContract.View {
     private LevelContract.Presenter levelPresenter;
@@ -31,7 +26,7 @@ public class LevelFragment extends BaseFragment implements View.OnClickListener,
     private Button btnBack;
 
     private RecyclerView rvView;
-    private LevelAdapter mAdapter;
+    private LevelAdapter levelAdapter;
 
     public LevelFragment() {
     }
@@ -70,28 +65,27 @@ public class LevelFragment extends BaseFragment implements View.OnClickListener,
         rvView.setLayoutManager(layoutManager);
         rvView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new LevelAdapter(GrammarPoint.getArrangedGrammarPointList(), levelPresenter.getReviews(), new LevelAdapter.ClickListener() {
+        Bundle bundle = getArguments();
+        String levelStr = bundle != null ? bundle.getString("level") : "";
+        if (bundle != null) {
+            String status = bundle.getString("status");
+            tvName.setText(status);
+        }
+
+        levelAdapter = new LevelAdapter(levelPresenter.getLevelGrammarPointsByLessons(levelStr), levelPresenter.getReviews(), new LevelAdapter.ClickListener() {
             @Override
             public void positionClicked(int position) {
                 Fragment fragment = LevelDetailFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putInt("lesson", position + 1);
+                bundle.putInt("lesson", levelAdapter.getLessonId(position));
 
                 fragment.setArguments(bundle);
                 ((HomeActivity)getActivity()).addFragment(fragment);
             }
         });
 
-        rvView.setAdapter(mAdapter);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String status = bundle.getString("status");
-            String levelStr = bundle.getString("level");
-            tvName.setText(status);
-            levelPresenter.sortGrammarPoints(levelStr);
-            updateLessons(GrammarPoint.getPointsByLessonMap());
-        }
+        rvView.setAdapter(levelAdapter);
+        updateLessons();
     }
 
     @Override
@@ -104,11 +98,7 @@ public class LevelFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void updateLessons(Map<String, List<GrammarPoint>> pointsByLesson) {
-        if (!pointsByLesson.isEmpty()) {
-            levelPresenter.arrangeGrammarPoints(pointsByLesson);
-            mAdapter.updateData(GrammarPoint.getArrangedGrammarPointList());
-            mAdapter.notifyDataSetChanged();
-        }
+    public void updateLessons() {
+        levelAdapter.notifyDataSetChanged();
     }
 }

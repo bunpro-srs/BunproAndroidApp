@@ -17,14 +17,14 @@ import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import ca.barrenechea.widget.recyclerview.decoration.StickyHeaderAdapter;
 
-class SearchWordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter<SearchWordAdapter.HeaderHolder> {
+class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter<SearchAdapter.HeaderHolder> {
 
     private LayoutInflater inflater;
     private ItemClickListener listener;
 
     List<GrammarPoint> points;
 
-    SearchWordAdapter(List<GrammarPoint> points, Context context, ItemClickListener listener) {
+    SearchAdapter(List<GrammarPoint> points, Context context, ItemClickListener listener) {
         inflater = LayoutInflater.from(context);
         this.listener = listener;
         this.points = points;
@@ -53,11 +53,15 @@ class SearchWordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> im
         return this.points.size();
     }
 
+    public int getGrammarPointId(int position) {
+        return points.get(position).id;
+    }
+
     @Override
     public long getHeaderId(int position) {
 
         GrammarPoint point = points.get(position);
-        String numberStr = point.level.replaceAll("[^0-9]", "");
+        String numberStr = point.level != null ? point.level.replaceAll("[^0-9]", "") : "0";
 
         try {
             return Integer.parseInt(numberStr);
