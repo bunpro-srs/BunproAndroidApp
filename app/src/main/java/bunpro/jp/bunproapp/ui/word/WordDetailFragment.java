@@ -24,19 +24,17 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import bunpro.jp.bunproapp.R;
-import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.SettingEvent;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
-import bunpro.jp.bunproapp.models.SupplementalLink;
 
 
 public class WordDetailFragment extends BaseFragment implements View.OnClickListener, WordDetailContract.View {
     private Context context;
     private WordDetailContract.Presenter wordDetailPresenter;
 
-    Button btnBack, btnReset;
+    Button btnBack, btnResetOrAdd;
     RecyclerView rvWords;
 
     StickAdapter mAdapter;
@@ -85,8 +83,8 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
 
-        btnReset = view.findViewById(R.id.btnReset);
-        btnReset.setOnClickListener(this);
+        btnResetOrAdd = view.findViewById(R.id.btnResetOrAdd);
+        btnResetOrAdd.setOnClickListener(this);
 
         rvWords = view.findViewById(R.id.rvWords);
         rvWords.setHasFixedSize(true);
@@ -120,11 +118,11 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
         if (selectedPoint != null) {
             if (!isReviewed(selectedPoint)) {
-                btnReset.setText("Add to Reviews");
-                btnReset.setTag(1003);
+                btnResetOrAdd.setText("Add to Reviews");
+                btnResetOrAdd.setTag(1003);
             } else {
-                btnReset.setText("Reset/Remove");
-                btnReset.setTag(1004);
+                btnResetOrAdd.setText("Reset/Remove");
+                btnResetOrAdd.setTag(1004);
             }
 
             review = wordDetailPresenter.getReview(selectedPoint);
@@ -177,18 +175,14 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
             popFragment();
         }
 
-        if (id == R.id.btnReset) {
-            int tag = (int)btnReset.getTag();
+        if (id == R.id.btnResetOrAdd) {
+            int tag = (int) btnResetOrAdd.getTag();
             if (tag == 1003) {
-                addToReview();
+                wordDetailPresenter.addToReviews();
             } else {
                 resetOrRemove();
             }
         }
-    }
-
-    private void addToReview() {
-        // TODO: investigate tag 1003
     }
 
     private void resetOrRemove() {
@@ -203,6 +197,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlRemoveFromReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                wordDetailPresenter.removeFromReviews();
                 dialog.dismiss();
             }
         });
@@ -211,6 +206,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlResetReviewProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                wordDetailPresenter.resetReviews();
                 dialog.dismiss();
             }
         });

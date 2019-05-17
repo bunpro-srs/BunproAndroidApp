@@ -69,7 +69,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
             @Override
             public void error(ANError anError) {
-                Log.w("LoginFailed", anError.getErrorDetail());
+                Log.w("LoginFailed", anError.getErrorBody());
                 callback.error("Wrong username or password");
             }
         });
@@ -135,7 +135,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
             @Override
             public void error(ANError anError) {
-                callback.error(anError.getErrorDetail());
+                callback.error(anError.getErrorBody());
             }
         });
     }

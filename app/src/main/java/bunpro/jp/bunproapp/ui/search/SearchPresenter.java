@@ -66,7 +66,7 @@ public class SearchPresenter implements SearchContract.Presenter {
 
                 @Override
                 public void error(ANError anError) {
-                    searchView.showError(anError.getErrorDetail());
+                    searchView.showError(anError.getErrorBody());
                 }
             });
 

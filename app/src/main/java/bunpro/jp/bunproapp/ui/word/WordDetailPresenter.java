@@ -84,4 +84,16 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
     public GrammarPoint getGrammarPoint(int id) {
         return grammarPointInteractor.loadGrammarPoint(id);
     }
+
+    public void addToReviews() {
+
+    }
+
+    public void removeFromReviews() {
+
+    }
+
+    public void resetReviews() {
+
+    }
 }

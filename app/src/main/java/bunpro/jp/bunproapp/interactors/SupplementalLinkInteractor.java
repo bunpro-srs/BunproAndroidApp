@@ -14,20 +14,11 @@ import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
-import io.realm.Realm;
 import io.realm.RealmQuery;
 
-public class SupplementalLinkInteractor {
-    private Realm realm;
-    private Context context;
-
+public class SupplementalLinkInteractor extends BaseInteractor {
     public SupplementalLinkInteractor(Context context) {
-        this.context = context;
-        realm = Realm.getDefaultInstance();
-    }
-
-    public void close() {
-        realm.close();
+        super(context);
     }
 
     private void saveSupplementalLinks(List<SupplementalLink> links) {
@@ -60,8 +51,11 @@ public class SupplementalLinkInteractor {
 
             @Override
             public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
+                Log.d("Error", anError.getErrorBody());
+                if (anError.getErrorBody().toLowerCase().contains("access denied")) {
+                    emergencyLogout();
+                }
+                callback.error(anError.getErrorBody());
             }
         });
     }

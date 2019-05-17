@@ -11,24 +11,14 @@ import org.json.JSONObject;
 import java.util.List;
 
 import bunpro.jp.bunproapp.models.ExampleSentence;
-import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
-import io.realm.Realm;
 import io.realm.RealmQuery;
 
-public class ExampleSentenceInteractor {
-    private Realm realm;
-    private Context context;
-
+public class ExampleSentenceInteractor extends BaseInteractor {
     public ExampleSentenceInteractor(Context context) {
-        this.context = context;
-        realm = Realm.getDefaultInstance();
-    }
-
-    public void close() {
-        realm.close();
+        super(context);
     }
 
     private void saveExampleSentences(List<ExampleSentence> sentences) {
@@ -59,8 +49,11 @@ public class ExampleSentenceInteractor {
             }
             @Override
             public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
+                Log.d("Error", anError.getErrorBody());
+                if (anError.getErrorBody().toLowerCase().contains("access denied")) {
+                    emergencyLogout();
+                }
+                callback.error(anError.getErrorBody());
             }
         });
     }

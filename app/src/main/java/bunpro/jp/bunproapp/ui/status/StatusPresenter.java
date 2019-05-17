@@ -45,7 +45,6 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     public void fetchStatus() {
-        // TODO: This should not use context
         ApiService apiService = new ApiService(statusView.getContext());
 
         apiService.getProgress(new ApiService.ApiCallbackListener() {
@@ -92,7 +91,7 @@ public class StatusPresenter implements StatusContract.Presenter {
 
             @Override
             public void error(ANError anError) {
-                Log.e("API request error", anError.getErrorDetail());
+                Log.e("API request error", anError.getErrorBody());
                 statusView.setGlobalLoadingProgress(false);
             }
         });

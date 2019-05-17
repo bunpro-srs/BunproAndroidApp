@@ -20,6 +20,9 @@ public interface WordDetailContract {
         List<SupplementalLink> fetchGrammarPointSupplementalLinks(GrammarPoint point);
         List<Review> getReviews();
         GrammarPoint getGrammarPoint(int id);
+        void addToReviews();
+        void removeFromReviews();
+        void resetReviews();
         void stop();
     }
 }

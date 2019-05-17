@@ -14,20 +14,11 @@ import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
-import io.realm.Realm;
 import io.realm.RealmQuery;
 
-public class ReviewInteractor {
-    private Realm realm;
-    private Context context;
-
+public class ReviewInteractor extends BaseInteractor {
     public ReviewInteractor(Context context) {
-        this.context = context;
-        realm = Realm.getDefaultInstance();
-    }
-
-    public void close() {
-        realm.close();
+        super(context);
     }
 
     private void saveReviews(List<Review> reviews) {
@@ -58,8 +49,11 @@ public class ReviewInteractor {
             }
             @Override
             public void error(ANError anError) {
-                Log.d("Error", anError.getErrorDetail());
-                callback.error(anError.getErrorDetail());
+                Log.d("Error", anError.getErrorBody());
+                if (anError.getErrorBody().toLowerCase().contains("access denied")) {
+                    emergencyLogout();
+                }
+                callback.error(anError.getErrorBody());
             }
         });
     }

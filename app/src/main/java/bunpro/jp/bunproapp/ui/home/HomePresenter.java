@@ -20,6 +20,7 @@ import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.SupplementalLink;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import bunpro.jp.bunproapp.ui.status.StatusFragment;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
 public class HomePresenter implements HomeContract.Presenter {
@@ -76,10 +77,12 @@ public class HomePresenter implements HomeContract.Presenter {
                         // Workaround for /user/progress v3 endpoint not working
                         if (GrammarPoint.getN2GrammarPointsTotal().size() == 0) {
                             countProgress(reviewInteractor.loadReviews().findAll());
-//                            Fragment currentFragment = fragNavController.getCurrentFrag();
-//                            if (currentFragment instanceof StatusFragment) {
-////                                ((StatusFragmentDeprecated)currentFragment).refreshStatus();
-//                            }
+                        }
+                        if (homeView.getContext() instanceof HomeActivity) {
+                            StatusFragment statusFragment = (StatusFragment)(((HomeActivity) homeView.getContext()).getSupportFragmentManager().getFragments().get(0));
+                            if (statusFragment != null && statusFragment.statusPresenter != null) {
+                                statusFragment.statusPresenter.fetchStatus();
+                            }
                         }
                     }
                     @Override
@@ -87,11 +90,6 @@ public class HomePresenter implements HomeContract.Presenter {
                         Log.e("Data retrieval error", errorMessage);
                     }
                 });
-                // Try to update status fragment with review count
-                //Fragment currentFragment = fragNavController.getCurrentFrag();
-//                if (currentFragment instanceof StatusFragmentDeprecated) {
-//                    ((StatusFragmentDeprecated)currentFragment).calculateReviewsNumber();
-//                }
             }
             @Override
             public void error(String errorMessage) {
@@ -127,14 +125,14 @@ public class HomePresenter implements HomeContract.Presenter {
         for (Review review : reviews) {
             for (GrammarPoint grammarConcernedByReview : n2GrammarPoints) {
                 if (review.grammar_point_id == grammarConcernedByReview.id) {
-                    if (review.times_correct > 0 && n2GrammarPointsLearned.contains(review.id)) {
+                    if (review.times_correct > 0 && !n2GrammarPointsLearned.contains(review.id)) {
                         n2GrammarPointsLearned.add(review.id);
                     }
                 }
             }
             for (GrammarPoint grammarConcernedByReview : n1GrammarPoints) {
                 if (review.grammar_point_id == grammarConcernedByReview.id) {
-                    if (review.times_correct > 0 && n1GrammarPointsLearned.contains(review.id)) {
+                    if (review.times_correct > 0 && !n1GrammarPointsLearned.contains(review.id)) {
                         n1GrammarPointsLearned.add(review.id);
                     }
                 }

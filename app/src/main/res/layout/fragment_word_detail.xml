@@ -34,7 +34,7 @@
                 android:drawableLeft="@drawable/ic_arrow_back_blue_24dp"/>
 
             <Button
-                android:id="@+id/btnReset"
+                android:id="@+id/btnResetOrAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

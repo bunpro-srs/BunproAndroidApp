@@ -34,7 +34,8 @@ import bunpro.jp.bunproapp.utils.UserData;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class StatusFragment extends BaseFragment implements StatusContract.View, View.OnClickListener {
-    private StatusContract.Presenter statusPresenter;
+    // TODO: set it private!! Waiting for the status API endpoint fix
+    public StatusContract.Presenter statusPresenter;
     private Context context;
     // TODO: Remove accessor
     public Context getContext() {
