@@ -79,9 +79,12 @@ public class HomePresenter implements HomeContract.Presenter {
                             countProgress(reviewInteractor.loadReviews().findAll());
                         }
                         if (homeView.getContext() instanceof HomeActivity) {
-                            StatusFragment statusFragment = (StatusFragment)(((HomeActivity) homeView.getContext()).getSupportFragmentManager().getFragments().get(0));
-                            if (statusFragment != null && statusFragment.statusPresenter != null) {
-                                statusFragment.statusPresenter.fetchStatus();
+                            HomeActivity homeActivity = (HomeActivity) homeView.getContext();
+                            if (homeActivity.getSupportFragmentManager().getFragments().get(0) instanceof StatusFragment) {
+                                StatusFragment statusFragment = (StatusFragment)(homeActivity.getSupportFragmentManager().getFragments().get(0));
+                                if (statusFragment != null && statusFragment.statusPresenter != null) {
+                                    statusFragment.statusPresenter.fetchStatus();
+                                }
                             }
                         }
                     }

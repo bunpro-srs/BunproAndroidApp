@@ -196,6 +196,78 @@ public class ApiService {
     }
 
     /**
+     * Create a "Review" for a grammar point
+     * @param grammarPointId Grammar point to create a review for
+     * @param listener Listener to call when review is created
+     */
+    public void addToReview(int grammarPointId, final ApiCallbackListener listener) {
+        String token = UserData.getInstance(mContext).getUserKey();
+        AndroidNetworking.post(Constants.BASE_URL_v3 + "reviews/create/" + grammarPointId + "?complete=true")
+                .setPriority(Priority.HIGH)
+                .addHeaders("Authorization", "Bearer " + token)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        listener.success(new JSONObject());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        listener.error(anError);
+                    }
+                });
+    }
+
+    /**
+     * Delete a review
+     * @param reviewId Review to delete
+     * @param listener Listener to call when review is reset
+     */
+    public void removeReview(int reviewId, final ApiCallbackListener listener) {
+        String token = UserData.getInstance(mContext).getUserKey();
+        AndroidNetworking.post(Constants.BASE_URL_v3 + "reviews/edit/" + reviewId + "?remove_review=true")
+                .setPriority(Priority.HIGH)
+                .addHeaders("Authorization", "Bearer " + token)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        listener.success(new JSONObject());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        listener.error(anError);
+                    }
+                });
+    }
+
+    /**
+     * Reset a review
+     * @param reviewId Review to reset
+     * @param listener Listener to call when review is reset
+     */
+    public void resetReview(int reviewId, final ApiCallbackListener listener) {
+        String token = UserData.getInstance(mContext).getUserKey();
+        AndroidNetworking.post(Constants.BASE_URL_v3 + "reviews/edit/" + reviewId + "?reset=true")
+                .setPriority(Priority.HIGH)
+                .addHeaders("Authorization", "Bearer " + token)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        listener.success(new JSONObject());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        listener.error(anError);
+                    }
+                });
+    }
+
+    /**
      * Fetch example sentences (very time consuming)
      * @param listener Listener to call once sentences have been fetched
      */

@@ -12,6 +12,7 @@ import bunpro.jp.bunproapp.models.SupplementalLink;
 public interface WordDetailContract {
     interface View {
         Context getContext();
+        void showToast(String message);
     }
 
     interface Presenter {
@@ -20,9 +21,9 @@ public interface WordDetailContract {
         List<SupplementalLink> fetchGrammarPointSupplementalLinks(GrammarPoint point);
         List<Review> getReviews();
         GrammarPoint getGrammarPoint(int id);
-        void addToReviews();
-        void removeFromReviews();
-        void resetReviews();
+        void addToReviews(int grammarPointId);
+        void removeFromReviews(int reviewId);
+        void resetReviews(int reviewId);
         void stop();
     }
 }

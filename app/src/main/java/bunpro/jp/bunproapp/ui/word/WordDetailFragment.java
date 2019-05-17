@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -178,7 +179,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btnResetOrAdd) {
             int tag = (int) btnResetOrAdd.getTag();
             if (tag == 1003) {
-                wordDetailPresenter.addToReviews();
+                wordDetailPresenter.addToReviews(selectedPoint.id);
             } else {
                 resetOrRemove();
             }
@@ -197,7 +198,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlRemoveFromReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                wordDetailPresenter.removeFromReviews();
+                wordDetailPresenter.removeFromReviews(review.id);
                 dialog.dismiss();
             }
         });
@@ -206,7 +207,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlResetReviewProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                wordDetailPresenter.resetReviews();
+                wordDetailPresenter.resetReviews(review.id);
                 dialog.dismiss();
             }
         });
@@ -250,9 +251,12 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         rlCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 dialog.dismiss();
             }
         });
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -51,7 +51,7 @@ public class SupplementalLinkInteractor extends BaseInteractor {
 
             @Override
             public void error(ANError anError) {
-                Log.d("Error", anError.getErrorBody());
+                Log.e("Error", anError.getErrorBody());
                 if (anError.getErrorBody().toLowerCase().contains("access denied")) {
                     emergencyLogout();
                 }

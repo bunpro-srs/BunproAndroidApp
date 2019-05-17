@@ -1,5 +1,12 @@
 package bunpro.jp.bunproapp.ui.word;
 
+import android.util.Log;
+
+import com.androidnetworking.error.ANError;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +14,7 @@ import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
 import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
+import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.models.GrammarPoint;
@@ -85,15 +93,60 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
         return grammarPointInteractor.loadGrammarPoint(id);
     }
 
-    public void addToReviews() {
-
+    public void addToReviews(int grammarPointId) {
+        ApiService apiService = new ApiService(wordDetailView.getContext());
+        apiService.addToReview(grammarPointId, new ApiService.ApiCallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+                wordDetailView.showToast("The review has been added to your list.");
+            }
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                wordDetailView.showToast("The review has been added to your list.");
+            }
+            @Override
+            public void error(ANError anError) {
+                wordDetailView.showToast("An error occured while adding the review to your list.");
+                Log.e("Error", anError.getErrorDetail());
+            }
+        });
     }
 
-    public void removeFromReviews() {
-
+    public void removeFromReviews(int reviewId) {
+        ApiService apiService = new ApiService(wordDetailView.getContext());
+        apiService.removeReview(reviewId, new ApiService.ApiCallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+                wordDetailView.showToast("The review has been removed from your list.");
+            }
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                wordDetailView.showToast("The review has been removed from your list.");
+            }
+            @Override
+            public void error(ANError anError) {
+                wordDetailView.showToast("An error occured while removing the review from your list.");
+                Log.e("Error", anError.getErrorDetail());
+            }
+        });
     }
 
-    public void resetReviews() {
-
+    public void resetReviews(int reviewId) {
+        ApiService apiService = new ApiService(wordDetailView.getContext());
+        apiService.resetReview(reviewId, new ApiService.ApiCallbackListener() {
+            @Override
+            public void success(JSONObject jsonObject) {
+                wordDetailView.showToast("The review has been reset.");
+            }
+            @Override
+            public void successAsJSONArray(JSONArray jsonArray) {
+                wordDetailView.showToast("The review has been reset.");
+            }
+            @Override
+            public void error(ANError anError) {
+                wordDetailView.showToast("An error occured while resetting the review in your list.");
+                Log.e("Error", anError.getErrorDetail());
+            }
+        });
     }
 }
