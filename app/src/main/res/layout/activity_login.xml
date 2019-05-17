@@ -65,14 +65,14 @@
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGrey"
             android:text="@string/login"
-            android:textColor="@color/colorBlue"
-            android:background="@android:color/transparent"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"/>
+            android:textColor="@color/colorAlmostWhite"
+            android:textSize="22sp"
+
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"/>
 
     </LinearLayout>
 
@@ -86,7 +86,7 @@
         android:textAllCaps="false"
         android:textColor="@color/colorBlue"
         android:background="@android:color/transparent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:textSize="16sp"/>
 
 </LinearLayout>

@@ -6,6 +6,8 @@
     <color name="colorYellow">#67B4F1</color>
     <color name="colorBlue">#67B4F1</color>
     <color name="colorGrey">#a9a9a9</color>
+    <color name="colorDarkGrey">#888888</color>
+    <color name="colorAlmostWhite">#EEEEEE</color>
     <color name="colorPgBack">#000000</color>
     <color name="colorBackground">#282828</color>
     <color name="colorPgTint">#a3aaab</color>

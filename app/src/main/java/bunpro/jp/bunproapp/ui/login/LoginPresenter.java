@@ -51,7 +51,8 @@ public class LoginPresenter implements LoginContract.Presenter {
                         JSONArray jsonArray = jsonObject.getJSONArray("errors");
                         if (jsonArray.length() > 0) {
                             JSONObject obj = jsonArray.getJSONObject(0);
-                            errorMessage = obj.getString("detail");
+                            Log.e("LoginException", obj.getString("detail"));
+                            errorMessage = "Wrong username or password";
                         }
                     } catch (JSONException e) {
                         Log.e("JSONException", "Login error result could not be parsed.");
@@ -68,7 +69,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
             @Override
             public void error(ANError anError) {
-                callback.error(anError.getErrorDetail());
+                Log.w("LoginFailed", anError.getErrorDetail());
+                callback.error("Wrong username or password");
             }
         });
 
