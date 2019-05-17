@@ -93,7 +93,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
-
     @Override
     public void loadingProgress(boolean loading) {
         if (progressBar != null) {
@@ -103,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 btnLogin.setEnabled(false);
             } else {
                 progressBar.setVisibility(View.GONE);
-                btnLogin.setTextColor(getResources().getColor(R.color.colorDarkGrey));
+                btnLogin.setTextColor(getResources().getColor(R.color.default_header_color));
                 btnLogin.setEnabled(true);
             }
         }

@@ -31,9 +31,11 @@ public class GrammarPointInteractor {
     }
 
     private void saveGrammarPoints(List<GrammarPoint> grammarPoints) {
-        realm.beginTransaction();
-        realm.insertOrUpdate(grammarPoints);
-        realm.commitTransaction();
+        if (!realm.isClosed()) {
+            realm.beginTransaction();
+            realm.insertOrUpdate(grammarPoints);
+            realm.commitTransaction();
+        }
     }
 
     public RealmQuery<GrammarPoint> loadGrammarPoints() {

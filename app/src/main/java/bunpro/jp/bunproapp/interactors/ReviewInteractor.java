@@ -31,9 +31,11 @@ public class ReviewInteractor {
     }
 
     private void saveReviews(List<Review> reviews) {
-        realm.beginTransaction();
-        realm.insertOrUpdate(reviews);
-        realm.commitTransaction();
+        if (!realm.isClosed()) {
+            realm.beginTransaction();
+            realm.insertOrUpdate(reviews);
+            realm.commitTransaction();
+        }
     }
 
     public RealmQuery<Review> loadReviews() {

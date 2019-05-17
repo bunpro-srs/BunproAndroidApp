@@ -31,9 +31,11 @@ public class SupplementalLinkInteractor {
     }
 
     private void saveSupplementalLinks(List<SupplementalLink> links) {
-        realm.beginTransaction();
-        realm.insertOrUpdate(links);
-        realm.commitTransaction();
+        if (!realm.isClosed()) {
+            realm.beginTransaction();
+            realm.insertOrUpdate(links);
+            realm.commitTransaction();
+        }
     }
 
     public RealmQuery<SupplementalLink> loadSupplementalLinks() {

@@ -9,9 +9,9 @@ import bunpro.jp.bunproapp.models.Status;
 
 public interface StatusContract {
     interface View {
-        // TODO: Remove getContext
         Context getContext();
-        void setLoadingProgress(boolean loading);
+        void setGlobalLoadingProgress(boolean loading);
+        void setReviewsLoadingProgress(boolean loading);
         void showError(String msg);
         void updateUsername(String username);
         void updateReviewTime(String dateUpdated);

@@ -17,14 +17,11 @@ import java.util.List;
 
 import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
-import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.service.ApiService;
-import bunpro.jp.bunproapp.service.JsonParser;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
-import io.realm.RealmQuery;
 
 public class StatusPresenter implements StatusContract.Presenter {
     private StatusContract.View statusView;
@@ -54,7 +51,7 @@ public class StatusPresenter implements StatusContract.Presenter {
         apiService.getProgress(new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-                statusView.setLoadingProgress(true);
+                statusView.setGlobalLoadingProgress(true);
 
                 Iterator iterator = jsonObject.keys();
                 List<Status> status = new ArrayList<>();
@@ -84,19 +81,19 @@ public class StatusPresenter implements StatusContract.Presenter {
                 status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
                 Status.setStatusList(status);
                 statusView.refresh();
-                statusView.setLoadingProgress(false);
+                statusView.setGlobalLoadingProgress(false);
             }
 
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
                 Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User progress)");
-                statusView.setLoadingProgress(false);
+                statusView.setGlobalLoadingProgress(false);
             }
 
             @Override
             public void error(ANError anError) {
                 Log.e("API request error", anError.getErrorDetail());
-                statusView.setLoadingProgress(false);
+                statusView.setGlobalLoadingProgress(false);
             }
         });
     }

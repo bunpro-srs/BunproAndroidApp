@@ -32,9 +32,11 @@ public class ExampleSentenceInteractor {
     }
 
     private void saveExampleSentences(List<ExampleSentence> sentences) {
-        realm.beginTransaction();
-        realm.insertOrUpdate(sentences);
-        realm.commitTransaction();
+        if (!realm.isClosed()) {
+            realm.beginTransaction();
+            realm.insertOrUpdate(sentences);
+            realm.commitTransaction();
+        }
     }
 
     public RealmQuery<ExampleSentence> loadExampleSentences() {

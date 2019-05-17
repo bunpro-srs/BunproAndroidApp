@@ -112,17 +112,11 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         tvUpdate1Hour = view.findViewById(R.id.tvUpdate1Hour);
         tvUpdate24Hours = view.findViewById(R.id.tvUpdate24Hours);
 
-        if (!spinKitView.isShown()) {
-            spinKitView.setVisibility(View.VISIBLE);
-        }
-
         final Handler handler = new Handler();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!spinKitView.isShown()) {
-                    spinKitView.setVisibility(View.VISIBLE);
-                }
+                setReviewsLoadingProgress(true);
                 statusPresenter.updateReviews();
                 handler.postDelayed(this, (long)(1000 * 60 * 5));
             }
@@ -166,7 +160,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         }
     }
 
-    public void setLoadingProgress(boolean loading) {
+    public void setGlobalLoadingProgress(boolean loading) {
         if (loading) {
             if (!slContainer.isRefreshing()) {
                 slContainer.setRefreshing(true);
@@ -174,6 +168,16 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         } else {
             if (slContainer.isRefreshing()) {
                 slContainer.setRefreshing(false);
+            }
+        }
+    }
+
+    public void setReviewsLoadingProgress(boolean loading) {
+        if (spinKitView != null) {
+            if (loading) {
+                spinKitView.setVisibility(View.VISIBLE);
+            } else {
+                spinKitView.setVisibility(View.GONE);
             }
         }
     }
@@ -198,9 +202,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         tvReviews.setText(String.format("%s Reviews", String.valueOf(currentReviews)));
         tvUpdate1Hour.setText(String.format("+%s", String.valueOf(hourReviews)));
         tvUpdate24Hours.setText(String.format("+%s", String.valueOf(dayReviews)));
-        if (spinKitView.isShown()) {
-            spinKitView.setVisibility(View.GONE);
-        }
+        setReviewsLoadingProgress(false);
     }
 
     @Override
