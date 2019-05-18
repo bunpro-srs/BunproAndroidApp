@@ -107,7 +107,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
                 }
 
-                if (review != null) {
+                if (review != null && review.complete) {
                     ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
                     ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, context);
                     ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);
@@ -224,7 +224,7 @@ class StickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((DescriptionHolder) viewHolder).llCaution.setVisibility(View.GONE);
                 }
 
-                if (review != null) {
+                if (review != null && review.complete) {
                     ((DescriptionHolder)viewHolder).llReviews.setVisibility(View.VISIBLE);
                     ReviewItemAdapter adapter = new ReviewItemAdapter(this.review, context);
                     ((DescriptionHolder) viewHolder).rvReviews.setAdapter(adapter);

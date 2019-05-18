@@ -24,9 +24,11 @@ public class GrammarPointInteractor extends BaseInteractor {
     private void saveGrammarPoints(List<GrammarPoint> grammarPoints) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
-            realm.delete(GrammarPoint.class);
+            realm.where(GrammarPoint.class).findAll().deleteAllFromRealm();
             realm.insertOrUpdate(grammarPoints);
             realm.commitTransaction();
+        } else {
+            Log.e("REALM_CLOSED", "Cannot update grammar points because realm is closed");
         }
     }
 

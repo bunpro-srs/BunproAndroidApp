@@ -46,8 +46,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     SpinKitView progress;
     TextView tvFurigana, tvHideEnglish, tvBunnyMode;
 
-    boolean refreshingDatabase = false;
-
     public SettingFragment() {
 
     }
@@ -416,19 +414,14 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     // TODO: delete this method once this is no longer useful
     private void beginDatabaseRefresh() {
-        if (!refreshingDatabase) {
-            refreshingDatabase = true;
-            Toast.makeText(context, R.string.refreshing_database, Toast.LENGTH_SHORT).show();
-            if (context instanceof HomeActivity) {
-                if (((HomeActivity)context).homePresenter != null) {
-                    ((HomeActivity)context).homePresenter.fetchData();
-                    refreshingDatabase = false;
-                    return;
-                }
+        Toast.makeText(context, R.string.refreshing_database, Toast.LENGTH_SHORT).show();
+        if (context instanceof HomeActivity) {
+            if (((HomeActivity)context).homePresenter != null) {
+                ((HomeActivity)context).homePresenter.fetchData();
+                return;
             }
-            Toast.makeText(context, "Unable to refresh database", Toast.LENGTH_SHORT).show();
         }
-
+        Toast.makeText(context, "Unable to refresh database", Toast.LENGTH_SHORT).show();
     }
 
     @Override

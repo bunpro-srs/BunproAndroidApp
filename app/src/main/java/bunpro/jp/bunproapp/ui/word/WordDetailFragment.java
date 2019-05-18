@@ -151,7 +151,7 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         List<Review> reviews = wordDetailPresenter.getReviews();
         if (reviews.size() > 0) {
             for (int k=0;k<reviews.size();k++) {
-                if (reviews.get(k).grammar_point_id == point.id) {
+                if (reviews.get(k).complete && reviews.get(k).grammar_point_id == point.id) {
                     status = true;
                     break;
                 }

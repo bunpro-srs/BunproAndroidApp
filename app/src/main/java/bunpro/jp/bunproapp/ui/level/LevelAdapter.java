@@ -68,7 +68,7 @@ class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.LevelViewHolder> {
         if (reviews.size() > 0) {
             for (GrammarPoint point : points) {
                 for (Review review : reviews) {
-                    if (point.id == review.grammar_point_id) {
+                    if (review.complete && point.id == review.grammar_point_id) {
                         count++;
                         break;
                     }

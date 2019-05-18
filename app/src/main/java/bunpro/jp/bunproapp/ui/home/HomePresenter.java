@@ -76,9 +76,7 @@ public class HomePresenter implements HomeContract.Presenter {
                             }
                         });
                         // Workaround for /user/progress v3 endpoint not working
-                        if (GrammarPoint.getN2GrammarPointsTotal().size() == 0) {
-                            countProgress(reviewInteractor.loadReviews().findAll());
-                        }
+                        countProgress(reviewInteractor.loadReviews().findAll());
                         if (homeView.getContext() instanceof HomeActivity) {
                             HomeActivity homeActivity = (HomeActivity) homeView.getContext();
                             if (homeActivity.getSupportFragmentManager().getFragments().get(0) instanceof StatusFragment) {
@@ -106,15 +104,39 @@ public class HomePresenter implements HomeContract.Presenter {
      * Temporary workaround for the non working /user/progress v3 endpoint
      */
     public void countProgress(List<Review> reviews) {
+        List<Integer> n5GrammarPointsLearned = new ArrayList<>();
+        List<Integer> n4GrammarPointsLearned = new ArrayList<>();
+        List<Integer> n3GrammarPointsLearned = new ArrayList<>();
         List<Integer> n2GrammarPointsLearned = new ArrayList<>();
         List<Integer> n1GrammarPointsLearned = new ArrayList<>();
+        List<Integer> n5GrammarPointsTotal = new ArrayList<>();
+        List<Integer> n4GrammarPointsTotal = new ArrayList<>();
+        List<Integer> n3GrammarPointsTotal = new ArrayList<>();
         List<Integer> n2GrammarPointsTotal = new ArrayList<>();
         List<Integer> n1GrammarPointsTotal = new ArrayList<>();
+        List<GrammarPoint> n5GrammarPoints = new ArrayList<>();
+        List<GrammarPoint> n4GrammarPoints = new ArrayList<>();
+        List<GrammarPoint> n3GrammarPoints = new ArrayList<>();
         List<GrammarPoint> n2GrammarPoints = new ArrayList<>();
         List<GrammarPoint> n1GrammarPoints = new ArrayList<>();
 
         for (GrammarPoint grammarPointExample : grammarPointInteractor.loadGrammarPoints().findAll()) {
-            if (grammarPointExample.level.equals("JLPT2")) {
+            if (grammarPointExample.level.equals("JLPT5")) {
+                if (!n5GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n5GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n5GrammarPoints.add(grammarPointExample);
+            } else if (grammarPointExample.level.equals("JLPT4")) {
+                if (!n4GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n4GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n4GrammarPoints.add(grammarPointExample);
+            } else if (grammarPointExample.level.equals("JLPT3")) {
+                if (!n3GrammarPointsTotal.contains(grammarPointExample.id)) {
+                    n3GrammarPointsTotal.add(grammarPointExample.id);
+                }
+                n3GrammarPoints.add(grammarPointExample);
+            } else if (grammarPointExample.level.equals("JLPT2")) {
                 if (!n2GrammarPointsTotal.contains(grammarPointExample.id)) {
                     n2GrammarPointsTotal.add(grammarPointExample.id);
                 }
@@ -127,24 +149,53 @@ public class HomePresenter implements HomeContract.Presenter {
             }
         }
         for (Review review : reviews) {
-            for (GrammarPoint grammarConcernedByReview : n2GrammarPoints) {
-                if (review.grammar_point_id == grammarConcernedByReview.id) {
-                    if (review.times_correct > 0 && !n2GrammarPointsLearned.contains(review.id)) {
-                        n2GrammarPointsLearned.add(review.id);
+            if (review.complete) {
+                for (GrammarPoint grammarConcernedByReview : n5GrammarPoints) {
+                    if (review.grammar_point_id == grammarConcernedByReview.id) {
+                        if (!n5GrammarPointsLearned.contains(review.id)) {
+                            n5GrammarPointsLearned.add(review.id);
+                        }
                     }
                 }
-            }
-            for (GrammarPoint grammarConcernedByReview : n1GrammarPoints) {
-                if (review.grammar_point_id == grammarConcernedByReview.id) {
-                    if (review.times_correct > 0 && !n1GrammarPointsLearned.contains(review.id)) {
-                        n1GrammarPointsLearned.add(review.id);
+                for (GrammarPoint grammarConcernedByReview : n4GrammarPoints) {
+                    if (review.grammar_point_id == grammarConcernedByReview.id) {
+                        if (!n4GrammarPointsLearned.contains(review.id)) {
+                            n4GrammarPointsLearned.add(review.id);
+                        }
+                    }
+                }
+                for (GrammarPoint grammarConcernedByReview : n3GrammarPoints) {
+                    if (review.grammar_point_id == grammarConcernedByReview.id) {
+                        if (!n3GrammarPointsLearned.contains(review.id)) {
+                            n3GrammarPointsLearned.add(review.id);
+                        }
+                    }
+                }
+                for (GrammarPoint grammarConcernedByReview : n2GrammarPoints) {
+                    if (review.grammar_point_id == grammarConcernedByReview.id) {
+                        if (!n2GrammarPointsLearned.contains(review.id)) {
+                            n2GrammarPointsLearned.add(review.id);
+                        }
+                    }
+                }
+                for (GrammarPoint grammarConcernedByReview : n1GrammarPoints) {
+                    if (review.grammar_point_id == grammarConcernedByReview.id) {
+                        if (!n1GrammarPointsLearned.contains(review.id)) {
+                            n1GrammarPointsLearned.add(review.id);
+                        }
                     }
                 }
             }
         }
         GrammarPoint.setN1GrammarPointsLearned(n1GrammarPointsLearned);
         GrammarPoint.setN2GrammarPointsLearned(n2GrammarPointsLearned);
+        GrammarPoint.setN3GrammarPointsLearned(n3GrammarPointsLearned);
+        GrammarPoint.setN4GrammarPointsLearned(n4GrammarPointsLearned);
+        GrammarPoint.setN5GrammarPointsLearned(n5GrammarPointsLearned);
         GrammarPoint.setN1GrammarPointsTotal(n1GrammarPointsTotal);
         GrammarPoint.setN2GrammarPointsTotal(n2GrammarPointsTotal);
+        GrammarPoint.setN3GrammarPointsTotal(n3GrammarPointsTotal);
+        GrammarPoint.setN4GrammarPointsTotal(n4GrammarPointsTotal);
+        GrammarPoint.setN5GrammarPointsTotal(n5GrammarPointsTotal);
     }
 }

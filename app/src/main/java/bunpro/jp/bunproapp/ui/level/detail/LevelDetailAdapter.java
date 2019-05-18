@@ -67,7 +67,7 @@ class LevelDetailAdapter extends RecyclerView.Adapter<LevelDetailAdapter.LevelDe
         boolean result = false;
         if (this.reviews.size() > 0) {
             for (Review review : this.reviews) {
-                if (review.grammar_point_id == point.id) {
+                if (review.complete && review.grammar_point_id == point.id) {
                     result = true;
                 }
             }

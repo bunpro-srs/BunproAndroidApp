@@ -25,5 +25,6 @@ public interface HomeContract {
     interface Presenter {
         void fetchData();
         void stop();
+        void countProgress(List<Review> reviews);
     }
 }

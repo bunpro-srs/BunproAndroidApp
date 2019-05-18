@@ -45,56 +45,67 @@ public class StatusPresenter implements StatusContract.Presenter {
     }
 
     public void fetchStatus() {
-        ApiService apiService = new ApiService(statusView.getContext());
+//        ApiService apiService = new ApiService(statusView.getContext());
 
-        apiService.getProgress(new ApiService.ApiCallbackListener() {
-            @Override
-            public void success(JSONObject jsonObject) {
-                statusView.setGlobalLoadingProgress(true);
-
-                Iterator iterator = jsonObject.keys();
-                List<Status> status = new ArrayList<>();
-
-                while(iterator.hasNext()){
-
-                    String key = (String)iterator.next();
-                    int sk =0, tk = 0;
-
-                    try {
-                        JSONArray jsonArray = jsonObject.getJSONArray(key);
-                        sk = jsonArray.getInt(0);
-                        tk = jsonArray.getInt(1);
-                    } catch (JSONException e) {
-                        Log.e("JSONException", "Progress status response could not be parsed.");
-                    }
-
-                    Status s = new Status(key, sk, tk);
-                    // Dirty fix condition for missing N1/wrong N2 values
-                    if (!s.getName().equals("N2") && !s.getName().equals("N1")) {
-                        status.add(s);
-                    }
-                }
-
-                // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
-                status.add(new Status("N2", GrammarPoint.getN2GrammarPointsLearned().size(), GrammarPoint.getN2GrammarPointsTotal().size()));
-                status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
-                Status.setStatusList(status);
-                statusView.refresh();
-                statusView.setGlobalLoadingProgress(false);
-            }
-
-            @Override
-            public void successAsJSONArray(JSONArray jsonArray) {
-                Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User progress)");
-                statusView.setGlobalLoadingProgress(false);
-            }
-
-            @Override
-            public void error(ANError anError) {
-                Log.e("API request error", anError.getErrorBody());
-                statusView.setGlobalLoadingProgress(false);
-            }
-        });
+        statusView.setGlobalLoadingProgress(true);
+        List<Status> status = new ArrayList<>();
+        status.add(new Status("N5", GrammarPoint.getN5GrammarPointsLearned().size(), GrammarPoint.getN5GrammarPointsTotal().size()));
+        status.add(new Status("N4", GrammarPoint.getN4GrammarPointsLearned().size(), GrammarPoint.getN4GrammarPointsTotal().size()));
+        status.add(new Status("N3", GrammarPoint.getN3GrammarPointsLearned().size(), GrammarPoint.getN3GrammarPointsTotal().size()));
+        status.add(new Status("N2", GrammarPoint.getN2GrammarPointsLearned().size(), GrammarPoint.getN2GrammarPointsTotal().size()));
+        status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
+        Status.setStatusList(status);
+        statusView.refresh();
+        statusView.setGlobalLoadingProgress(false);
+        // TODO: Reenable getProgress call when the endpoint works again
+//        apiService.getProgress(new ApiService.ApiCallbackListener() {
+//            @Override
+//            public void success(JSONObject jsonObject) {
+//                statusView.setGlobalLoadingProgress(true);
+//
+//                Iterator iterator = jsonObject.keys();
+//                List<Status> status = new ArrayList<>();
+//
+//                while(iterator.hasNext()){
+//
+//                    String key = (String)iterator.next();
+//                    int sk =0, tk = 0;
+//
+//                    try {
+//                        JSONArray jsonArray = jsonObject.getJSONArray(key);
+//                        sk = jsonArray.getInt(0);
+//                        tk = jsonArray.getInt(1);
+//                    } catch (JSONException e) {
+//                        Log.e("JSONException", "Progress status response could not be parsed.");
+//                    }
+//
+//                    Status s = new Status(key, sk, tk);
+//                    // Dirty fix condition for missing N1/wrong N2 values
+//                    if (!s.getName().equals("N2") && !s.getName().equals("N1")) {
+//                        status.add(s);
+//                    }
+//                }
+//
+//                // Dirty fix status for missing N1/wrong N2 values due to inconsistent /user/progress v3 endpoint
+//                status.add(new Status("N2", GrammarPoint.getN2GrammarPointsLearned().size(), GrammarPoint.getN2GrammarPointsTotal().size()));
+//                status.add(new Status("N1", GrammarPoint.getN1GrammarPointsLearned().size(), GrammarPoint.getN1GrammarPointsTotal().size()));
+//                Status.setStatusList(status);
+//                statusView.refresh();
+//                statusView.setGlobalLoadingProgress(false);
+//            }
+//
+//            @Override
+//            public void successAsJSONArray(JSONArray jsonArray) {
+//                Log.e("API Format changed", "JSONArray obtained instead of an JSONObject ! (User progress)");
+//                statusView.setGlobalLoadingProgress(false);
+//            }
+//
+//            @Override
+//            public void error(ANError anError) {
+//                Log.e("API request error", anError.getErrorBody());
+//                statusView.setGlobalLoadingProgress(false);
+//            }
+//        });
     }
 
     @Override

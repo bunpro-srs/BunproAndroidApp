@@ -24,9 +24,11 @@ public class ReviewInteractor extends BaseInteractor {
     private void saveReviews(List<Review> reviews) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
-            realm.delete(Review.class);
+            realm.where(Review.class).findAll().deleteAllFromRealm();
             realm.insertOrUpdate(reviews);
             realm.commitTransaction();
+        } else {
+            Log.e("REALM_CLOSED", "Cannot update reviews because realm is closed");
         }
     }
 

@@ -24,9 +24,11 @@ public class SupplementalLinkInteractor extends BaseInteractor {
     private void saveSupplementalLinks(List<SupplementalLink> links) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
-            realm.delete(SupplementalLink.class);
+            realm.where(SupplementalLink.class).findAll().deleteAllFromRealm();
             realm.insertOrUpdate(links);
             realm.commitTransaction();
+        } else {
+            Log.e("REALM_CLOSED", "Cannot update supplemental links because realm is closed");
         }
     }
 

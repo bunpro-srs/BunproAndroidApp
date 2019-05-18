@@ -11,8 +11,14 @@ import io.realm.annotations.PrimaryKey;
 
 public class GrammarPoint extends RealmObject {
     /* Temporary workaround for non working API endpoint */
+    private static List<Integer> n5GrammarPointsLearned = new ArrayList<>();
+    private static List<Integer> n4GrammarPointsLearned = new ArrayList<>();
+    private static List<Integer> n3GrammarPointsLearned = new ArrayList<>();
     private static List<Integer> n2GrammarPointsLearned = new ArrayList<>();
     private static List<Integer> n1GrammarPointsLearned = new ArrayList<>();
+    private static List<Integer> n5GrammarPointsTotal = new ArrayList<>();
+    private static List<Integer> n4GrammarPointsTotal = new ArrayList<>();
+    private static List<Integer> n3GrammarPointsTotal = new ArrayList<>();
     private static List<Integer> n2GrammarPointsTotal = new ArrayList<>();
     private static List<Integer> n1GrammarPointsTotal = new ArrayList<>();
 
@@ -74,6 +80,24 @@ public class GrammarPoint extends RealmObject {
     };
 
     /* Temporary workaround for non working API endpoint */
+    public static List<Integer> getN5GrammarPointsLearned() {
+        return n5GrammarPointsLearned;
+    }
+    public static void setN5GrammarPointsLearned(List<Integer> n5GrammarPointsLearned) {
+        GrammarPoint.n5GrammarPointsLearned = n5GrammarPointsLearned;
+    }
+    public static List<Integer> getN4GrammarPointsLearned() {
+        return n4GrammarPointsLearned;
+    }
+    public static void setN4GrammarPointsLearned(List<Integer> n4GrammarPointsLearned) {
+        GrammarPoint.n4GrammarPointsLearned = n4GrammarPointsLearned;
+    }
+    public static List<Integer> getN3GrammarPointsLearned() {
+        return n3GrammarPointsLearned;
+    }
+    public static void setN3GrammarPointsLearned(List<Integer> n3GrammarPointsLearned) {
+        GrammarPoint.n3GrammarPointsLearned = n3GrammarPointsLearned;
+    }
     public static List<Integer> getN2GrammarPointsLearned() {
         return n2GrammarPointsLearned;
     }
@@ -86,13 +110,32 @@ public class GrammarPoint extends RealmObject {
     public static void setN1GrammarPointsLearned(List<Integer> n1GrammarPointsLearned) {
         GrammarPoint.n1GrammarPointsLearned = n1GrammarPointsLearned;
     }
+
+    public static List<Integer> getN5GrammarPointsTotal() {
+        return n5GrammarPointsTotal;
+    }
+    public static void setN5GrammarPointsTotal(List<Integer> n5GrammarPointsTotal) {
+        GrammarPoint.n5GrammarPointsTotal = n5GrammarPointsTotal;
+    }
+    public static List<Integer> getN4GrammarPointsTotal() {
+        return n4GrammarPointsTotal;
+    }
+    public static void setN4GrammarPointsTotal(List<Integer> n4GrammarPointsTotal) {
+        GrammarPoint.n4GrammarPointsTotal = n4GrammarPointsTotal;
+    }
+    public static List<Integer> getN3GrammarPointsTotal() {
+        return n3GrammarPointsTotal;
+    }
+    public static void setN3GrammarPointsTotal(List<Integer> n3GrammarPointsTotal) {
+        GrammarPoint.n3GrammarPointsTotal = n3GrammarPointsTotal;
+    }
+
     public static List<Integer> getN2GrammarPointsTotal() {
         return n2GrammarPointsTotal;
     }
     public static void setN2GrammarPointsTotal(List<Integer> n2GrammarPointsTotal) {
         GrammarPoint.n2GrammarPointsTotal = n2GrammarPointsTotal;
     }
-
     public static List<Integer> getN1GrammarPointsTotal() {
         return n1GrammarPointsTotal;
     }

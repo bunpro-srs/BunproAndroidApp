@@ -24,9 +24,11 @@ public class ExampleSentenceInteractor extends BaseInteractor {
     private void saveExampleSentences(List<ExampleSentence> sentences) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
-            realm.delete(ExampleSentence.class);
+            realm.where(ExampleSentence.class).findAll().deleteAllFromRealm();
             realm.insertOrUpdate(sentences);
             realm.commitTransaction();
+        } else {
+            Log.e("REALM_CLOSED", "Cannot update example sentences because realm is closed");
         }
     }
 

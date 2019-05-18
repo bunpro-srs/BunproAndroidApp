@@ -71,6 +71,9 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
                 } else if (grammarPointId != -1) {
                     updateReviewByGrammarPoint(grammarPointId);
                 }
+                if (wordDetailView.getContext() instanceof HomeActivity && ((HomeActivity)wordDetailView.getContext()).homePresenter != null) {
+                    ((HomeActivity)wordDetailView.getContext()).homePresenter.countProgress(reviewInteractor.loadReviews().findAll());
+                }
                 callback.success();
             }
 
