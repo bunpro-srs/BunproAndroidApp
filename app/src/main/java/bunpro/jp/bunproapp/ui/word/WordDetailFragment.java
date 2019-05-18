@@ -118,15 +118,9 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         selectedPoint = wordDetailPresenter.getGrammarPoint(getArguments() != null ? getArguments().getInt("currentGrammarPointId") : -1);
 
         if (selectedPoint != null) {
-            if (!isReviewed(selectedPoint)) {
-                btnResetOrAdd.setText("Add to Reviews");
-                btnResetOrAdd.setTag(1003);
-            } else {
-                btnResetOrAdd.setText("Reset/Remove");
-                btnResetOrAdd.setTag(1004);
-            }
+            setActionLoading(false);
 
-            review = wordDetailPresenter.getReview(selectedPoint);
+            wordDetailPresenter.updateReviewByGrammarPoint(selectedPoint.id);
 
             mAdapter = new StickAdapter(context, 0, review, selectedPoint, wordDetailPresenter.fetchExampleSentences(selectedPoint), wordDetailPresenter.fetchGrammarPointSupplementalLinks(selectedPoint), new StickAdapter.ItemClickListener() {
                 @Override
@@ -156,16 +150,13 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
         boolean status = false;
         List<Review> reviews = wordDetailPresenter.getReviews();
         if (reviews.size() > 0) {
-
             for (int k=0;k<reviews.size();k++) {
                 if (reviews.get(k).grammar_point_id == point.id) {
                     status = true;
                     break;
                 }
             }
-
         }
-
         return status;
     }
 
@@ -258,5 +249,27 @@ public class WordDetailFragment extends BaseFragment implements View.OnClickList
 
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setActionLoading(boolean loading) {
+        if (loading) {
+            btnResetOrAdd.setText(R.string.loading_progressing);
+            btnResetOrAdd.setTextColor(getResources().getColor(R.color.colorGrey));
+            btnResetOrAdd.setEnabled(false);
+        } else {
+            if (!isReviewed(selectedPoint)) {
+                btnResetOrAdd.setText(R.string.add_to_reviews);
+                btnResetOrAdd.setTag(1003);
+            } else {
+                btnResetOrAdd.setText(R.string.reset_or_remove);
+                btnResetOrAdd.setTag(1004);
+            }
+            btnResetOrAdd.setTextColor(getResources().getColor(R.color.colorBlue));
+            btnResetOrAdd.setEnabled(true);
+        }
+    }
+
+    public void updateReview(Review review) {
+        this.review = review;
     }
 }

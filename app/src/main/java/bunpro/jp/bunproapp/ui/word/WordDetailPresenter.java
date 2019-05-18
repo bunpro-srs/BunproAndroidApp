@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
@@ -20,6 +21,8 @@ import bunpro.jp.bunproapp.models.ExampleSentence;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.models.SupplementalLink;
+import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
+import io.realm.RealmList;
 
 public class WordDetailPresenter implements WordDetailContract.Presenter {
     private WordDetailContract.View wordDetailView;
@@ -45,18 +48,43 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
     }
 
     @Override
-    public Review getReview(GrammarPoint point) {
+    public void updateReviewByGrammarPoint(int grammarPointId) {
         Review review = null;
         List<Review> reviews = getReviews();
         if (reviews.size() > 0) {
             for (Review r : reviews) {
-                if (r.grammar_point_id == point.id) {
+                if (r.grammar_point_id == grammarPointId) {
                     review = r;
                     break;
                 }
             }
         }
-        return review;
+        wordDetailView.updateReview(review);
+    }
+
+    private void refetchReviews(int grammarPointId, int reviewId, SimpleCallbackListener callback) {
+        reviewInteractor.fetchReviews(new SimpleCallbackListener() {
+            @Override
+            public void success() {
+                if (reviewId != -1) {
+                    updateReviewById(reviewId);
+                } else if (grammarPointId != -1) {
+                    updateReviewByGrammarPoint(grammarPointId);
+                }
+                callback.success();
+            }
+
+            @Override
+            public void error(String errorMessage) {
+                Log.e("REFETCH_REVIEWS", errorMessage);
+                callback.error(errorMessage);
+            }
+        });
+    }
+
+    public void updateReviewById(int reviewId) {
+        Review review = reviewInteractor.getReview(reviewId).findFirst();
+        wordDetailView.updateReview(review);
     }
 
     public List<ExampleSentence> fetchExampleSentences(GrammarPoint point) {
@@ -95,17 +123,39 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
 
     public void addToReviews(int grammarPointId) {
         ApiService apiService = new ApiService(wordDetailView.getContext());
+        wordDetailView.setActionLoading(true);
         apiService.addToReview(grammarPointId, new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-                wordDetailView.showToast("The review has been added to your list.");
+                refetchReviews(grammarPointId, -1, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been added to your list.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after adding one.");
+                    }
+                });
             }
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-                wordDetailView.showToast("The review has been added to your list.");
+                refetchReviews(grammarPointId, -1, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been added to your list.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after adding one.");
+                    }
+                });
             }
             @Override
             public void error(ANError anError) {
+                wordDetailView.setActionLoading(false);
                 wordDetailView.showToast("An error occured while adding the review to your list.");
                 Log.e("Error", anError.getErrorDetail());
             }
@@ -114,17 +164,39 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
 
     public void removeFromReviews(int reviewId) {
         ApiService apiService = new ApiService(wordDetailView.getContext());
+        wordDetailView.setActionLoading(true);
         apiService.removeReview(reviewId, new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-                wordDetailView.showToast("The review has been removed from your list.");
+                refetchReviews(-1, reviewId, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been removed from your list.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after removing one.");
+                    }
+                });
             }
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-                wordDetailView.showToast("The review has been removed from your list.");
+                refetchReviews(-1, reviewId, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been removed from your list.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after removing one.");
+                    }
+                });
             }
             @Override
             public void error(ANError anError) {
+                wordDetailView.setActionLoading(false);
                 wordDetailView.showToast("An error occured while removing the review from your list.");
                 Log.e("Error", anError.getErrorDetail());
             }
@@ -133,17 +205,39 @@ public class WordDetailPresenter implements WordDetailContract.Presenter {
 
     public void resetReviews(int reviewId) {
         ApiService apiService = new ApiService(wordDetailView.getContext());
+        wordDetailView.setActionLoading(true);
         apiService.resetReview(reviewId, new ApiService.ApiCallbackListener() {
             @Override
             public void success(JSONObject jsonObject) {
-                wordDetailView.showToast("The review has been reset.");
+                refetchReviews(-1, reviewId, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been reset.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after resetting one.");
+                    }
+                });
             }
             @Override
             public void successAsJSONArray(JSONArray jsonArray) {
-                wordDetailView.showToast("The review has been reset.");
+                refetchReviews(-1, reviewId, new SimpleCallbackListener() {
+                    @Override
+                    public void success() {
+                        wordDetailView.setActionLoading(false);
+                        wordDetailView.showToast("The review has been reset.");
+                    }
+                    @Override
+                    public void error(String errorMessage) {
+                        wordDetailView.showToast("Error while re-fetching reviews after resetting one.");
+                    }
+                });
             }
             @Override
             public void error(ANError anError) {
+                wordDetailView.setActionLoading(false);
                 wordDetailView.showToast("An error occured while resetting the review in your list.");
                 Log.e("Error", anError.getErrorDetail());
             }

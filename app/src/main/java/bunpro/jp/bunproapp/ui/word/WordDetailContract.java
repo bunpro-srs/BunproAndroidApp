@@ -13,10 +13,12 @@ public interface WordDetailContract {
     interface View {
         Context getContext();
         void showToast(String message);
+        void setActionLoading(boolean loading);
+        void updateReview(Review review);
     }
 
     interface Presenter {
-        Review getReview(GrammarPoint point);
+        void updateReviewByGrammarPoint(int grammarPointId);
         List<ExampleSentence> fetchExampleSentences(GrammarPoint point);
         List<SupplementalLink> fetchGrammarPointSupplementalLinks(GrammarPoint point);
         List<Review> getReviews();

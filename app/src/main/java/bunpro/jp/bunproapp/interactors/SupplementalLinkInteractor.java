@@ -24,6 +24,7 @@ public class SupplementalLinkInteractor extends BaseInteractor {
     private void saveSupplementalLinks(List<SupplementalLink> links) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
+            realm.delete(SupplementalLink.class);
             realm.insertOrUpdate(links);
             realm.commitTransaction();
         }

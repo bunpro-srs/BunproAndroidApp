@@ -19,6 +19,7 @@ public interface HomeContract {
         void replaceFragment(Fragment fragment);
         void addFragment(Fragment fragment);
         void popFragment();
+        void showToast(String message);
     }
 
     interface Presenter {

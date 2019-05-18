@@ -28,8 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements HomeContract.View, FragNavController.RootFragmentListener {
-
-    HomeContract.Presenter homePresenter;
+    // TODO: Make it private! Waiting for database refresh to be no longer useful
+    public HomeContract.Presenter homePresenter;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.main_container) FrameLayout container;
@@ -184,4 +184,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         throw new IllegalStateException("Need to send an index that we know");
     }
 
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }

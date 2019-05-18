@@ -24,6 +24,7 @@ public class ExampleSentenceInteractor extends BaseInteractor {
     private void saveExampleSentences(List<ExampleSentence> sentences) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
+            realm.delete(ExampleSentence.class);
             realm.insertOrUpdate(sentences);
             realm.commitTransaction();
         }

@@ -296,14 +296,33 @@
 
 
             <RelativeLayout
+                android:id="@+id/rlRefreshDatabase"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_width"
+                android:background="@drawable/bg_corner_left_right"
+                android:layout_marginTop="50dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorBlue"
+                    android:text="@string/refresh_database"
+                    android:textSize="16sp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rlLogout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_width"
-                android:background="@drawable/bg_login"
-                android:layout_marginTop="50dp"
+                android:background="@drawable/bg_corner_bottom_left_right"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="2dp">
 
                 <TextView
                     android:layout_width="wrap_content"

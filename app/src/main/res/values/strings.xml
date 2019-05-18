@@ -52,4 +52,9 @@
     <string name="cram">Cram</string>
     <string name="study">Study</string>
     <string name="bunpro">Bunpro</string>
+    <string name="loading_progressing">Loading...</string>
+    <string name="add_to_reviews">Add to reviews</string>
+    <string name="reset_or_remove">Reset/Remove</string>
+    <string name="refresh_database">Refresh database</string>
+    <string name="refreshing_database">Refreshing local database... This might take a while</string>
 </resources>

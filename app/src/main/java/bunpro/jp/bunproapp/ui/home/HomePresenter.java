@@ -62,6 +62,7 @@ public class HomePresenter implements HomeContract.Presenter {
                                 supplementalLinkInteractor.fetchSupplementalLinks(new SimpleCallbackListener() {
                                     @Override
                                     public void success() {
+                                        homeView.showToast("Database is fully loaded.");
                                     }
                                     @Override
                                     public void error(String errorMessage) {

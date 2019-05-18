@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import bunpro.jp.bunproapp.R;
+import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.ui.login.LoginActivity;
 import bunpro.jp.bunproapp.ui.BaseFragment;
 import bunpro.jp.bunproapp.utils.AppData;
@@ -38,11 +39,14 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     RelativeLayout furigana;
     RelativeLayout hideEnglish;
     RelativeLayout logout;
+    RelativeLayout refreshDatabase;
     RelativeLayout privacy;
     RelativeLayout terms;
     RelativeLayout community;
     SpinKitView progress;
     TextView tvFurigana, tvHideEnglish, tvBunnyMode;
+
+    boolean refreshingDatabase = false;
 
     public SettingFragment() {
 
@@ -94,6 +98,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
         logout = view.findViewById(R.id.rlLogout);
         logout.setOnClickListener(this);
+
+        refreshDatabase = view.findViewById(R.id.rlRefreshDatabase);
+        refreshDatabase.setOnClickListener(this);
 
         community = view.findViewById(R.id.rlCommunity);
         community.setOnClickListener(this);
@@ -193,6 +200,10 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
         if (id == R.id.rlLogout) {
             showLogout();
+        }
+
+        if (id == R.id.rlRefreshDatabase) {
+            beginDatabaseRefresh();
         }
 
         if (id == R.id.rlCommunity) {
@@ -401,6 +412,23 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         }
 
         settingPresenter.submitSettings(hide_english, furigana, light_mode, bunny_mode);
+    }
+
+    // TODO: delete this method once this is no longer useful
+    private void beginDatabaseRefresh() {
+        if (!refreshingDatabase) {
+            refreshingDatabase = true;
+            Toast.makeText(context, R.string.refreshing_database, Toast.LENGTH_SHORT).show();
+            if (context instanceof HomeActivity) {
+                if (((HomeActivity)context).homePresenter != null) {
+                    ((HomeActivity)context).homePresenter.fetchData();
+                    refreshingDatabase = false;
+                    return;
+                }
+            }
+            Toast.makeText(context, "Unable to refresh database", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

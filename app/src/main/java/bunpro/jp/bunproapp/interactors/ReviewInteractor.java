@@ -24,6 +24,7 @@ public class ReviewInteractor extends BaseInteractor {
     private void saveReviews(List<Review> reviews) {
         if (!realm.isClosed()) {
             realm.beginTransaction();
+            realm.delete(Review.class);
             realm.insertOrUpdate(reviews);
             realm.commitTransaction();
         }
@@ -31,6 +32,10 @@ public class ReviewInteractor extends BaseInteractor {
 
     public RealmQuery<Review> loadReviews() {
         return realm.where(Review.class);
+    }
+
+    public RealmQuery<Review> getReview(int reviewId) {
+        return realm.where(Review.class).equalTo("id", reviewId);
     }
 
     public void fetchReviews(SimpleCallbackListener callback) {
