@@ -9,7 +9,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +35,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
 
     SegmentedGroup filterGroup;
     RadioButton rbAll, rbUnlearned, rbLearned;
-    SearchView svSearch;
+//    SearchView svSearch;
 
     SwipeRefreshLayout sfLayout;
 
@@ -136,7 +135,7 @@ public class SearchFragment extends BaseFragment implements SearchContract.View 
         });
 
 
-        svSearch = view.findViewById(R.id.svSearch);
+//        svSearch = view.findViewById(R.id.svSearch);
         //androidx.appcompat.widget.SearchView.SearchAutoComplete searchAutoComplete = (androidx.appcompat.widget.SearchView.SearchAutoComplete)svSearch.findViewById(androidx.appcompat.appcompat.R.id.search_src_text);
         //searchAutoComplete.setHintTextColor(Color.parseColor("#c7d1d3"));
         //searchAutoComplete.setTextColor(Color.parseColor("#c7d1d3"));

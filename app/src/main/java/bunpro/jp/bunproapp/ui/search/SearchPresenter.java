@@ -1,6 +1,5 @@
 package bunpro.jp.bunproapp.ui.search;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.androidnetworking.error.ANError;
@@ -16,12 +15,11 @@ import bunpro.jp.bunproapp.interactors.ExampleSentenceInteractor;
 import bunpro.jp.bunproapp.interactors.GrammarPointInteractor;
 import bunpro.jp.bunproapp.interactors.ReviewInteractor;
 import bunpro.jp.bunproapp.interactors.SupplementalLinkInteractor;
-import bunpro.jp.bunproapp.models.ExampleSentence;
-import bunpro.jp.bunproapp.ui.home.HomeActivity;
 import bunpro.jp.bunproapp.models.GrammarPoint;
 import bunpro.jp.bunproapp.models.Review;
 import bunpro.jp.bunproapp.service.ApiService;
 import bunpro.jp.bunproapp.service.JsonParser;
+import io.realm.RealmResults;
 
 public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View searchView;
@@ -119,7 +117,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         return !exampleSentenceInteractor.loadExampleSentences().findAll().isEmpty() && !supplementalLinkInteractor.loadSupplementalLinks().findAll().isEmpty();
     }
 
-    public List<GrammarPoint> getGrammarPoints() {
+    public RealmResults<GrammarPoint> getGrammarPoints() {
         return grammarPointInteractor.loadGrammarPoints().findAll();
     }
 }

@@ -153,18 +153,20 @@ public class StatusPresenter implements StatusContract.Presenter {
         statusView.updateReviewTime(dateStr);
         int pendingReviewCount = 0, withinAnHourReviewCount = 0, withinADayReviewCount = 0;
         for (Review review : reviewInteractor.loadReviews().findAll()) {
-            long remainingHours = review.getRemainingHoursBeforeReview();
-            if (remainingHours <= 0) {
-                pendingReviewCount++;
-            } else if (remainingHours == 1) {
-                withinAnHourReviewCount++;
-            } else if (remainingHours <= 24) {
-                withinADayReviewCount++;
+            if (review.complete) {
+                long remainingHours = review.getRemainingHoursBeforeReview();
+                if (remainingHours <= 0) {
+                    pendingReviewCount++;
+                } else if (remainingHours == 1) {
+                    withinAnHourReviewCount++;
+                } else if (remainingHours <= 24) {
+                    withinADayReviewCount++;
+                }
             }
         }
         statusView.updateReviewNumbers(pendingReviewCount, withinAnHourReviewCount, withinADayReviewCount);
         // Updating badge
-        statusView.updateBadge(reviewInteractor.loadReviews().findAll().size());
+        statusView.updateBadge(pendingReviewCount);
     }
 
     public boolean checkGrammarPointsAndReviewsExistence() {

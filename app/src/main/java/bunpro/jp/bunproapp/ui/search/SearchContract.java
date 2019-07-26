@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import bunpro.jp.bunproapp.models.GrammarPoint;
+import io.realm.RealmResults;
 
 public interface SearchContract {
 
@@ -18,6 +19,6 @@ public interface SearchContract {
         void getAllWords(int filter);
         void stop();
         boolean checkSentenceAndLinksExistence();
-        List<GrammarPoint> getGrammarPoints();
+        RealmResults<GrammarPoint> getGrammarPoints();
     }
 }

@@ -1,6 +1,7 @@
 package bunpro.jp.bunproapp.ui.search;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,6 @@ class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implem
 
     void update(List<GrammarPoint> points) {
         this.points = points;
-
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

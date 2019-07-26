@@ -58,6 +58,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'io.realm:android-adapters:2.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'info.hoang8f:android-segmented:1.0.6'

@@ -53,6 +53,8 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
     TextView tvReviewTimeTextView, tvUpdate1Hour, tvUpdate24Hours;
     SpinKitView spinKitView;
 
+    private int reviewCount = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +143,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.llReview) {
+        if (id == R.id.llReview && reviewCount > 0) {
             String token = UserData.getInstance(context).getUserKey();
             Map<String, String> header = new HashMap<>();
             header.put("Authorization", "Bearer " + token);
@@ -200,6 +202,7 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
 
     @Override
     public void updateReviewNumbers(int currentReviews, int hourReviews, int dayReviews) {
+        reviewCount = currentReviews;
         tvReviews.setText(String.format("%s Reviews", String.valueOf(currentReviews)));
         tvUpdate1Hour.setText(String.format("+%s", String.valueOf(hourReviews)));
         tvUpdate24Hours.setText(String.format("+%s", String.valueOf(dayReviews)));
