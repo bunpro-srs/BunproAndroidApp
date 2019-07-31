@@ -136,11 +136,6 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.llReview && reviewCount > 0) {
@@ -149,13 +144,13 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
             header.put("Authorization", "Bearer " + token);
             new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_STUDY_URL);
         }
-        if (id == R.id.cram) {
+        else if (id == R.id.cram) {
             String token = UserData.getInstance(context).getUserKey();
             Map<String, String> header = new HashMap<>();
             header.put("Authorization", "Bearer " + token);
             new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_CRAM);
         }
-        if (id == R.id.study) {
+        else if (id == R.id.study) {
             String token = UserData.getInstance(context).getUserKey();
             Map<String, String> header = new HashMap<>();
             header.put("Authorization", "Bearer " + token);
