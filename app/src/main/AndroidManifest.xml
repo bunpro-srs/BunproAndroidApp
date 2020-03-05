@@ -16,11 +16,11 @@
         <uses-library android:name="android.test.runner" android:required="false" />
 
         <activity
-            android:name="bunpro.jp.bunproapp.ui.home.HomeActivity"
+            android:name="bunpro.jp.bunproapp.presentation.home.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"/>
 
-        <activity android:name="bunpro.jp.bunproapp.ui.home.SplashActivity"
+        <activity android:name="bunpro.jp.bunproapp.presentation.home.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -29,7 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="bunpro.jp.bunproapp.ui.login.LoginActivity"
+        <activity android:name="bunpro.jp.bunproapp.presentation.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"/>
 

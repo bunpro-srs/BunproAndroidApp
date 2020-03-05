@@ -14,8 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import bunpro.jp.bunproapp.utils.Constants;
-import bunpro.jp.bunproapp.utils.UserData;
+import bunpro.jp.bunproapp.utils.config.Constants;
+import bunpro.jp.bunproapp.utils.config.UserData;
 
 public class ApiService {
 

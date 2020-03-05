@@ -21,13 +21,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import bunpro.jp.bunproapp.ui.home.HomeActivity;
-import bunpro.jp.bunproapp.ui.login.LoginPresenter;
-import bunpro.jp.bunproapp.utils.EspressoTestingIdlingResource;
+import bunpro.jp.bunproapp.presentation.home.HomeActivity;
+import bunpro.jp.bunproapp.presentation.login.LoginPresenter;
+import bunpro.jp.bunproapp.utils.test.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
