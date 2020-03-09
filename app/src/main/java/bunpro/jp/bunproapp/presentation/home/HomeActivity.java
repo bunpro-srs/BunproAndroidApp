@@ -24,16 +24,13 @@ import bunpro.jp.bunproapp.presentation.search.SearchFragment;
 import bunpro.jp.bunproapp.presentation.settings.SettingFragment;
 import bunpro.jp.bunproapp.presentation.status.StatusFragment;
 import bunpro.jp.bunproapp.utils.test.EspressoTestingIdlingResource;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements HomeContract.View, FragNavController.RootFragmentListener {
     // TODO: Make it private! Waiting for database refresh to be no longer useful
     public HomeContract.Presenter homePresenter;
 
-    @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
-    @BindView(R.id.main_container) FrameLayout container;
-
+    BottomNavigationView bottomNavigationView;
+    FrameLayout container;
 
     FragNavController.Builder builder;
     FragNavController fragNavController;
@@ -67,7 +64,8 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         homePresenter = new HomePresenter(this);
 
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        container = findViewById(R.id.main_container);
 
         builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.main_container);
 
