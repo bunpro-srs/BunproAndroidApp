@@ -1,10 +1,12 @@
-[![Build Status](https://app.bitrise.io/app/fa3f978235505e36/status.svg?token=-aLDA1C71XHB5RF5O2u3IA&branch=master)](https://app.bitrise.io/app/fa3f978235505e36)
+[![Build Status](https://travis-ci.org/bunpro-srs/BunproAndroidApp.svg?branch=master)](https://travis-ci.org/bunpro-srs/BunproAndroidApp)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bunpro-srs&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bunpro-srs)
 # Bunpro Android App
 
 This is the Android application for the [Bunpro](https://bunpro.jp/) japanese grammar learning service.
 
-## Testing
+## Testing (deprecated)
+
+*Instrumentation tests were too costly to maintain, so they are no longer in use. The following should still work for future implementation, it was used with Bitrise CI tool.*
 
 A few instrumentation tests had been created, although they are now discontinued. Instrumentation tests
 launch the application like it should on an android device and test relevant features.
