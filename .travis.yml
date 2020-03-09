@@ -1,10 +1,12 @@
-language: java
-os: linux
+language: android
 dist: trusty
-jdk: oraclejdk8
+android:
+  components:
+    - build-tools-28.0.3
+    - android-28
 
 #before_install:
-#  - gradle wrapper --gradle-version 5.6.4
+#  - gradle wrapper --stacktrace --info
 install: true
 
 addons:
@@ -12,7 +14,7 @@ addons:
     organization: bunpro-srs
 
 script:
-  - ./gradlew build --info
+  - ./gradlew build --info --stacktrace
   - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then bash ./gradlew sonarqube --info; fi'
 
 before_cache:

@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/bunpro-srs/BunproAndroidApp.svg?branch=master)](https://travis-ci.org/bunpro-srs/BunproAndroidApp)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bunpro-srs&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bunpro-srs)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=bunpro-srs&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=bunpro-srs)
 # Bunpro Android App
 
 This is the Android application for the [Bunpro](https://bunpro.jp/) japanese grammar learning service.
