@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @BindView(R.id.btnLogin) Button btnLogin;
     @BindView(R.id.btnPrivacy) Button btnPrivacy;
 
+    @BindView(R.id.tvLinkHome) TextView tvLinkHome;
+
     @BindView(R.id.etEmail) EditText etEmail;
     @BindView(R.id.etPassword) EditText etPassword;
 
@@ -38,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        tvLinkHome.setText(Constants.HOME_URL);
 
         ButterKnife.bind(this);
         loadingProgress(false);
