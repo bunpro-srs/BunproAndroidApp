@@ -21,14 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.ybq.android.spinkit.SpinKitView;
-import com.wuadam.awesomewebview.AwesomeWebView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import bunpro.jp.bunproapp.R;
 import bunpro.jp.bunproapp.models.Status;
 import bunpro.jp.bunproapp.presentation.BaseFragment;
+import bunpro.jp.bunproapp.presentation.BunproWebView;
 import bunpro.jp.bunproapp.utils.config.Constants;
 import bunpro.jp.bunproapp.utils.config.UserData;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -140,21 +137,16 @@ public class StatusFragment extends BaseFragment implements StatusContract.View,
         int id = view.getId();
         if (id == R.id.llReview && reviewCount > 0) {
             String token = UserData.getInstance(context).getUserKey();
-            Map<String, String> header = new HashMap<>();
-            header.put("Authorization", "Bearer " + token);
-            new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_STUDY_URL);
+            BunproWebView.instantiate(context, Constants.APP_STUDY_URL, token);
+//            new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_STUDY_URL);
         }
         else if (id == R.id.cram) {
             String token = UserData.getInstance(context).getUserKey();
-            Map<String, String> header = new HashMap<>();
-            header.put("Authorization", "Bearer " + token);
-            new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_CRAM);
+            BunproWebView.instantiate(context, Constants.APP_CRAM, token);
         }
         else if (id == R.id.study) {
             String token = UserData.getInstance(context).getUserKey();
-            Map<String, String> header = new HashMap<>();
-            header.put("Authorization", "Bearer " + token);
-            new AwesomeWebView.Builder(context).setHeader(header).showUrl(false).show(Constants.APP_LEARN);
+            BunproWebView.instantiate(context, Constants.APP_LEARN, token);
         }
     }
 

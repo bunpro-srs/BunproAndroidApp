@@ -15,13 +15,13 @@ import androidx.annotation.Nullable;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.wuadam.awesomewebview.AwesomeWebView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import bunpro.jp.bunproapp.R;
+import bunpro.jp.bunproapp.presentation.BunproWebView;
 import bunpro.jp.bunproapp.presentation.home.HomeActivity;
 import bunpro.jp.bunproapp.presentation.login.LoginActivity;
 import bunpro.jp.bunproapp.presentation.BaseFragment;
@@ -169,19 +169,19 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
         int id = view.getId();
         if (id == R.id.rlAbout) {
-            new AwesomeWebView.Builder(context).show(Constants.ABOUT_URL);
+            BunproWebView.instantiate(context, Constants.ABOUT_URL);
         }
 
         if (id == R.id.rlPrivacy) {
-            new AwesomeWebView.Builder(context).show(Constants.PRIVACY_URL);
+            BunproWebView.instantiate(context, Constants.PRIVACY_URL);
         }
 
         if (id == R.id.rlTerms) {
-            new AwesomeWebView.Builder(context).show(Constants.TERMS_URL);
+            BunproWebView.instantiate(context, Constants.TERMS_URL);
         }
 
         if (id == R.id.rlContact) {
-            new AwesomeWebView.Builder(context).show(Constants.CONTACT_URL);
+            BunproWebView.instantiate(context, Constants.CONTACT_URL);
         }
 
         if (id == R.id.rlFurigana) {
@@ -205,7 +205,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (id == R.id.rlCommunity) {
-            new AwesomeWebView.Builder(context).showUrl(true).show(Constants.COMMUNITY_URL);
+            BunproWebView.instantiate(context, Constants.COMMUNITY_URL);
         }
     }
 

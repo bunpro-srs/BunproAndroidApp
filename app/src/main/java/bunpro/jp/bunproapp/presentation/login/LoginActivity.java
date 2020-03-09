@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
-import com.wuadam.awesomewebview.AwesomeWebView;
 
 import bunpro.jp.bunproapp.R;
+import bunpro.jp.bunproapp.presentation.BunproWebView;
 import bunpro.jp.bunproapp.presentation.home.HomeActivity;
 import bunpro.jp.bunproapp.utils.config.Constants;
 import bunpro.jp.bunproapp.utils.test.EspressoTestingIdlingResource;
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @OnClick(R.id.btnPrivacy) void privacy() {
-        new AwesomeWebView.Builder(this).showUrl(false).show(Constants.PRIVACY_URL);
+        BunproWebView.instantiate(this, Constants.PRIVACY_URL);
     }
 
     @OnClick(R.id.btnLogin) void login() {

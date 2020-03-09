@@ -34,7 +34,7 @@
             android:theme="@style/FullScreenTheme"/>
 
         <activity
-            android:name="com.wuadam.awesomewebview.AwesomeWebViewActivity"
+            android:name="bunpro.jp.bunproapp.presentation.BunproWebView"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:theme="@style/WebTheme" />

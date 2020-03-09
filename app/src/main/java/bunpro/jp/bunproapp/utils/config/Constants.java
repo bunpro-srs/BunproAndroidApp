@@ -2,6 +2,7 @@ package bunpro.jp.bunproapp.utils.config;
 
 public class Constants {
 
+    public static String BASE_DOMAIN = "bunpro.jp";
     public static String BASE_URL_v4 = "https://www.bunpro.jp/api/v4/";
     public static String BASE_URL_v3 = "https://www.bunpro.jp/api/v3/";
 
