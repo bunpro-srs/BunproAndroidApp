@@ -3,8 +3,8 @@ os: linux
 dist: trusty
 jdk: oraclejdk8
 
-before_install:
-  - gradle wrapper
+#before_install:
+#  - gradle wrapper --gradle-version 5.6.4
 install: true
 
 addons:
