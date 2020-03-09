@@ -57,4 +57,6 @@
     <string name="reset_or_remove">Reset/Remove</string>
     <string name="refresh_database">Refresh database</string>
     <string name="refreshing_database">Refreshing local database... This might take a while</string>
+    <string name="on_back_button_title">Closing session</string>
+    <string name="on_back_button_message">Are you sure you want to end the current session?</string>
 </resources>

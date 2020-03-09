@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import bunpro.jp.bunproapp.ui.login.LoginActivity;
-import bunpro.jp.bunproapp.utils.UserData;
+import bunpro.jp.bunproapp.presentation.login.LoginActivity;
+import bunpro.jp.bunproapp.utils.config.UserData;
 import io.realm.Realm;
 
 public abstract class BaseInteractor {

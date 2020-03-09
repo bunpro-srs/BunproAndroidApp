@@ -8,3 +8,6 @@ app/release
 /captures
 app/release
 .externalNativeBuild
+
+bunpro.jks*
+private*

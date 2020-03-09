@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="bunpro.jp.bunproapp.ui.home.HomeActivity">
+    tools:context="bunpro.jp.bunproapp.presentation.home.HomeActivity">
 
 
     <FrameLayout
