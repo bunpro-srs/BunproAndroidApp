@@ -1,65 +1,26 @@
 language: android
-
-before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
-  - "$HOME/.android/build-cache"
-
-env:
-  global:
-  - ANDROID_API=28
-  - ANDROID_BUILD_TOOLS=28.0.3
-  - ADB_INSTALL_TIMEOUT=10
-  - secure: U7wyPLP0iNj5scmeFAgpa8P8RKSWem7+5Uud1ldgkz6wzIM0a8RCRy8qSaYK/C6zTpZjXCOrHUEIHuxLWiVlB3BCJbVBjV3N3lQN9hx/eu0kdcgCRAuKMwcbM0C99VJwB8lNvWUbGYaNl26/Hbc6YCz5StWSt9Xdnej7dL5SxjQA+H83QEoL3SjHGQizlYpDGuA8NcXXunfzi+wPlESlwe+Q9umYZVOTKjyWYe+LwhKhkoxoRgK6FE+UIn8BYjNG1vrGWoo6nCX7LbCaLljqfUxgemukY2TiBVURP19VlsF4b2oIl18FMWgavD4+i7cbuiMBk+o4DHfweUg1FxAJJQIOhW6ggU1JhFncxXwUPYoled3I6Nx4W7PkhdKdkzIeMnCN9baVXbecc+AO3T/FLmyH0OSytJyG67BZtu4ErW3MUWRK3FNQvP3XN+1C9KlYXIwflhdqVEESEmR+z+OquYiCsjUiZKd0yIR1hgiKnj8Rja9V+A0A2w4yEGYB00ej0PKmxrZ6s8VDBbFq2g6GtLu8DOC41zgxMnN33DxH0cKmmDTJ1XPNOf+xAP/2rU1InVn3tIkuy+TL/+obbOpyNqrUVEUrYu7Gm8nqHO0PamJiCSuPc/fwm9ZQTfC8CTIZl4Np0g3nr1WGwNYnjwSr743728h1TU5TwWWrsHTLIxs= # storepass
-  - secure: jM73B6xXz9kg//arwyAOjxYNrWxvalnGJRdWM3Qet9kHa+zx6ecyT7wik5k/SuiaTNhkUvJaW6Z0DxRmXYZ6WcqTH9D+Hg1o+8sWComq+x8xV2KVooAGfThyuq/AnnARr95o9+dZInRVsIaN/y/8oI5+SCijWFrjmO/UNiWPjYmFyrreJ6HZSm/76eqM0cUNRyL8ykaE4R7yiMVpcwoQgPsrR3bYqSq8ijhlXnANlHy9UMQ3GJJWxKc5KxlfpyVhIQklLTAuciOroyoMfwTXs73KFpHbq1EwbmIfU87HjQPM8/X4D2TsxtbsgXqIGDkW1GF13LfnUAjImzjBOI0HRJvEelLOG3VuZBVqT6vxH4H/rBcSTb1RLsstLoqSEBPXGebF2ufg04O4Fijxe0lKR0tNCl4Z8eHgZo+eOC/1pv0Cm2BRIdfWrwqHchhJs//ww/LbvF2pDN0Ow6AN6LE1p2UVZ6dVg/ovPvrRvVO35N0bx3scW70/4yX6Ssk2t7EZiF6lf/mFy8IU5hyUgOWbjEbULJUFXPNLuepC0ZMRDZWkF0zMwNi9K1b1QK24JRaQOhQUojCRjnEzJxj/8UX+0n0ZxvBpcESc4+m5DxUhiHWs/SqcoAvop9sjepvger7BPal39cHQZ3oSq7BUCY1WX8Klx7FeHzUTMoqxYMQx2FM= # keypass
-  - secure: CCSL/E87oz/9zYUEsmUwhzV3RbzKSDEkPNnrHcW5rotpeqwzoDnCREw9bwMAO1p7V8k4O6F+2C6REdiFeUOvhCil0egd3QPk3WHBiorHbn6kU1LS9mzOVxcHOhhUZ9DDCM8pvxR/EacLtsFcclQDarViK8FId+BzFPxl4N814ZPb6axCaukQSOVjyusegcV0++SvvhtswEFIssprsQlC6mR9BF8n/fvp8xFX0oJ00dcK1/vLw5ZqB8q6fAphHk4QSJaIR0nz6D7yTQNE+v14EgMSH4RG/g6Md1V/3Ow7BSNmTM4OKo5KltpX0aFCdcTYY1Yo/bAlyXcdjGMmoL0wTab8Leacl3eTPBTozuYDveTyJZtzxQn1Y4F+dq849XrxerwQE9dYnuSLo23RxpZvvjKdJVwRV8JPv+HpV+gKxzdsb95+Mz+qcA4g9mQCI9FcLTSzfn1j17ccCt0absEyyztCUg3O8DK5eXOny0+a0mf/vwDjFmk+aAQhq9QG9oWp/pTdqYFcdCbOJF+T4NZjAEy9/749PLLHic96W/OS8hpW+WXejm1Cqi/VfB+KpbwWpvJ4i+mz84fS/Avl76wd2Gpfc8t0nODfJtWfSsB4fjwFg01WaH30/06QaOICxR0DZpOt40SIdb89TbNplOr/jbqQ8EbQ3/mOuGiKW2SK4zM= # GH_TOKEN
-  - secure: Rosg4vc6BVKTCWFzoR3CfjmzymkgYoLFElePblnesHrvTXh2s8XmPLydnqizmnCGhMJIIkAaxMySbFRmqPrj4XxiQRjQQy3AegOZxLBq9PNGypczRXQqirpoKhuzJG5OfmgESbp1E9r5b6Bticxq9c0eIV4p6JGnXQTZw9TQmqX+5RURJFYPANP2hS0iQ9fk85ZR2XZYP64/tIF69lReSN51y60+1zsUYZyYxYxVCKlg8e7k2fbzrf6stN2/ThnSlXOMWfgLl8Njg2DxUyeh60h0iPw7fDrlQ1Am92IOEd2JRY8XUDbqJU8WXhE0PAY7d/gZ/Zv2bPy8qTN3O0NKsgeGl8QafC1ERFS/WkrFKuLy0kLuHZA+bCf1MF/x7hdLMTTeSf5zB/R4JE/+6tbbBaOucVqcnH0VAkFKllj3+8MkGhN3c4HVZrkoJj5zYUdKfhoyj9m3pinl7U/+phnfRs//DT1m4fyAuMB9X6yL1woF2khqxTwZlc/0D6lxvCzjmy6n+ZLEoi8vHY0aSozsZEK2y1k6QR5MgqczAUenjwA79oApJSZKBRdx1o8/PzjBM3cf0e7oFL+um3eQxR+54gfPnypGquSAAp3dmqfPAL32x0NsVFgwKFlUqe7Y+xlcHtO7BLrLq57un6q2mVV3zbiE80xrK5N3oawSQsA0/VU= # sonarlogin
-
+dist: trusty
 android:
   components:
-  - tools
-  - tools
-  - platform-tools
-  - build-tools-$ANDROID_BUILD_TOOLS
-  - android-$ANDROID_API
-  - extra
-  - sys-img-x86-android-$ANDROID_API
-  - sys-img-armeabi-v7a-google_apis-25
+    - build-tools-28.0.3
+    - android-28
 
-before_install:
-- yes | sdkmanager "platforms;android-$ANDROID_API"
+#before_install:
+#  - gradle wrapper --stacktrace --info
+install: true
 
-before_script:
-  - echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+addons:
+  sonarcloud:
+    organization: bunpro-srs
 
 script:
-- "./gradlew build connectedCheck --stacktrace"
-- "./gradlew sonarqube -Dsonar.projectKey=bunpro-srs -Dsonar.organization=bunpro-srs -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${sonarlogin}"
+  - ./gradlew build --info --stacktrace
+  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then bash ./gradlew sonarqube --info; fi'
 
-after_failure: cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml
-
-before_deploy:
-  - openssl aes-256-cbc -K $encrypted_7242601d1e06_key -iv $encrypted_7242601d1e06_iv -in bunpro.jks.enc -out bunpro.jks -d
-  - cd app/release
-  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks -storepass $storepass -keypass $keypass app.aab key0
-  - jarsigner -verify app.aab
-  - "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -v 4 app.aab Bunpro.aab"
-  - cd -
-  - scripts/tag.sh
-
-deploy:
-  provider: releases
-  on:
-    branch: technical/espresso-testing
-  api_key:
-    secure: Eal2RaH2Tx8RBtpel7Zb6wDqlLKzltHDF4FMBnqG0S89bU8/8016wkNAe6NisbPKL/Hx+RLVNzs9yPSZwpp8uXKHmTK7XlwDWZqi7z8LYyGwX6cARltYqwIWMLw2S7QUHkylU8WsCDGXOvP2PHuZSAmOEuK7tKBp7K3fJAGddLxmJ3AL5uw8gHeLauzgTWkOGTThioMtirVEXAY4XbFTCROVtcMUOe/QIXiDAm1ZQ74CpRugjqAn9KZvNoyHA/HkGUwCtB/DDbTs0f6a2oI7jxC3+zws/PbZc9LZNeq7hxVmHWJe3+hyhvIRSuttSF4vhoC6QZCjmDMrGNg3nnNuouKGvxA7Fq5Y8p02/QLpCdu6cUHpkCk4fnmLbnEXMdts83IocleY6Dr4WnkyjNZvGb56dmBLc1F1ZmsUhUNEmzS/r+wGVrE7HWtuWMQ+/RS5iANmLyiYAmqlqPsH9ARysilzdfwHi18J9yddtrdvXpUU10aR6YeTvKtHStiFN9Nk043nkU4MUKY0M2OmxFNQa8iyY4uxIGdXNSZxRVCWGqBfHFikFiMhR7ljmdEBR5efffv3RkmUCm7jj1PPQvc7eq1K81Y2hFipsSLj7vuBjP2cdw98AvFS+speRPQBO0EknJdyC5FTBvox2ncxrjWF5HuCRzhozoLIfl7cBTx8jp0=
-  overwrite: true
-  skip_cleanup: true
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/

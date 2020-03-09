@@ -1,5 +1,6 @@
 package bunpro.jp.bunproapp.presentation.login;
 
+import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,39 +19,50 @@ import bunpro.jp.bunproapp.presentation.home.HomeActivity;
 import bunpro.jp.bunproapp.utils.config.Constants;
 import bunpro.jp.bunproapp.utils.test.EspressoTestingIdlingResource;
 import bunpro.jp.bunproapp.utils.SimpleCallbackListener;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
-    @BindView(R.id.btnLogin) Button btnLogin;
-    @BindView(R.id.btnPrivacy) Button btnPrivacy;
+    Button btnLogin;
+    Button btnPrivacy;
 
-    @BindView(R.id.etEmail) EditText etEmail;
-    @BindView(R.id.etPassword) EditText etPassword;
+    EditText etEmail;
+    EditText etPassword;
 
-    @BindView(R.id.spin_kit) SpinKitView progressBar;
+    SpinKitView progressBar;
 
     LoginContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        Context contextReference = this;
 
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_login);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+        btnPrivacy = findViewById(R.id.btnPrivacy);
+        btnPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BunproWebView.instantiate(contextReference, Constants.PRIVACY_URL);
+            }
+        });
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        progressBar = findViewById(R.id.progressBar);
+
         loadingProgress(false);
 
         mPresenter = new LoginPresenter(this);
 
     }
 
-    @OnClick(R.id.btnPrivacy) void privacy() {
-        BunproWebView.instantiate(this, Constants.PRIVACY_URL);
-    }
-
-    @OnClick(R.id.btnLogin) void login() {
+    void login() {
 
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
