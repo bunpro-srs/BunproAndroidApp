@@ -62,7 +62,9 @@
             android:layout_gravity="center_horizontal"
             android:autoLink="web"
             android:textStyle="bold"
-            android:textColor="@color/colorAlmostWhite" />
+            android:textColor="@color/colorAlmostWhite"
+            android:textColorLink="@color/colorBlue"
+            android:textColorHighlight="@color/colorAlmostWhite" />
     </RelativeLayout>
 
     <LinearLayout
