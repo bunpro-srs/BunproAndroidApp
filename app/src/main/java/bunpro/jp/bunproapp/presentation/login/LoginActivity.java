@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.spin_kit);
         tvLinkHome = findViewById(R.id.tvLinkHome);
 
         tvLinkHome.setText(Constants.HOME_URL);
