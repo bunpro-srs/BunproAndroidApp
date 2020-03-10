@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     EditText etEmail;
     EditText etPassword;
+    TextView tvLinkHome;
 
     SpinKitView progressBar;
 
@@ -54,8 +56,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.spin_kit);
+        tvLinkHome = findViewById(R.id.tvLinkHome);
 
+        tvLinkHome.setText(Constants.HOME_URL);
         loadingProgress(false);
 
         mPresenter = new LoginPresenter(this);

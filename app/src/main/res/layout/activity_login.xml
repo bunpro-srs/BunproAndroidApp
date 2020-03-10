@@ -8,6 +8,64 @@
     tools:context="bunpro.jp.bunproapp.presentation.login.LoginActivity">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvGreetings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:paddingHorizontal="10dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorAlmostWhite"
+            android:text="@string/app_greetings" />
+
+        <TextView
+            android:id="@+id/tvDefinition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvGreetings"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorAlmostWhite"
+            android:text="@string/app_definition" />
+
+        <TextView
+            android:id="@+id/tvInvitation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvDefinition"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorAlmostWhite"
+            android:text="@string/app_invitation" />
+
+        <TextView
+            android:id="@+id/tvLinkHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvInvitation"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:autoLink="web"
+            android:textStyle="bold"
+            android:textColor="@color/colorAlmostWhite"
+            android:textColorLink="@color/colorBlue"
+            android:textColorHighlight="@color/colorAlmostWhite" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/login_layout"
@@ -16,7 +74,7 @@
         android:orientation="vertical"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
         android:background="@drawable/box_shadow">
 

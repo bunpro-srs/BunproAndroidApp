@@ -18,7 +18,10 @@ Or you can test only a specific class: "test_bunpro_login=*LOGIN* test_bunpro_pa
 ## Contributing
 
 The project use the [Github issues](https://github.com/bunpro-srs/BunproAndroidApp/issues) to track down the bugs and log upcoming features.
-Feel free to report the bugs you discover; we are also open to pull requests.
+Feel free to report the bugs you discover; we are also open to pull requests.  
+
+The project is currently suffering many bugs that need to be addressed.  
+One of which is caused by updating the dependencies: one of those is causing the application to crash, so that's why I rolled back the versions to what they were before.  
 
 ## License
 

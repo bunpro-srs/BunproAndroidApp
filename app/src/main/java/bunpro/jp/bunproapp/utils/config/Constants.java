@@ -2,20 +2,21 @@ package bunpro.jp.bunproapp.utils.config;
 
 public class Constants {
 
-    public static String BASE_DOMAIN = "bunpro.jp";
-    public static String BASE_URL_v4 = "https://www.bunpro.jp/api/v4/";
-    public static String BASE_URL_v3 = "https://www.bunpro.jp/api/v3/";
+    public static final String BASE_DOMAIN = "bunpro.jp";
+    public static final String BASE_URL_v4 = "https://www.bunpro.jp/api/v4/";
+    public static final String BASE_URL_v3 = "https://www.bunpro.jp/api/v3/";
 
-    public static String AUDIO_BASE_URL = "https://bunpro.jp/audio/";
+    public static final String AUDIO_BASE_URL = "https://bunpro.jp/audio/";
 
-    public static String PRIVACY_URL = "https://bunpro.jp/privacy";
-    public static String TERMS_URL = "https://bunpro.jp/terms";
-    public static String ABOUT_URL = "https://bunpro.jp/about";
-    public static String CONTACT_URL = "https://bunpro.jp/contact";
-    public static String COMMUNITY_URL = "https://community.bunpro.jp";
-    public static String APP_STUDY_URL = "https://www.bunpro.jp/app_study";
-    public static String APP_CRAM = "https://www.bunpro.jp/app_cram";
-    public static String APP_LEARN = "https://www.bunpro.jp/app_learn";
+    public static final String HOME_URL = "https://bunpro.jp";
+    public static final String PRIVACY_URL = "https://bunpro.jp/privacy";
+    public static final String TERMS_URL = "https://bunpro.jp/terms";
+    public static final String ABOUT_URL = "https://bunpro.jp/about";
+    public static final String CONTACT_URL = "https://bunpro.jp/contact";
+    public static final String COMMUNITY_URL = "https://community.bunpro.jp";
+    public static final String APP_STUDY_URL = "https://www.bunpro.jp/app_study";
+    public static final String APP_CRAM = "https://www.bunpro.jp/app_cram";
+    public static final String APP_LEARN = "https://www.bunpro.jp/app_learn";
 
     public static final int SETTING_FURIGANA_ALWAYS = 3001;
     public static final int SETTING_FURIGANA_NEVER = 3002;

@@ -53,11 +53,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.2.0-alpha03'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation project(':furiganatextview')
     implementation 'io.realm:android-adapters:2.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'info.hoang8f:android-segmented:1.0.6'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
@@ -66,12 +66,13 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.1.1'
     implementation 'junit:junit:4.12'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 //    androidTestImplementation 'androidx.test:runner:1.1.1'
