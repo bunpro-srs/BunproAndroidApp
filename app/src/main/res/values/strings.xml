@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Bunpro SRS</string>
+    <string name="app_greetings">Welcome to the Bunpro Android application.</string>
+    <string name="app_definition">Bunpro is a website that helps learning japanese grammar. With a concise learning roadmap and with the use of SRS flashcards, Bunpro helps you to make japanese grammar simple.</string>
+    <string name="app_invitation">To be able to use Bunpro, you will need to create an account first. Head to the official website!</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
